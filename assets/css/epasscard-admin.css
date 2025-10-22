@@ -1,0 +1,1459 @@
+/* Common CSS start */
+:root {
+  --royal-blue-color: #0c1325;
+  --sky-blue-color: #5772b4;
+  --red-color: #dc3545;
+  --white-color: #ffffff;
+  --black-color: #000;
+  --grey-color: #ccc;
+}
+.epasscard-hidden {
+  display: none;
+}
+.epasscard-input-error {
+  border-color: var(--red-color) !important;
+}
+.wrap.epasscard-admin {
+  background: var(--white-color);
+  padding: 20px;
+}
+.epasscard-suggestion-box {
+  position: absolute;
+  display: none;
+  background: var(--white-color);
+  border: 1px solid var(--grey-color);
+  padding: 5px;
+  z-index: 9999;
+  list-style: none;
+  max-height: 150px;
+  overflow: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.epasscard-suggestion-box li {
+  padding: 5px;
+  cursor: pointer;
+}
+.epasscard-suggestion-box li:hover {
+  background-color: #f0f0f0;
+}
+.epasscard-primary-btn {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background-color: var(--royal-blue-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.epasscard-spinner {
+  border: 4px solid var(--grey-color);
+  border-radius: 50%;
+  border-top: 4px solid var(--red-color);
+  width: 20px;
+  height: 20px;
+  animation: epasscard-spin 1s linear infinite;
+  margin-left: 10px;
+  float: right;
+  opacity: 0.7;
+  display: none;
+}
+
+@keyframes epasscard-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.epasscard-remove-btn {
+  background-color: var(--red-color);
+  color: var(--white-color);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#epasscard_additional_properties {
+  display: flex;
+  gap: 100px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  margin: 40px auto;
+  /* flex-wrap: wrap; */
+}
+
+#epasscard_pass_info,
+#epasscard_front_field,
+#back_fields,
+#epasscard_color_image,
+#epasscard-location,
+#epasscard_setting {
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+  margin: 40px auto;
+  /* flex-wrap: wrap; */
+}
+
+#epasscard_pass_info span.select2-selection.select2-selection--single {
+  min-height: 46px;
+}
+#epasscard_pass_info
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  line-height: 46px;
+}
+#epasscard_pass_info span.select2-selection__arrow {
+  margin-top: 10px;
+}
+#create-template
+  .epasscard-barcode-fields
+  span.select2.select2-container.select2-container--default {
+  margin-bottom: 15px;
+}
+#epasscard_pass_info
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__clear {
+  margin-top: 9px;
+}
+
+/* Fields CSS */
+.epasscard-field-group {
+  border: 1px solid var(--grey-color);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.epasscard-field-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.epasscard-field-group input[type="text"],
+.epasscard-field-group input[type="number"],
+.epasscard-field-group input[type="date"],
+.epasscard-field-group select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--grey-color);
+  border-radius: 4px;
+}
+
+.epasscard-field-group .radio-group {
+  margin-bottom: 10px;
+}
+
+.epasscard-field-group .radio-group label {
+  font-weight: normal;
+  margin-right: 15px;
+}
+
+/* Modal Styles */
+.epass-info-modal,
+#location-modal,
+.epasscard-modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.epass-info-modal .modal-content,
+#location-modal .modal-content,
+.epasscard-modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+.epass-info-modal .close,
+#location-modal .close,
+.epasscard-close-modal {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.epasscard-modal-content {
+  max-width: fit-content;
+}
+#location-modal button.location-search-btn {
+  margin-top: 20px;
+}
+.epass-info-modal button#confirm-delete,
+.epass-info-modal button#cancel-delete {
+  padding: 2px 8px;
+  background: #b0233a;
+  color: #fff;
+  border: 0;
+  border-radius: 5px;
+}
+.epass-info-modal button#cancel-delete {
+  background: #0e7537;
+}
+
+/* Location Google Map */
+#epass-location-map-wrap {
+  margin-top: 20px;
+}
+.epass-location-map {
+  width: 100%;
+  height: 400px;
+  border: 0;
+  display: none; /* Hide map initially */
+}
+
+/* Common CSS end */
+.epasscard-admin .form-group {
+  margin-bottom: 20px;
+  max-width: 500px;
+}
+.epasscard-admin .regular-text {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.epasscard-admin .regular-text:focus {
+  border-color: #2271b1;
+  outline: none;
+  box-shadow: 0 0 0 1px #2271b1;
+}
+
+.epasscard-admin .validation-error {
+  color: #d63638;
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.epasscard-admin #epasscard-connect-btn {
+  position: relative;
+  padding-right: 40px;
+  transition: all 0.3s ease;
+}
+
+.epasscard-admin #epasscard-connect-btn .btn-spinner {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.epasscard-admin #epasscard-connect-btn.is-loading .btn-text {
+  opacity: 0.7;
+}
+
+.epasscard-admin #epasscard-connect-btn.is-loading .btn-spinner {
+  opacity: 1;
+}
+
+.spinner-svg {
+  width: 100%;
+  height: 100%;
+  animation: rotate 1.5s linear infinite;
+}
+
+.spinner-circle {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+.epasscard-admin #epasscard-response {
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+.epasscard-admin .epasscard-notice {
+  padding: 12px;
+  border: 1px solid var(--grey-color);
+  border-left: 4px solid var(--red-color);
+  margin: 0;
+}
+
+.epasscard-admin .notice-success {
+  background-color: #f0f7eb;
+  border-left-color: #4ab866;
+}
+
+.epasscard-admin .notice-error {
+  background-color: #f7ebec;
+  border-left-color: #d63638;
+}
+
+/* Notification CSS */
+
+.notice.is-dismissible {
+  position: relative;
+  padding-right: 38px;
+}
+
+.notice-dismiss {
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  right: 1px;
+  border: none;
+  margin: 0;
+  background: none;
+  color: #787c82;
+  cursor: pointer;
+}
+
+.notice-dismiss:hover {
+  color: var(--red-color);
+}
+
+.notice-dismiss:before {
+  background: none;
+  color: inherit;
+  content: "\f153";
+  display: block;
+  font: normal 16px/20px dashicons;
+  speak: never;
+  height: 20px;
+  text-align: center;
+  width: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal;
+}
+#epasscard-response .notice p {
+  margin: 0;
+}
+
+/* Pass template CSS start */
+#epasscard-template-wrap {
+  max-width: 1280px;
+  margin-top: 50px;
+}
+.epasscard-dropdown-container {
+  position: relative;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+}
+
+.epasscard-dropdown-container .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #000; /* dark blue */
+  color: var(--white-color);
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.epasscard-dropdown-container .dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background-color: var(--white-color);
+  border: 1px solid var(--grey-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 220px;
+  z-index: 1000;
+  padding: 8px 0;
+}
+
+.epasscard-dropdown-container .dropdown-menu li {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.epasscard-dropdown-container .dropdown-menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.epasscard-dropdown-container .dropdown-menu .danger {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.epasscard-dropdown-container.open .dropdown-menu {
+  display: block;
+}
+#epasscard-template-wrap .bottom-part,
+#epasscard-template-wrap .top-part {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#epasscard-template-wrap .epasscard-status > span {
+  font-weight: 700;
+  line-height: 1;
+  background: #e3ebf7;
+  color: #285192;
+  padding: 5px 8px;
+  border-radius: 5px;
+}
+
+#epasscard-template-wrap .epasscard-status > span:nth-child(2) {
+  background: #d6fae4;
+  color: #0e7537;
+}
+
+#epasscard-template-wrap .epasscard-status > span:nth-child(3) {
+  background: #fae5e9;
+  color: #b0233a;
+}
+
+#epasscard-template-wrap .bottom-part .left-part {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#epasscard-template-wrap .bottom-part .left-part span.app-logo,
+#epasscard-template-wrap .bottom-part .left-part > span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+#epasscard-template-wrap .epasscard-template {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  padding: 30px 20px;
+  margin-top: 20px;
+}
+
+#epasscard-template-wrap .epasscard-template h4.epasscard-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+#epasscard-template-wrap .epasscard-template .bottom-part {
+  margin-top: 30px;
+}
+
+#epasscard-template-wrap .epasscard-template div.maximum-passes {
+  font-size: 16px;
+}
+#epasscard-template-wrap .epasscard-template div.maximum-passes > span {
+  font-weight: bold;
+}
+#epasscard-template-wrap .epasscard-template div.send-notification {
+  width: fit-content;
+  margin-top: 40px;
+  margin-left: auto;
+}
+#epasscard-template-wrap .epasscard-template .epasscard-actions > a,
+#epasscard-template-wrap .epasscard-template div.send-notification > a {
+  text-decoration: none;
+  background: #d9e4f3;
+  padding: 10px 22px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+#epasscard-template-wrap .epasscard-template .btn-area .epasscard-actions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+#epasscard-template-wrap .epasscard-template .epasscard-actions > a {
+  background: transparent;
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+#epasscard-template-wrap .epasscard-template .epasscard-actions > a:hover {
+  background: #f5f5f5;
+}
+#epasscard-template-wrap .tablenav .tablenav-pages {
+  border: 1px solid #a7aaad;
+  padding: 5px;
+  border-radius: 5px;
+}
+div.create_pass_template a {
+  background: #0c1325;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: var(--white-color);
+  font-weight: 500;
+}
+.epasscard-pagination {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.epasscard-pagination button.epasscard-page-link {
+  color: var(--black-color);
+  padding: 6px 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.epasscard-pagination button.epasscard-page-link.active {
+  background-color: var(--black-color);
+  color: var(--white-color);
+  border-radius: 5px;
+}
+
+/* Create Template CSS */
+
+.epasscard-tab-bar {
+  margin-bottom: 20px;
+}
+.epasscard-tab-bar button {
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
+  outline: none;
+  color: #000;
+}
+.epasscard-tab-bar button.active {
+  border-bottom: 3px solid #000;
+}
+.epasscard-tab-content {
+  display: none;
+}
+#epass-content-tab {
+  display: flex;
+  justify-content: space-between;
+}
+.epasscard-tab-content.default-show {
+  display: block;
+}
+.epasscard-tab-item {
+  display: inline-block;
+}
+
+/* Front Field CSS start */
+
+#epasscard_front_field .left img {
+  width: 100%;
+}
+
+#epasscard_front_field .right {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+#epasscard_front_field h3 {
+  margin-top: 0;
+}
+
+#epasscard_front_field .description {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Pass info css start */
+#epasscard_pass_info .left img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+#epasscard_pass_info .right {
+  flex: 2 1 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+#epasscard_pass_info .info-text {
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#epasscard_pass_info .form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+#epasscard_pass_info .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+#epasscard_pass_info .required::after {
+  content: " *";
+  color: red;
+}
+.epasscard-card-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 20px 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.epasscard-card-carousel::-webkit-scrollbar {
+  display: none;
+}
+.epasscard-card-item {
+  flex: 0 0 auto;
+  width: 120px;
+  height: 188px;
+  cursor: pointer;
+  border: 4px solid #f1f1f1;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+.epasscard-card-item.epasscard-active-card {
+  border-color: #1c4960;
+  opacity: 1;
+}
+.epasscard-card-image-container {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.epasscard-card-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.epasscard-card-name {
+  color: #000;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.epasscard-more-cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-weight: bold;
+  height: 100%;
+}
+
+/* Back Fields CSS Start */
+
+#back_fields .left img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+#back_fields .right {
+  flex: 2 1 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+#back_fields h3 {
+  margin-top: 0;
+}
+
+#back_fields .description {
+  margin-bottom: 20px;
+  color: #555;
+}
+.coupon-field-display {
+  border-bottom: 1px solid #80808057;
+  padding: 0 10px;
+}
+.coupon-field-display > div.display-value {
+  padding-bottom: 16px;
+}
+
+/* Colors and Images css */
+#epasscard_color_image .left-part img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+#epasscard_color_image .right-part {
+  flex: 2 1 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#epasscard_color_image .colors,
+#epasscard_color_image .images {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); */
+}
+
+#epasscard_color_image .color-row,
+#epasscard_color_image .image-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+#epasscard_color_image .color-group {
+  flex: 1 1 30%;
+}
+
+#epasscard_color_image .color-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+#epasscard_color_image input[type="color"] {
+  height: 40px;
+  border: none;
+  cursor: pointer;
+}
+
+.images .epasscard-background {
+  height: 200px;
+  min-width: 300px;
+  max-width: 300px;
+}
+.images .epasscard-logo,
+.images .epasscard-icon {
+  height: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.image-upload-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 175px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.image-upload-wrapper input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.image-upload-wrapper .preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+}
+
+.image-upload-wrapper .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--white-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+  font-weight: bold;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.image-upload-wrapper:hover .overlay {
+  opacity: 1;
+}
+/* Cropper modal CSS */
+#epasscard-cropper-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.epasscard-cropper-backdrop {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.epasscard-cropper-container {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.epasscard-cropper-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  z-index: 1;
+}
+
+#epasscard-cropper-image {
+  max-width: 100%;
+  max-height: 400px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.epasscard-cropper-container button {
+  margin: 0 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+/* Epasscard Location CSS start */
+
+#epasscard-location .description {
+  margin-bottom: 20px;
+  color: #444;
+  line-height: 1.6;
+}
+
+#epasscard-location .form-group {
+  margin-bottom: 15px;
+}
+#epasscard-location .form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+#epasscard-location .form-row .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Additional properties CSS start */
+
+#epasscard_additional_properties .left img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+#epasscard_additional_properties .right {
+  flex: 2 1 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+#epasscard_additional_properties .info-text {
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.adition-type {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px;
+}
+#epasscard_additional_properties .additional-block div#field-type-container {
+  display: flex;
+  align-items: end;
+  gap: 20px;
+}
+
+/* Epasscard setting css */
+
+#epasscard_setting .left img {
+  width: 100%;
+  border-radius: 10px;
+}
+.setting-group {
+  padding: 5px 0;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.toggle-label span {
+  margin-left: 10px;
+  flex: 1;
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background: #ccc;
+  border-radius: 20px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle-label input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: var(--white-color);
+  border-radius: 50%;
+  top: 0px;
+  left: 0px;
+  transition: transform 0.3s;
+  margin: 0;
+}
+
+.toggle-label input[type="checkbox"]:checked {
+  background: #007bff;
+}
+
+.toggle-label input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
+
+.conditional-section,
+.transaction-log-wrap {
+  margin-top: 10px;
+}
+
+.conditional-section label {
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.conditional-section input[type="datetime-local"],
+.conditional-section select {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--grey-color);
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+table.recharge-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#recharge-table th,
+#recharge-table td {
+  text-align: left;
+  border: 1px solid var(--grey-color);
+  padding: 8px;
+}
+.expiration-type {
+  margin-bottom: 15px;
+}
+table#recharge-table {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+
+/* Mobile preview front CSS */
+
+.mobile-preview .phone-pass-preview {
+  position: relative;
+  width: 300px;
+}
+
+.mobile-preview .phone-img {
+  width: 100%;
+}
+
+.mobile-preview .coupon {
+  position: absolute;
+  left: 17.3px;
+  top: 46px;
+  z-index: 10;
+}
+
+.mobile-preview .coupon-container {
+  position: relative;
+  z-index: 50;
+  width: 267px;
+  height: 490px;
+}
+
+.mobile-preview .coupon-header {
+  display: grid;
+  height: 48px;
+  font-size: 12px;
+  padding: 4px 8px;
+  position: relative;
+}
+
+.mobile-preview .header-logo {
+  max-height: 48px;
+  padding-top: 4px;
+  position: absolute;
+  left: 8px;
+  max-width: 130px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+}
+
+.mobile-preview .logo-img {
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.mobile-preview .header-content {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: end;
+  max-width: 200px;
+  margin-left: auto;
+  gap: 10px;
+}
+.mobile-preview .content-text > p {
+  font-size: 10px;
+}
+.mobile-preview .product-name {
+  font-weight: bold;
+  color: var(--white-color);
+  margin: 0;
+}
+.mobile-preview .product-value {
+  font-weight: bold;
+  color: var(--white-color);
+  margin: 0;
+}
+
+.mobile-preview .edit-button {
+  position: absolute;
+  right: -64px;
+  z-index: 20;
+  top: 12px;
+}
+
+.mobile-preview .edit-btn {
+  background-color: var(--sky-blue-color);
+  color: var(--white-color);
+  border-radius: 0 4px 4px 0;
+  border-color: var(--sky-blue-color);
+  height: 35px;
+  padding: 4px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+}
+.mobile-preview .edit-btn.mobile-preview-active-btn {
+  background-color: var(--royal-blue-color);
+  border-color: var(--royal-blue-color);
+}
+
+.mobile-preview .edit-btn:hover {
+  background-color: var(--royal-blue-color);
+  border-color: var(--royal-blue-color);
+}
+
+.mobile-preview .coupon-strip {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 8px;
+  position: relative;
+  height: 100px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.mobile-preview .strip-content {
+  width: 100%;
+}
+
+.mobile-preview .strip-text {
+  font-size: 35px;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.mobile-preview .strip-text-uppercase {
+  text-transform: uppercase;
+  margin-left: 8px;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.mobile-preview .coupon-image {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 8px;
+  position: relative;
+  height: 100px;
+}
+
+.mobile-preview .image-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mobile-preview .image-wrapper {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+}
+
+.mobile-preview .product-image {
+  width: 80px;
+  height: auto;
+}
+
+.mobile-preview .coupon-details {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 8px;
+  position: relative;
+}
+
+.mobile-preview .details-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  max-width: 250px;
+  overflow: hidden;
+}
+.mobile-preview .detail-label {
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-preview .detail-value {
+  font-size: 11px;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-preview .coupon-qrcode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+  position: relative;
+}
+
+.mobile-preview .qrcode-container img.qrcode-img {
+  border: 2px solid #e5e7eb;
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile preview back part css */
+.mobile-preview.mobile_portrait.back-fields .phone-pass-preview {
+  position: relative;
+  width: 300px;
+}
+
+.mobile-preview.mobile_portrait.back-fields .phone {
+  width: 100%;
+}
+
+.mobile-preview.mobile_portrait.back-fields .pass-inner {
+  position: absolute;
+  left: 17.3px;
+  top: 48px;
+  z-index: 10;
+}
+
+.mobile-preview.mobile_portrait.back-fields .coupon-container {
+  height: 490px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.mobile-preview.mobile_portrait.back-fields .coupon-item {
+  width: 267px;
+  height: 110px;
+  margin-top: 16px;
+  border-radius: 4px;
+}
+
+.mobile-preview.mobile_portrait.back-fields .coupon-item img {
+  width: 100%;
+  padding-top: 16px;
+}
+
+.mobile-preview.mobile_portrait.back-fields .spacer {
+  width: 248px;
+}
+
+.mobile-preview.mobile_portrait.back-fields .coupon-bottom {
+  background-color: var(--white-color);
+  width: 267px;
+  padding: 20px;
+}
+
+/* Hide scrollbar */
+.mobile-preview.mobile_portrait.back-fields .scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.mobile-preview.mobile_portrait.back-fields .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+#back_fields .left .coupon-container {
+  background-color: var(--grey-color) !important;
+}
+
+/* Create single pass CSS */
+.single-pass-wrap {
+  margin-top: 55px;
+}
+
+/* Push notification CSS */
+.push-notification-inner {
+  display: flex;
+  gap: 20px;
+}
+
+/* Main Tab CSS */
+.epasscard-tabcontent {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+/* Add this rule to show create-template by default */
+#create-template {
+  display: block;
+}
+button.epasscard-tablinks.nav-tab {
+  cursor: pointer;
+}
+button.epasscard-tablinks.nav-tab.active {
+  background-color: var(--white-color);
+}
+
+/* Extension setting CSS */
+.epasscard-extension {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom:10px;
+}
+.extension-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    min-width: 200px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.extension-button {
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-bottom:5px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.extension-button:hover {
+    background: #005a87;
+}
+
+.epass-button-disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.button-install {
+    background: #007cba;
+}
+
+/* Pass limit notification CSS */
+.epass-alert-box {
+  padding: 1rem;
+  font-size: 0.875rem;
+  background-color: #fef3c7;
+  color: #b45309;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  width: 75%;
+  position: relative;
+}
+
+.epass-alert-box .alert-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: #b45309;
+}
+
+.epass-alert-box .alert-message {
+  margin-left: 0.75rem;
+  flex: 1;
+}
+
+.epass-alert-box .alert-close {
+  background-color: #fef3c7;
+  color: #f59e0b;
+  border: none;
+  padding: 0.375rem;
+  margin-left: auto;
+  margin-right: -0.375rem;
+  margin-top: -0.375rem;
+  margin-bottom: -0.375rem;
+  border-radius: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+}
+.epass-alert-box .alert-close:hover {
+  background-color: #fde68a;
+}
+.epass-alert-box .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+

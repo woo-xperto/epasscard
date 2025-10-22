@@ -1,0 +1,26 @@
+@media (max-width: 768px) {
+  /* Epasscard pass info responsive */
+  #epasscard_pass_info,
+  #epasscard_pass_info .form-row,
+  #back_fields,
+  #epasscard_color_image,
+  #epasscard-location .form-row,
+  #epasscard_front_field,
+  #epasscard_additional_properties,
+  #epasscard-location,
+  #epasscard_setting {
+    flex-direction: column;
+  }
+  #back_fields .left,
+  #back_fields .right,
+  #epasscard_additional_properties .left,
+  #epasscard_additional_properties .right,
+  #epasscard_color_image .left-part,
+  #epasscard_color_image .right-part,
+  #epasscard_color_image .color-group,
+  #epasscard_color_image .image-upload-wrapper,
+  #epasscard_setting .left,
+  #epasscard_setting .right {
+    flex: 1 1 100%;
+  }
+}

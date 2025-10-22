@@ -1,0 +1,39 @@
+<div class="epasscard-form-container">
+    <?php $api_key     = sanitize_text_field(get_option('epasscard_api_key', ''));
+        $organization_id       = get_option('epasscard_organization_id', '');
+    $accountesc_html_email = get_option('epasscard_account_email', ''); ?>
+    <form id="epasscard-connection-form" method="post">
+        <?php wp_nonce_field('epasscard_connect', 'epasscard_nonce'); ?>
+        <div class="form-group">
+            <label for="epasscard-api-key"><?php esc_html_e('API Key', 'epasscard'); ?></label>
+            <input type="text" id="epasscard-api-key" name="epasscard_api_key" class="regular-text"
+                value="<?php echo esc_attr($api_key); ?>" required>
+            <span class="validation-error" id="api-key-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="organization-id"><?php esc_html_e('Organization Id', 'epasscard'); ?></label>
+            <input type="number" id="organization-id" name="organization_id" class="regular-text"
+                value="<?php echo esc_attr($organization_id); ?>" required>
+            <span class="validation-error" id="organization-id-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="account-email"><?php esc_html_e('Account Email', 'epasscard'); ?></label>
+            <input type="email" id="account-email" name="account_email" class="regular-text"
+                value="<?php echo esc_attr($accountesc_html_email); ?>" required>
+            <span class="validation-error" id="account-email-error"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" id="epasscard-connect-btn" class="button button-primary">
+                <span class="btn-text"><?php esc_html_e('Connect', 'epasscard'); ?></span>
+                <span class="btn-spinner">
+                    <svg class="spinner-svg" viewBox="0 0 50 50">
+                        <circle class="spinner-circle" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                    </svg>
+                </span>
+            </button>
+        </div>
+        <div id="epasscard-response"></div>
+    </form>
+</div>

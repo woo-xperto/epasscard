@@ -1,0 +1,538 @@
+{
+  "predefinedTemplates": [
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/warrenty-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Warrenty card",
+          "cardType": "StoreCard",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#3A3740",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Product name",
+            "value": "{Product name}",
+            "valueType": "dynamic",
+            "changeMsg": "Product name is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "qrCode",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Model name",
+            "value": "{Model}",
+            "valueType": "dynamic",
+            "changeMsg": "Model name is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Purchase date",
+            "value": "{Purchase Date}",
+            "valueType": "dynamic",
+            "changeMsg": "Purchase date is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    },
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/isp-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Internet provider",
+          "cardType": "StoreCard",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#003D69",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Package",
+            "value": "{package}",
+            "valueType": "dynamic",
+            "changeMsg": "package is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "CODE_128",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Name",
+            "value": "{Name}",
+            "valueType": "dynamic",
+            "changeMsg": "Name is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Customer ID",
+            "value": "{Customer id}",
+            "valueType": "dynamic",
+            "changeMsg": "Purchase date is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    },
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/gift-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Gift card",
+          "cardType": "StoreCard",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#C8407E",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Balance",
+            "value": "{Balance}",
+            "valueType": "dynamic",
+            "changeMsg": "Balance is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "CODE_128",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Full name",
+            "value": "{Full name}",
+            "valueType": "dynamic",
+            "changeMsg": "Name is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Giftcard no",
+            "value": "{Giftcard no}",
+            "valueType": "dynamic",
+            "changeMsg": "Giftcard number is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    },
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/customer-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Customer card",
+          "cardType": "StoreCard",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#E24654",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Category",
+            "value": "{Category}",
+            "valueType": "dynamic",
+            "changeMsg": "Category is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "CODE_128",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Name",
+            "value": "{Name}",
+            "valueType": "dynamic",
+            "changeMsg": "Name is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Customer ID",
+            "value": "{Customer ID}",
+            "valueType": "dynamic",
+            "changeMsg": "Customer ID is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    },
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/Membership-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Membership card",
+          "cardType": "StoreCard",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#792B0E",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Membership type",
+            "value": "{Membership type}",
+            "valueType": "dynamic",
+            "changeMsg": "Category is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "qrCode",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Name",
+            "value": "{Name}",
+            "valueType": "dynamic",
+            "changeMsg": "Name is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Expiry",
+            "value": "{Expiry}",
+            "valueType": "dynamic",
+            "changeMsg": "Customer ID is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    },
+    {
+      "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/Cupon-card.png",
+      "designObj": {
+        "primarySettings": {
+          "name": "Coupon card",
+          "cardType": "Coupon",
+          "organizationName": "",
+          "description": "",
+          "forgroundColor": "#ffffff",
+          "backgroundColor": "#FF6A0B",
+          "labelColor": "#ffffff",
+          "stripColor": "",
+          "expireType": "",
+          "expireValue": "",
+          "passTypeId": "",
+          "dateTimeFormat": "YYYY-MM-DD HH:mm:ss",
+          "shareable": false,
+          "googleWalletShareable": "STATUS_UNSPECIFIED"
+        },
+        "headerFields": [
+          {
+            "label": "Store name",
+            "value": "{Store name}",
+            "valueType": "dynamic",
+            "changeMsg": "Category is updated to",
+            "staticValueType": ""
+          }
+        ],
+        "backFields": [],
+        "auxiliaryFields": [],
+        "images": {
+          "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/coupon-logo.png",
+          "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/coupon-logo.png",
+          "thumbnail": "",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/coupon-strip.png",
+          "footer": ""
+        },
+        "primaryFields": [
+          {
+            "label": "",
+            "value": "",
+            "valueType": ""
+          }
+        ],
+        "barcode": {
+          "format": "qrCode",
+          "barcodeValueType": "",
+          "value": "",
+          "altText": "",
+          "showValue": false
+        },
+        "secondaryFields": [
+          {
+            "label": "Coupon code",
+            "value": "{Coupon code}",
+            "valueType": "dynamic",
+            "changeMsg": "Coupon code is updated",
+            "staticValueType": "text"
+          },
+          {
+            "label": "Discount",
+            "value": "{Discount}",
+            "valueType": "dynamic",
+            "changeMsg": "Discount  is updated",
+            "staticValueType": "text"
+          }
+        ],
+        "googlePassLayout": "Custom",
+        "googleDefaultLayout": {
+          "loyaltyBalance": "",
+          "loyaltyBalanceLabel": "",
+          "giftCardBalance": "",
+          "giftCardCurrencyCode": ""
+        },
+        "emailSettings": {
+          "subject": "",
+          "emailTemplate": "",
+          "recipientEmail": ""
+        },
+        "pushNotificationContent": {
+          "bodyForUpdate": ""
+        },
+        "smsContent": {
+          "receiver": "",
+          "content": ""
+        },
+        "status": false
+      }
+    }
+  ]
+}
