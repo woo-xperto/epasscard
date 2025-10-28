@@ -626,29 +626,55 @@ jQuery(document).ready(function ($) {
     if (settingId) {
       settingData.setting_id = settingId;
     }
-
-    // settingData.bgColor = $(
-    //   "#create-template .color-images .background-color"
-    // ).val();
-
-    // settingData.labelColor = $(
-    //   "#create-template .color-images .label-color"
-    // ).val();
+    // Colors
+    // settingData.bgColor = $("#create-template .color-images .background-color")
+    //   .siblings(".evo-pointer")
+    //   .css("background-color");
+    // settingData.labelColor = $("#create-template .color-images .label-color")
+    //   .siblings(".evo-pointer")
+    //   .css("background-color");
     // settingData.textColor = $(
     //   "#create-template .color-images .foreground-color"
-    // ).val();
+    // )
+    //   .siblings(".evo-pointer")
+    //   .css("background-color");
 
-    settingData.bgColor = $("#create-template .color-images .background-color")
-      .siblings(".evo-pointer")
-      .css("background-color");
-    settingData.labelColor = $("#create-template .color-images .label-color")
-      .siblings(".evo-pointer")
-      .css("background-color");
-    settingData.textColor = $(
-      "#create-template .color-images .foreground-color"
-    )
-      .siblings(".evo-pointer")
-      .css("background-color");
+    function rgbToHex(color) {
+      if (color.startsWith("#")) return color; // already hex
+
+      const rgb = color.match(/\d+/g);
+      if (!rgb || rgb.length < 3) return "#000000"; // fallback
+
+      return (
+        "#" +
+        rgb
+          .slice(0, 3)
+          .map((val) => {
+            const hex = parseInt(val).toString(16);
+            return hex.length === 1 ? "0" + hex : hex;
+          })
+          .join("")
+      );
+    }
+
+    // Apply conversion to each color
+    settingData.bgColor = rgbToHex(
+      $("#create-template .color-images .background-color")
+        .siblings(".evo-pointer")
+        .css("background-color")
+    );
+
+    settingData.labelColor = rgbToHex(
+      $("#create-template .color-images .label-color")
+        .siblings(".evo-pointer")
+        .css("background-color")
+    );
+
+    settingData.textColor = rgbToHex(
+      $("#create-template .color-images .foreground-color")
+        .siblings(".evo-pointer")
+        .css("background-color")
+    );
 
     // Get the header logo src
     var headerLogoSrc = $("#create-template .header-logo .logo-img").attr(
@@ -1259,11 +1285,10 @@ jQuery(document).ready(function ($) {
         _ajax_nonce: epasscard_admin.nonce,
       },
       success: function (response) {
-        console.log(response);
         const message = response.data.message;
         $(".info-notification-data").html(message);
         $(".epass-info-modal").css("display", "block");
-        return;
+
         const baseUrl = window.location.origin + window.location.pathname;
 
         setTimeout(function () {
