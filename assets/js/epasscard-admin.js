@@ -1,9 +1,9 @@
 jQuery(document).ready(function ($) {
   var pluginUrl = epasscard_admin.epasscardPluginUrl;
-  var organization_id = epasscard_admin.organization_id;
+  //var organization_id = epasscard_admin.organization_id;
   var dynamicValues = [];
   var apiKey = epasscard_admin.api_key;
-
+  var epassCardApiUrl = "https://api.epasscard.com/api/public/v1/";
   var epassCardUrl = "https://api.epasscard.com/";
 
   var passIdUrlParams = new URLSearchParams(window.location.search);
@@ -62,7 +62,6 @@ jQuery(document).ready(function ($) {
     $btn.addClass("is-loading").prop("disabled", true);
 
     var api_key = $("#epasscard-api-key").val();
-    var organization_id = $("#organization-id").val();
     var account_email = $("#account-email").val();
 
     // AJAX request
@@ -73,7 +72,6 @@ jQuery(document).ready(function ($) {
         action: "epasscard_connect",
         nonce: epasscard_admin.nonce,
         api_key: api_key,
-        organization_id: organization_id,
         account_email: account_email,
       },
       success: function (response) {
@@ -1192,7 +1190,7 @@ jQuery(document).ready(function ($) {
               field_name: name,
               field_type: type,
               required: required,
-              org_id: Number(organization_id),
+              //org_id: Number(organization_id),
               status: false,
             });
 
@@ -1204,7 +1202,7 @@ jQuery(document).ready(function ($) {
               field_name: name,
               field_type: type,
               required: required,
-              org_id: Number(organization_id),
+              //org_id: Number(organization_id),
             });
           }
 
@@ -1254,7 +1252,7 @@ jQuery(document).ready(function ($) {
     const templateData = $(".epasscard-card-item.epasscard-active-card").attr(
       "data-template"
     );
-    const parsedTemplateData = JSON.parse(templateData);
+    const parsedTemplateData = templateData ? JSON.parse(templateData) : {};
 
     // Create pass template
     var $button = $(this);
@@ -1289,16 +1287,20 @@ jQuery(document).ready(function ($) {
         $(".info-notification-data").html(message);
         $(".epass-info-modal").css("display", "block");
 
-        const baseUrl = window.location.origin + window.location.pathname;
+        if(message == "Template Created successfully" || message == "Templated updated successfully") {
 
-        setTimeout(function () {
-          const redirectUrl = `${templateEpassVars.templateBaseUrl}&tab=templates&_wpnonce=${templateEpassVars.nonce}`;
-          window.location.href = redirectUrl;
-        }, 3000);
+          const baseUrl = window.location.origin + window.location.pathname;
 
+          setTimeout(function () {
+            const redirectUrl = `${templateEpassVars.templateBaseUrl}&tab=templates&_wpnonce=${templateEpassVars.nonce}`;
+            window.location.href = redirectUrl;
+          }, 3000);
+
+        }
+        $button.find(".epasscard-spinner").css("display", "none");
         //loadTemplates();
-        $(".epasscard-tablinks.nav-tab.list-nav").trigger("click");
-        $button.prop("disabled", true).html("Update pass");
+        //$(".epasscard-tablinks.nav-tab.list-nav").trigger("click");
+        //$button.prop("disabled", true).html("Update pass");
       },
       error: function (xhr, status, error) { },
       complete: function () {
@@ -1665,7 +1667,7 @@ jQuery(document).ready(function ($) {
 
     // Handle Yes click
     $(".epass-info-modal #confirm-delete").on("click", function () {
-      const apiUrl = `https://api.epasscard.com/api/pass-template/delete/${passId}`;
+      const apiUrl = `${epassCardApiUrl}/delete-pass-template/${passId}`;
       $.ajax({
         url: apiUrl,
         method: "DELETE",

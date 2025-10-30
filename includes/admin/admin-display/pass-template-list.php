@@ -10,11 +10,10 @@
             $per_page        = 5;
             $current_page    = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
             $offset          = ($current_page - 1) * $per_page;
-            $organization_id = get_option('epasscard_organization_id', '');
+            //$organization_id = get_option('epasscard_organization_id', '');
             $api_key         = get_option('epasscard_api_key', '');
             $nonce           = sanitize_text_field(wp_unslash($_GET['_wpnonce']));
-
-            $api_url = 'https://api.epasscard.com/api/pass-template/all-templates?page=' . $current_page;
+            $api_url = EPASSCARD_API_URL.'get-pass-templates?page=' . $current_page;
 
             $response = wp_remote_get($api_url, [
                 'headers' => [
@@ -23,12 +22,12 @@
             ]);
 
             if (is_wp_error($response)) {
-                echo '<div class="notice notice-warning"><p>API Request Failed</p></div>';
+                echo '<div class="epasscard-notice">API Request Failed</div>';
             } else {
                 $data = json_decode(wp_remote_retrieve_body($response), true);
 
-                if (isset($data) && ! empty($data['allPasses']) && is_array($data['allPasses'])) {
-                    foreach ($data['allPasses'] as $template) {
+                if (isset($data) && ! empty($data['templates']) && is_array($data['templates'])) {
+                    foreach ($data['templates'] as $template) {
                         $edit_url = add_query_arg([
                             'page'     => 'epasscard',
                             'tab'      => 'update-template',
@@ -48,9 +47,9 @@
                                 alt="Dropdown Icon" />
                         </button>
                         <ul class="dropdown-menu epasscard-hidden">
-                            <li>Download Example CSV File (new)</li>
+                            <!-- <li>Download Example CSV File (new)</li>
                             <li>Download passes as CSV</li>
-                            <li>Create Bulk processing job</li>
+                            <li>Create Bulk processing job</li> -->
                             <li class="danger">Delete template</li>
                         </ul>
                     </div>
@@ -75,7 +74,7 @@
                         <span><?php echo esc_html($template['pass_limit']); ?></span>
                     </div>
                 </div>
-                <div class="right-part">
+                <!-- <div class="right-part">
                     <div class="btn-area">
                         <div class="epasscard-actions">
                             <a href="#" class="epasscard-link">
@@ -93,7 +92,7 @@
                     <div class="send-notification">
                         <a href="#">Send push notification</a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <?php
@@ -116,7 +115,7 @@
                     }
 
                 } else {
-                    echo '<div class="epasscard-notice">No templates found or API request failed.</div>';
+                    echo '<div class="epasscard-notice">No templates found or API Request Failed</div>';
                 }
             }
         ?>

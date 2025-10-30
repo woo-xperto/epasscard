@@ -1,9 +1,7 @@
 <?php
-
-// var_dump($setting_data);
-// die;
-$api_url = 'https://api.epasscard.com/api/pass-template/create';
+$api_url = EPASSCARD_API_URL."create-template";
 $api_key = get_option('epasscard_api_key', '');
+
 $body    = '{
     "passSettings": {
         "primarySettings": {
@@ -83,7 +81,7 @@ $body    = '{
         "initialMsg": "",
         "locationRadius": "' . $notification_radius . '"
     },
-    "additionalFields":' . $additionalProperties . ',
+    "additionalFields":'. $additionalProperties .',
     "advancedSettings": {
         "isExpire": ' . (filter_var($setting_values['is_expire'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false') . ',
         "expireType": "date",

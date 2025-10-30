@@ -159,7 +159,7 @@ class Epasscard_Load_Assets
             true
         );
 
-        $organization_id = get_option('epasscard_organization_id', '');
+
         $api_key         = get_option('epasscard_api_key', '');
 
         $localization_data = [
@@ -167,7 +167,6 @@ class Epasscard_Load_Assets
             'nonce'              => wp_create_nonce('epasscard_ajax_nonce'),
             'error_required'     => __('This field is required', 'epasscard'),
             'epasscardPluginUrl' => plugins_url('', __DIR__),
-            'organization_id'    => $organization_id,
             'api_key'            => $api_key,
         ];
 

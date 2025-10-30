@@ -34,12 +34,12 @@
                             value="<?php echo isset($location['title']) ? esc_attr($location['title']) : ''; ?>">
                     </div>
                     <div class="form-group">
-                        <label>Latitude</label>
+                        <label>Latitude<span>*</span></label>
                         <input type="text" class="location-latitude" placeholder="Eg. 37.7749"
                             value="<?php echo isset($location['latitude']) ? esc_attr($location['latitude']) : ''; ?>">
                     </div>
                     <div class="form-group">
-                        <label>Longitude</label>
+                        <label>Longitude<span>*</span></label>
                         <input type="text" class="location-longitude" placeholder="Eg. -122.4194"
                             value="<?php echo isset($location['longitude']) ? esc_attr($location['longitude']) : ''; ?>">
                     </div>

@@ -31,8 +31,13 @@
 
         public function render_admin_page()
         {
+            
+            $api_key     = sanitize_text_field(get_option('epasscard_api_key', ''));
+            $account_email = get_option('epasscard_account_email', '');
+            $active_tab_selector = ((isset($api_key) && $api_key != "") && (isset($account_email) && $account_email != "")) ? 'create-template' :'connection';
+
             // Get the active tab from the URL, default to 'create-template'
-            $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'create-template';
+            $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : $active_tab_selector;
             $pass_id    = isset($_GET['pass_id']) ? sanitize_text_field(wp_unslash($_GET['pass_id'])) : '';
 
             // Generate base URL for tab links

@@ -1,27 +1,16 @@
 <?php
-$api_url = "https://api.epasscard.com/api/pass-template/update-template/$pass_uid";
+$api_url = EPASSCARD_API_URL."update-pass-template/$pass_uid";
 $api_key = get_option('epasscard_api_key', '');
 
 // Fix 1: Ensure settings block is properly included
-$settingsBlock = '';
-if (! empty($locations_setting_id)) {
-    $settingsBlock = '
-        "settings": {
-            "id": ' . $locations_setting_id . ',
-            "is_active": 1,
-            "initial_message": "",
-            "notification_radius": "' . $notification_radius . '"
-        },';
-} else {
-    // Provide default settings if ID is empty
-    $settingsBlock = '
-        "settings": {
-            "id": null,
-            "is_active": 1,
-            "initial_message": "",
-            "notification_radius": 100
-        },';
-}
+$settingsBlock = '
+    "settings": {
+        "id": ' . (!empty($locations_setting_id) ? $locations_setting_id : 'null') . ',
+        "is_active": 1,
+        "initial_message": "",
+        "notification_radius": "' . $notification_radius . '"
+    },';
+
 
 // Decode JSON to PHP array
 $rechargeData = json_decode($rechargeField, true);
@@ -32,7 +21,7 @@ $rechargeData = array_column($rechargeData, 'name');
 // Create a comma-separated string
 $rechargeField = implode(',', $rechargeData);
 
-$body_data = '{
+$data = '{
     "template": {
         "template_id": ' . $pass_id . ',
         "template_uid": "' . $pass_uid . '",
@@ -158,7 +147,7 @@ $response = wp_remote_request($api_url, [
         'Content-Type' => 'application/json',
         'x-api-key'    => $api_key,
     ],
-    'body'    => $body_data,
+    'body'    => $data,
     'timeout' => 60,
 ]);
 

@@ -11,7 +11,7 @@ if (isset($_GET['pass_id'], $_GET['pass_uid'])) {
     $template_id = isset($_GET['pass_id']) ? sanitize_text_field(wp_unslash($_GET['pass_id'])) : '';
     $uid         = isset($_GET['pass_uid']) ? sanitize_text_field(wp_unslash($_GET['pass_uid'])) : '';
     $passIds     = (isset($template_id) && isset($uid)) ? json_encode(['id' => $template_id, 'uid' => $uid]) : '';
-    $api_url     = 'https://api.epasscard.com/api/pass-template/template-details/' . $uid;
+    $api_url     = EPASSCARD_API_URL.'template-details/' . $uid;
     $api_key     = get_option('epasscard_api_key', '');
 
     $response = wp_remote_get($api_url, [

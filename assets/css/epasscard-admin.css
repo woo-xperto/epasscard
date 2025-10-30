@@ -469,7 +469,6 @@
 #epasscard-template-wrap .bottom-part .left-part {
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 #epasscard-template-wrap .bottom-part .left-part span.app-logo,
 #epasscard-template-wrap .bottom-part .left-part > span {

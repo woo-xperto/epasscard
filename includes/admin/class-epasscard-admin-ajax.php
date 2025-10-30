@@ -16,6 +16,10 @@ class Epasscard_Ajax
         add_action('wp_ajax_create_pass_template', [$this, 'create_pass_template']);
         add_action('wp_ajax_nopriv_create_pass_template', [$this, 'create_pass_template']);
 
+        //Get location
+        add_action('wp_ajax_get_epasscard_location', [$this, 'get_epasscard_location']);
+        add_action('wp_ajax_nopriv_get_epasscard_location', [$this, 'get_epasscard_location']);
+
         // Download and Activate required plugins
         add_action('wp_ajax_epass_install_required_plugin', [$this, 'epass_install_required_plugin']);
         add_action('wp_ajax_nopriv_epass_install_required_plugin', [$this, 'epass_install_required_plugin']);
@@ -39,7 +43,6 @@ class Epasscard_Ajax
 
         // Sanitize and validate input
         $api_key = isset($_POST['api_key']) ? sanitize_text_field(wp_unslash($_POST['api_key'])) : '';
-        $organization_id = isset($_POST['organization_id']) ? sanitize_text_field(wp_unslash($_POST['organization_id'])) : '';
         $account_email = isset($_POST['account_email']) ? sanitize_email(wp_unslash($_POST['account_email'])) : '';
 
         // Validate fields
@@ -47,10 +50,6 @@ class Epasscard_Ajax
 
         if (empty($api_key)) {
             $errors['api_key'] = __('API key is required', 'epasscard');
-        }
-
-        if (!empty($organization_id) && !preg_match('/^[a-zA-Z0-9\-_]+$/', $organization_id)) {
-            $errors['organization_id'] = __('Organization ID contains invalid characters', 'epasscard');
         }
         if (empty($account_email) || !is_email($account_email)) {
             $errors['account_email'] = __('A valid email address is required', 'epasscard');
@@ -66,10 +65,9 @@ class Epasscard_Ajax
 
             // Save the settings
             $api_key_saved = update_option('epasscard_api_key', $api_key);
-            $organization_id_saved = update_option('epasscard_organization_id', $organization_id);
             $account_email_saved = update_option('epasscard_account_email', $account_email);
 
-            if ($api_key_saved || $organization_id_saved || $account_email_saved) {
+            if ($api_key_saved || $account_email_saved) {
                 $response['success'] = true;
                 $response['message'] = __('Settings saved successfully!', 'epasscard');
             } else {
@@ -82,30 +80,6 @@ class Epasscard_Ajax
         }
 
         wp_send_json($response);
-    }
-
-    /**
-     * Make request to Ecosmartcards API
-     */
-    private function make_ecosmartcards_request($email, $password)
-    {
-        $api_url = 'https://api.epasscard.com/api/user/sign-in';
-
-        $body = [
-            'email' => $email,
-            'password' => $password,
-            'plugin_code' => 'wooxperto_mTK5w6qsXiODQZIYT4TSs9dgGcapSQUvp3axzOvGY1QWtpa3z3', // Replace with your actual plugin code
-        ];
-
-        $args = [
-            'body' => $body,
-            'timeout' => 15,
-            'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-        ];
-
-        return wp_remote_post($api_url, $args);
     }
 
     // Get pass card list
@@ -281,7 +255,6 @@ class Epasscard_Ajax
             ]);
         } else {
             wp_send_json_success([
-                // 'message' => 'Pass template created successfully',
                 'data' => $result,
             ]);
         }
@@ -312,14 +285,14 @@ class Epasscard_Ajax
 
         // Clean up stringified JSON fields
         $additionalProperties = str_replace('\\', '', $data['additional_properties']);
-        
+
         $rechargeField = str_replace('\\', '', $data['recharge_field']);
         $transactionValues = str_replace('\\', '', $data['transaction_values']);
 
         // Extract IDs
         $pass_id = $data['pass_ids']['id'];
         $pass_uid = $data['pass_ids']['uid'];
-        $organization_id = get_option('epasscard_organization_id', '');
+        $organization_id = $data['pass_ids']['org_id'];
 
         // Make variables accessible to included file
         $template_info = $data['template_info'];
@@ -335,6 +308,39 @@ class Epasscard_Ajax
             require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/pass-update.php';
         } else {
             require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/pass-create.php';
+        }
+    }
+    
+    //Get location
+    public function get_epasscard_location()
+    {
+        check_ajax_referer('epasscard_ajax_nonce');
+
+        $place_name = isset($_GET['search']) ? sanitize_text_field(wp_unslash($_GET['search'])) : '';
+        $api_key = get_option('epasscard_api_key', '');
+
+        if (empty($place_name)) {
+            wp_send_json_error('Place name is required');
+        }
+
+        // Use the dynamic place name in the API URL
+        $api_url = 'https://api.epasscard.com/api/google/places/' . urlencode($place_name);
+
+        $args = [
+            'headers' => [
+                'x-api-key' => $api_key,
+            ],
+            'timeout' => 15,
+        ];
+
+        $response = wp_remote_get($api_url, $args);
+
+        if (is_wp_error($response)) {
+            wp_send_json_error($response->get_error_message());
+        } else {
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+            wp_send_json_success($data);
         }
     }
 
