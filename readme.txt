@@ -1,5 +1,5 @@
 === Epasscard ===
-Contributors: Rihan Habib  
+Contributors: wooxperto,xihad1 
 Tags: wallet, passbook, gift card, Apple Wallet, Google Wallet  
 Requires at least: 5.0  
 Tested up to: 6.8  
@@ -46,8 +46,9 @@ Yes, you can customize the appearance and metadata of your passes via the plugin
 == Screenshots ==
 
 1. Epasscard settings panel  
-2. Generated pass preview  
+2. Generate pass template  
 3. WooCommerce gift card integration
+4. Template list
 
 == Changelog ==
 

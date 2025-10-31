@@ -60,7 +60,7 @@
 
                         <?php
                             $passTypeId = $passTypeId ?? '';
-                            $api_url    = 'https://api.epasscard.com/api/certificate/all-certificates/';
+                            $api_url    = EPASSCARD_API_CERTIFICATES;
                             $api_key    = get_option('epasscard_api_key', '');
 
                             // Static option
@@ -95,8 +95,6 @@
                         ?>
                     </select>
                 </div>
-
-
                 <!-- Add JavaScript to handle Select2 -->
                 <!-- <script>
                 jQuery(document).ready(function($) {
@@ -111,9 +109,8 @@
                 </script> -->
 
                 <?php
-                    $api_key                 = get_option('epasscard_api_key', '');
-                    $epasscard_account_email = get_option('epasscard_account_email', '');
-                    $api_url                 = "https://api.epasscard.com/api/profile/" . $epasscard_account_email;
+                    $api_key  = get_option('epasscard_api_key', '');
+                    $api_url = EPASSCARD_API_URL."get-user-data";
 
                     $args = [
                         'headers' => [
@@ -123,7 +120,7 @@
                     ];
 
                     $response           = wp_remote_get($api_url, $args);
-                    $available_pass     = 0;
+                    $total_pass     = 0;
                     $total_created_pass = 0;
 
                     if (! is_wp_error($response)) {
@@ -131,15 +128,17 @@
                         $data = json_decode($body, true);
 
                         // Extract the data you need from API response
-                        $available_pass     = $data['data']['num_of_pass'] ?? 0;
-                        $total_created_pass = $data['data']['total_created_pass'] ?? 0;
-                    }
+                        $total_pass     = $data['data']['num_of_pass'] ?? 0;
+                        $total_created_pass = $data['data']['total_pass_active'] ?? 0;
+                        $available_pass =  $total_pass - $total_created_pass;
 
+                    }
+                    
                 ?>
 
 
                 <div class="form-group pass-limit-check" data-pass-stats="<?php echo esc_attr(json_encode([
-                                                                                  'numberOfPass'     => $available_pass,
+                                                                                  'numberOfPass'     => $total_pass,
                                                                               'totalCreatedPass' => $total_created_pass,
                                                                           ])); ?>">
                     <label class="required">Maximum number of created passes <small>(Available pass:

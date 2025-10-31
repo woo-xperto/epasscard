@@ -60,9 +60,7 @@ jQuery(document).ready(function ($) {
 
     // Add loading state
     $btn.addClass("is-loading").prop("disabled", true);
-
     var api_key = $("#epasscard-api-key").val();
-    var account_email = $("#account-email").val();
 
     // AJAX request
     $.ajax({
@@ -72,7 +70,6 @@ jQuery(document).ready(function ($) {
         action: "epasscard_connect",
         nonce: epasscard_admin.nonce,
         api_key: api_key,
-        account_email: account_email,
       },
       success: function (response) {
         // Remove loading state
@@ -1283,7 +1280,13 @@ jQuery(document).ready(function ($) {
         _ajax_nonce: epasscard_admin.nonce,
       },
       success: function (response) {
-        const message = response.data.message;
+        let message;
+        if (response.data && response.data.message){
+          message = response.data.message;
+        }else{
+          message = "Something wrong. Please try again later";
+        }
+        
         $(".info-notification-data").html(message);
         $(".epass-info-modal").css("display", "block");
 
@@ -1298,9 +1301,6 @@ jQuery(document).ready(function ($) {
 
         }
         $button.find(".epasscard-spinner").css("display", "none");
-        //loadTemplates();
-        //$(".epasscard-tablinks.nav-tab.list-nav").trigger("click");
-        //$button.prop("disabled", true).html("Update pass");
       },
       error: function (xhr, status, error) { },
       complete: function () {

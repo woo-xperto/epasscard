@@ -16,6 +16,8 @@ define('EPASSCARD_VERSION', '1.0.0');
 define('EPASSCARD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EPASSCARD_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('EPASSCARD_API_URL', 'https://api.epasscard.com/api/public/v1/');
+define('EPASSCARD_API_CERTIFICATES', 'https://api.epasscard.com/api/certificate/all-certificates/');
+
 
 // Manually require all class files
 require_once EPASSCARD_PLUGIN_DIR . 'includes/class-epasscard-assets.php';

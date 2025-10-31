@@ -1,7 +1,6 @@
 jQuery(document).ready(function ($) {
   $(".created-passes").on("input", function () {
     let maximumPass = $(this).val();
-    //epass_get_profile(maximumPass);
 
     const passData = JSON.parse(
       $("#PassInfo .pass-limit-check").attr("data-pass-stats")

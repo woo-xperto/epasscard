@@ -112,9 +112,10 @@ $response = wp_remote_post($api_url, [
     'timeout' => 30,
 ]);
 
+
 if (is_wp_error($response)) {
     wp_send_json_error($response->get_error_message());
-} else {
+}else {
     $body = wp_remote_retrieve_body($response);
     $data = json_decode($body, true);
     wp_send_json_success($data);

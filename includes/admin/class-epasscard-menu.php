@@ -33,8 +33,7 @@
         {
             
             $api_key     = sanitize_text_field(get_option('epasscard_api_key', ''));
-            $account_email = get_option('epasscard_account_email', '');
-            $active_tab_selector = ((isset($api_key) && $api_key != "") && (isset($account_email) && $account_email != "")) ? 'create-template' :'connection';
+            $active_tab_selector = ((isset($api_key) && $api_key != "")) ? 'create-template' :'connection';
 
             // Get the active tab from the URL, default to 'create-template'
             $active_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : $active_tab_selector;

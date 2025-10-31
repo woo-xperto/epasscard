@@ -1,7 +1,6 @@
 <div class="epasscard-form-container">
     <?php 
-    $api_key     = sanitize_text_field(get_option('epasscard_api_key', ''));
-    $accountesc_html_email = get_option('epasscard_account_email', ''); ?>
+    $api_key     = sanitize_text_field(get_option('epasscard_api_key', '')); ?>
     <form id="epasscard-connection-form" method="post">
         <?php wp_nonce_field('epasscard_connect', 'epasscard_nonce'); ?>
         <div class="form-group">
@@ -9,13 +8,6 @@
             <input type="text" id="epasscard-api-key" name="epasscard_api_key" class="regular-text"
                 value="<?php echo esc_attr($api_key); ?>" required>
             <span class="validation-error" id="api-key-error"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="account-email"><?php esc_html_e('Account Email', 'epasscard'); ?></label>
-            <input type="email" id="account-email" name="account_email" class="regular-text"
-                value="<?php echo esc_attr($accountesc_html_email); ?>" required>
-            <span class="validation-error" id="account-email-error"></span>
         </div>
 
         <div class="form-group">

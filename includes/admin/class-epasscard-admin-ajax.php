@@ -43,16 +43,12 @@ class Epasscard_Ajax
 
         // Sanitize and validate input
         $api_key = isset($_POST['api_key']) ? sanitize_text_field(wp_unslash($_POST['api_key'])) : '';
-        $account_email = isset($_POST['account_email']) ? sanitize_email(wp_unslash($_POST['account_email'])) : '';
 
         // Validate fields
         $errors = [];
 
         if (empty($api_key)) {
             $errors['api_key'] = __('API key is required', 'epasscard');
-        }
-        if (empty($account_email) || !is_email($account_email)) {
-            $errors['account_email'] = __('A valid email address is required', 'epasscard');
         }
 
         if (!empty($errors)) {
@@ -65,9 +61,8 @@ class Epasscard_Ajax
 
             // Save the settings
             $api_key_saved = update_option('epasscard_api_key', $api_key);
-            $account_email_saved = update_option('epasscard_account_email', $account_email);
 
-            if ($api_key_saved || $account_email_saved) {
+            if ($api_key_saved) {
                 $response['success'] = true;
                 $response['message'] = __('Settings saved successfully!', 'epasscard');
             } else {
@@ -247,17 +242,7 @@ class Epasscard_Ajax
         $data['backFields'] = $backFields;
 
         // Call the template creation function with the full data array
-        $result = $this->make_pass_template_request($data);
-
-        if ($result === false) {
-            wp_send_json_error([
-                'message' => 'Something went wrong, please try again.',
-            ]);
-        } else {
-            wp_send_json_success([
-                'data' => $result,
-            ]);
-        }
+        echo $this->make_pass_template_request($data);
 
         wp_die();
     }

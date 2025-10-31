@@ -16,9 +16,6 @@ class Epasscard
             // Load contents in admin footer
             new EpasscardAdminFooter();
         }
-
-        // Load text domain
-        //load_plugin_textdomain('epasscard', false, dirname(plugin_basename(__FILE__)) . '/languages/');
     }
 
     /**

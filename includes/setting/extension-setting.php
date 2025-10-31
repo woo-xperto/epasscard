@@ -28,13 +28,5 @@ $is_webcartisan_giftcard_active = 0;
                  </div>
             <?php }?>  
         </div>
-        <div class="extension-item">
-            <h3>Yeith</h3>
-            <button class="extension-button">Get<span class="epasscard-spinner"></span></button>
-        </div>
-        <div class="extension-item">
-            <h3>Title 3</h3>
-            <button class="extension-button">Get<span class="epasscard-spinner"></span></button>
-        </div>
     </div>
 </div>
