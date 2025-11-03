@@ -1,13 +1,14 @@
 === EpassCard ===
-Contributors: wooxperto,xihad1 
-Tags: wallet, passbook, gift card, Apple Wallet, Google Wallet, membership card  
-Requires at least: 5.0  
-Tested up to: 6.8  
-Stable tag: 1.0.0  
-License: GPLv2 or later  
-License URI: https://www.gnu.org/licenses/gpl-2.0.html  
+**Contributors:** wooxperto,xihad1 
+**Tags:** wallet, passbook, gift card, Apple Wallet, Google Wallet, membership card  
+**Requires at least:** 5.0  
+**Tested up to:** 6.8
+**Requires PHP:** 7.2
+**Stable tag:** 1.0.0  
+**License:** GPLv2 or later  
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
-Create digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.
+**Create digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.**
 
 == Description ==
 **Smartest Card Solution For Google Wallet and Apple Wallet and EpassCard**
