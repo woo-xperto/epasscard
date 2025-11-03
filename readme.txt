@@ -1,17 +1,17 @@
-=== Epasscard ===
+=== EpassCard – Smartest Card Solution (Google Wallet and Apple Wallet) ===
 Contributors: wooxperto,xihad1 
-Tags: wallet, passbook, gift card, Apple Wallet, Google Wallet  
+Tags: wallet, passbook, gift card, Apple Wallet, Google Wallet, membership card  
 Requires at least: 5.0  
 Tested up to: 6.8  
 Stable tag: 1.0.0  
 License: GPLv2 or later  
 License URI: https://www.gnu.org/licenses/gpl-2.0.html  
 
-Create digital wallet passes for Apple Wallet, Google Wallet, and WooCommerce gift cards.
+Create digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.
 
 == Description ==
 
-Epasscard is a powerful WordPress plugin that brings digital wallet functionality to your WooCommerce store. It allows users to generate and manage electronic passes and cards, such as loyalty cards, coupons, and gift cards, directly from your website.
+Epasscard is a powerful WordPress plugin that brings digital wallet functionality to your Website. It allows users to generate and manage electronic passes and cards, such as loyalty cards, coupons, and gift cards, directly from your website.
 
 With the **Epasscard to Gift Card Extension**, you can automatically generate a digital pass whenever a gift card is created using the popular **Gift Card for WooCommerce** plugin. This pass can be stored and accessed via Epasscard, providing a seamless experience for your customers.
 
