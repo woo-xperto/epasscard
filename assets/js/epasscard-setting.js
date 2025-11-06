@@ -8,43 +8,6 @@ jQuery(document).ready(function ($) {
       .toggleClass("epasscard-hidden");
   });
 
-  // $(".recharge-select").on("change", function () {
-  //   const values = $(this).val();
-  //   const table = $(this).siblings(".recharge-table");
-  //   const tbody = table.find("tbody");
-  //   tbody.empty();
-
-  //   if (values && values.length > 0) {
-  //     values.forEach((val) => {
-  //       const dropdown = `
-  //       <select class="action-select">
-  //         <option disabled selected value="">Please select one</option>
-  //         <option value="add_deduct">Add/Deduct</option>
-  //         <option value="replace" selected>Replace</option>
-  //       </select>
-  //     `;
-
-  //       const row = `
-  //       <tr>
-  //         <td>${val}</td>
-  //         <td>${dropdown}</td>
-  //       </tr>
-  //     `;
-  //       tbody.append(row);
-  //     });
-  //     table.show();
-  //   } else {
-  //     table.hide();
-  //   }
-  // });
-
-  // $(".recharge-select").each(function () {
-  //   $(this).select2({
-  //     placeholder: "Select recharge options",
-  //     width: "100%",
-  //   });
-  // });
-
   $(".recharge-select").on("change", function () {
     const values = $(this).val() || [];
     const table = $(this).siblings(".recharge-table");

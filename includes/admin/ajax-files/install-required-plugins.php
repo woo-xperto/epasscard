@@ -29,6 +29,18 @@ if (!current_user_can('install_plugins')) {
         $plugin_dir = WP_PLUGIN_DIR . '/epasscard-giftcard-extension';
         $plugin_file = $plugin_dir . '/epasscard-giftcard-extension.php';
         $plugin_relative_path = 'epasscard-giftcard-extension/epasscard-giftcard-extension.php';
+     }else if($plugin_type == "yith_giftcard"){
+        $plugin_url = 'https://downloads.wordpress.org/plugin/yith-woocommerce-gift-cards.4.29.0.zip';
+        // Get plugin file path from installed plugin directory
+        $plugin_dir = WP_PLUGIN_DIR . '/yith-woocommerce-gift-cards';
+        $plugin_file = $plugin_dir . '/init.php';
+        $plugin_relative_path = 'yith-woocommerce-gift-cards/init.php';
+     }else if($plugin_type == "yith_extension"){
+        $plugin_url = 'https://downloads.wordpress.org/plugin/epasscard-yith-extension.1.0.0.zip';
+        // Get plugin file path from installed plugin directory
+        $plugin_dir = WP_PLUGIN_DIR . '/epasscard-yith-extension';
+        $plugin_file = $plugin_dir . '/epasscard-yith-extension.php';
+        $plugin_relative_path = 'epasscard-yith-extension/epasscard-yith-extension.php';
      }
 
     
