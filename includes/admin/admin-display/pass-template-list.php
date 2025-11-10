@@ -10,7 +10,6 @@
             $per_page        = 5;
             $current_page    = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
             $offset          = ($current_page - 1) * $per_page;
-            //$organization_id = get_option('epasscard_organization_id', '');
             $api_key         = get_option('epasscard_api_key', '');
             $nonce           = sanitize_text_field(wp_unslash($_GET['_wpnonce']));
             $api_url = EPASSCARD_API_URL.'get-pass-templates?page=' . $current_page;
