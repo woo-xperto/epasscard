@@ -20,6 +20,17 @@ $is_webcartisan_yith_extension_active = 0;
    $is_webcartisan_yith_extension_active = 1;
  }
 
+ // Check is Ultimate gift card active
+ $is_webcartisan_ultimate_giftcard_active = 0;
+ if (class_exists('Woocommerce_Gift_Cards_Lite')) {
+   $is_webcartisan_ultimate_giftcard_active = 1;
+ }
+
+$is_webcartisan_ultimate_extension_active = 0;
+ if (class_exists('WODGC_Gift_Cards_Lite_Extension')) {
+   $is_webcartisan_ultimate_extension_active = 1;
+ }
+
  
 ?>
 <div class="wrap">
@@ -58,5 +69,24 @@ $is_webcartisan_yith_extension_active = 0;
                  </div>
             <?php }?>  
         </div>
+        
+        <!-- Ultimate Gift Cards For WooCommerce Setting -->
+        <div class="extension-item">
+            <h3>Ultimate Gift Cards For WooCommerce</h3>
+            <?php if($is_webcartisan_ultimate_giftcard_active == 1) { 
+                if($is_webcartisan_ultimate_extension_active == 1) {?>
+                    <button class="extension-button epass-button-disabled" disabled>Activated</button>
+                <?php }else{ ?>
+                   <button class="extension-button epass-button-install" plugin-type="ultimate_extension">Get<span class="epasscard-spinner"></span></button> 
+                <?php } ?>
+               
+            <?php }else{ ?>
+                <button class="extension-button epass-button-disabled" disabled>Get</button>
+                <div>
+                    <a href="#" class="epass-button-install" plugin-type="ultimate_giftcard">Please Install Ultimate Gift Cards For WooCommerce<span class="epasscard-spinner"></span></a>
+                 </div>
+            <?php }?>  
+        </div>
+
     </div>
 </div>

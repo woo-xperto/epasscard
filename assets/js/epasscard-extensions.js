@@ -20,7 +20,7 @@ jQuery(document).ready(function ($) {
                 modal.css("display", "block");
                 $button.find(".epasscard-spinner").css("display", "none");
                 setTimeout(function () {
-                    window.location.href = window.location.href;
+                   window.location.reload();
                 }, 500); // Delay by 500ms
             },
             error: function () {

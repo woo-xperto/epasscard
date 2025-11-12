@@ -41,8 +41,19 @@ if (!current_user_can('install_plugins')) {
         $plugin_dir = WP_PLUGIN_DIR . '/epasscard-yith-extension';
         $plugin_file = $plugin_dir . '/epasscard-yith-extension.php';
         $plugin_relative_path = 'epasscard-yith-extension/epasscard-yith-extension.php';
+     }else if($plugin_type == "ultimate_giftcard"){
+        $plugin_url = 'https://downloads.wordpress.org/plugin/woo-gift-cards-lite.3.2.2.zip';
+        // Get plugin file path from installed plugin directory
+        $plugin_dir = WP_PLUGIN_DIR . '/woo-gift-cards-lite';
+        $plugin_file = $plugin_dir . '/woocommerce_gift_cards_lite.php';
+        $plugin_relative_path = 'woo-gift-cards-lite/woocommerce_gift_cards_lite.php';
+     }else if($plugin_type == "ultimate_extension"){
+        $plugin_url = 'https://downloads.wordpress.org/plugin/epasscard-woo-gift-cards-lite-extension.1.0.0.zip';
+        // Get plugin file path from installed plugin directory
+        $plugin_dir = WP_PLUGIN_DIR . '/epasscard-woo-gift-cards-lite-extension';
+        $plugin_file = $plugin_dir . '/epasscard-gift-cards-lite-extension.php';
+        $plugin_relative_path = 'epasscard-woo-gift-cards-lite-extension/epasscard-gift-cards-lite-extension.php';
      }
-
     
     $upgrader = new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin());
     $result = $upgrader->install($plugin_url);
