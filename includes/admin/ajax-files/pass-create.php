@@ -1,8 +1,9 @@
 <?php
-$api_url = EPASSCARD_API_URL."create-template";
-$api_key = get_option('epasscard_api_key', '');
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+$epasscard_api_url = EPASSCARD_API_URL."create-template";
+$epasscard_api_key = get_option('epasscard_api_key', '');
 
-$body    = '{
+$epasscard_body    = '{
     "passSettings": {
         "primarySettings": {
             "name": "' . $templateName . '",
@@ -103,20 +104,20 @@ $body    = '{
     "org_id": null
 }';
 
-$response = wp_remote_post($api_url, [
+$epasscard_response = wp_remote_post($epasscard_api_url, [
     'headers' => [
         'Content-Type' => 'application/json',
-        'x-api-key'    => $api_key,
+        'x-api-key'    => $epasscard_api_key,
     ],
-    'body'    => $body,
+    'body'    => $epasscard_body,
     'timeout' => 30,
 ]);
 
 
-if (is_wp_error($response)) {
-    wp_send_json_error($response->get_error_message());
+if (is_wp_error($epasscard_response)) {
+    wp_send_json_error($epasscard_response->get_error_message());
 }else {
-    $body = wp_remote_retrieve_body($response);
-    $data = json_decode($body, true);
-    wp_send_json_success($data);
+    $epasscard_body = wp_remote_retrieve_body($epasscard_response);
+    $epasscard_data = json_decode($epasscard_body, true);
+    wp_send_json_success($epasscard_data);
 }

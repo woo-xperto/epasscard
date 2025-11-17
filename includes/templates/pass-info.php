@@ -1,10 +1,11 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div id="epasscard_pass_info">
     <div class="left">
         <!-- Mobile preview -->
         <?php include EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-preview.php'; ?>
     </div>
     <div class="right">
-        <?php if(isset($total_pass) && $total_pass > 0) { ?>
+        <?php if(isset($epasscard_total_pass) && $epasscard_total_pass > 0) { ?>
         <div class="epass-alert-box" role="alert">
         <div class="alert-icon">
             <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -12,7 +13,7 @@
             </svg>
         </div>
         <div class="alert-message">
-            You’ve already created <?php echo esc_html($total_pass); ?> pass using this template. Unfortunately, this template can no longer be updated or modified. If you need changes, consider creating a new template.
+            You’ve already created <?php echo esc_html($epasscard_total_pass); ?> pass using this template. Unfortunately, this template can no longer be updated or modified. If you need changes, consider creating a new template.
         </div>
         <button type="button" class="alert-close" aria-label="Close">
             <span class="sr-only">Dismiss</span>
@@ -36,17 +37,17 @@
                 <div class="form-group">
                     <label class="required">Template Name</label>
                     <input type="text" class="template-name" placeholder="Enter template name"
-                        value="<?php echo esc_attr($name ?? ''); ?>">
+                        value="<?php echo esc_attr($epasscard_name ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label class="required">Description</label>
                     <input type="text" class="template-description" placeholder="Enter description"
-                        value="<?php echo esc_attr($description ?? ''); ?>">
+                        value="<?php echo esc_attr($epasscard_description ?? ''); ?>">
                 </div>
                 <div class="form-group">
                     <label class="required">Organization Name</label>
                     <input type="text" class="organization-name" placeholder="Enter organization name"
-                        value="<?php echo esc_attr($passOrgName ?? ''); ?>">
+                        value="<?php echo esc_attr($epasscard_org_name ?? ''); ?>">
                 </div>
             </div>
 
@@ -59,32 +60,32 @@
                         </option>
 
                         <?php
-                            $passTypeId = $passTypeId ?? '';
-                            $api_url    = EPASSCARD_API_CERTIFICATES;
-                            $api_key    = get_option('epasscard_api_key', '');
+                            $epasscard_pass_type_id = $epasscard_pass_type_id ?? '';
+                            $epasscard_api_url    = EPASSCARD_API_CERTIFICATES;
+                            $epasscard_api_key    = get_option('epasscard_api_key', '');
 
                             // Static option
-                            $isSelected = ($passTypeId === 'pass.test.epasscard') ? ' selected' : '';
-                            echo '<option value="' . esc_attr('pass.test.epasscard') . '"' . esc_attr($isSelected) . '>' . esc_html('pass.test.epasscard') . '</option>';
+                            $epasscard_is_selected = ($epasscard_pass_type_id === 'pass.test.epasscard') ? ' selected' : '';
+                            echo '<option value="' . esc_attr('pass.test.epasscard') . '"' . esc_attr($epasscard_is_selected) . '>' . esc_html('pass.test.epasscard') . '</option>';
 
                             // Dynamic options from API
-                            if (! empty($api_key)) {
-                                $response = wp_remote_get($api_url, [
+                            if (! empty($epasscard_api_key)) {
+                                $epasscard_response = wp_remote_get($epasscard_api_url, [
                                     'headers' => [
-                                        'x-api-key' => $api_key,
+                                        'x-api-key' => $epasscard_api_key,
                                     ],
                                     'timeout' => 15,
                                 ]);
 
-                                if (! is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
-                                    $body = wp_remote_retrieve_body($response);
-                                    $data = json_decode($body, true);
+                                if (! is_wp_error($epasscard_response) && wp_remote_retrieve_response_code($epasscard_response) === 200) {
+                                    $epasscard_body = wp_remote_retrieve_body($epasscard_response);
+                                    $epasscard_data = json_decode($epasscard_body, true);
 
-                                    if (is_array($data) && json_last_error() === JSON_ERROR_NONE) {
-                                        foreach ($data as $item) {
-                                            if (! empty($item['certificate_name'])) {
-                                                $name = sanitize_text_field($item['certificate_name']);
-                                                echo '<option value="' . esc_attr($name) . '" ' . selected($passTypeId, $name, false) . '>' . esc_html($name) . '</option>';
+                                    if (is_array($epasscard_data) && json_last_error() === JSON_ERROR_NONE) {
+                                        foreach ($epasscard_data as $epasscard_item) {
+                                            if (! empty($epasscard_item['certificate_name'])) {
+                                                $epasscard_name = sanitize_text_field($epasscard_item['certificate_name']);
+                                                echo '<option value="' . esc_attr($epasscard_name) . '" ' . selected($epasscard_pass_type_id, $epasscard_name, false) . '>' . esc_html($epasscard_name) . '</option>';
                                             }
                                         }
                                     }
@@ -102,35 +103,35 @@
                     $('.pass-certificates').select2();
 
                     // Clear any existing selection if passTypeId is empty
-                    <?php if (empty($passTypeId)): ?>
+                    <?php if (empty($epasscard_pass_type_id)): ?>
                     $('.pass-certificates').val('').trigger('change');
                     <?php endif; ?>
                 });
                 </script> -->
 
                 <?php
-                    $api_key  = get_option('epasscard_api_key', '');
-                    $api_url = EPASSCARD_API_URL."get-user-data";
+                    $epasscard_api_key  = get_option('epasscard_api_key', '');
+                    $epasscard_api_url = EPASSCARD_API_URL."get-user-data";
 
-                    $args = [
+                    $epasscard_args = [
                         'headers' => [
-                            'x-api-key' => $api_key,
+                            'x-api-key' => $epasscard_api_key,
                         ],
                         'timeout' => 15,
                     ];
 
-                    $response           = wp_remote_get($api_url, $args);
-                    $total_pass     = 0;
-                    $total_created_pass = 0;
+                    $epasscard_response           = wp_remote_get($epasscard_api_url, $epasscard_args);
+                    $epasscard_total_pass     = 0;
+                    $epasscard_total_created_pass = 0;
 
-                    if (! is_wp_error($response)) {
-                        $body = wp_remote_retrieve_body($response);
-                        $data = json_decode($body, true);
+                    if (! is_wp_error($epasscard_response)) {
+                        $epasscard_body = wp_remote_retrieve_body($epasscard_response);
+                        $epasscard_data = json_decode($epasscard_body, true);
 
                         // Extract the data you need from API response
-                        $total_pass     = $data['data']['num_of_pass'] ?? 0;
-                        $total_created_pass = $data['data']['total_pass_active'] ?? 0;
-                        $available_pass =  $total_pass - $total_created_pass;
+                        $epasscard_total_pass     = $epasscard_data['data']['num_of_pass'] ?? 0;
+                        $epasscard_total_created_pass = $epasscard_data['data']['total_pass_active'] ?? 0;
+                        $epasscard_available_pass =  $epasscard_total_pass - $epasscard_total_created_pass;
 
                     }
                     
@@ -138,13 +139,13 @@
 
 
                 <div class="form-group pass-limit-check" data-pass-stats="<?php echo esc_attr(json_encode([
-                                                                                  'numberOfPass'     => $total_pass,
-                                                                              'totalCreatedPass' => $total_created_pass,
+                                                                                  'numberOfPass'     => $epasscard_total_pass,
+                                                                              'totalCreatedPass' => $epasscard_total_created_pass,
                                                                           ])); ?>">
                     <label class="required">Maximum number of created passes <small>(Available pass:
-                            <span id="availablePass"><?php echo esc_html($available_pass); ?></span>)</small></label>
+                            <span id="availablePass"><?php echo esc_html($epasscard_available_pass); ?></span>)</small></label>
                     <input type="number" class="created-passes" min="0" onkeypress="return event.charCode >= 48"
-                        placeholder="Enter maximum number" value="<?php echo esc_attr($passLimit ?? ''); ?>">
+                        placeholder="Enter maximum number" value="<?php echo esc_attr($epasscard_pass_limit ?? ''); ?>">
                 </div>
             </div>
         </div>

@@ -27,14 +27,10 @@ require_once EPASSCARD_PLUGIN_DIR . 'includes/admin/class-epasscard-menu.php';
 require_once EPASSCARD_PLUGIN_DIR . 'includes/admin/class-epasscard-admin-ajax.php';
 require_once EPASSCARD_PLUGIN_DIR . 'includes/admin/class-epasscard-footer.php';
 
-// Register activation and deactivation hooks
-register_activation_hook(__FILE__, ['Epasscard', 'activate']);
-register_deactivation_hook(__FILE__, ['Epasscard', 'deactivate']);
-
 // Initialize the plugin
 add_action('plugins_loaded', function () {
     if (class_exists('Epasscard')) {
         $epasscard = new Epasscard();
-        $epasscard->init();
+        $epasscard->Epasscard_init();
     }
 });

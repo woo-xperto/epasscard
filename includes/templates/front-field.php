@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div id="epasscard_front_field">
     <div class="left">
         <!-- Mobile preview -->

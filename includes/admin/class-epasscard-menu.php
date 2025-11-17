@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     class Epasscard_Menu
     {
         /**
@@ -6,20 +7,20 @@
          */
         public function __construct()
         {
-            add_action('admin_menu', [$this, 'add_admin_menu']);
+            add_action('admin_menu', [$this, 'Epasscard_admin_menu']);
         }
 
         /**
          * Add admin menu
          */
-        public function add_admin_menu()
+        public function Epasscard_admin_menu()
         {
             add_menu_page(
                 __('Epasscard', 'epasscard'),
                 __('Epasscard', 'epasscard'),
                 'manage_options',
                 'epasscard',
-                [$this, 'render_admin_page'],
+                [$this, 'Epasscard_render_admin_page'],
                 'dashicons-admin-network',
                 80
             );
@@ -29,7 +30,7 @@
          * Render admin page
          */
 
-        public function render_admin_page()
+        public function Epasscard_render_admin_page()
         {
             
             $api_key     = sanitize_text_field(get_option('epasscard_api_key', ''));

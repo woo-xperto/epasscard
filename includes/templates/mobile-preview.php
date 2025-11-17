@@ -1,25 +1,26 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div class="mobile-preview mobile_portrait relative">
     <div>
         <div class="phone-pass-preview" id="phone-pass-preview">
             <img class="phone-img" id="phone"
                 src="<?php echo esc_url(EPASSCARD_PLUGIN_URL . 'assets/img/images/mobile_portrait.png'); ?>"
                 alt="image">
-            <div id="pass-inner" class="coupon" style="background-color:<?php echo esc_attr($bgColor ?? ''); ?>;">
+            <div id="pass-inner" class="coupon" style="background-color:<?php echo esc_attr($epasscard_bg_color ?? ''); ?>;">
                 <div class="coupon-container">
                     <div>
                         <div class="coupon-header">
                             <div class="header-logo">
                                 <img class="logo-img"
-                                    src="<?php echo esc_attr($logo ?? 'https://app.epasscard.com/assets/img/predefined-templates/assets/warrenty-logo.png'); ?>">
+                                    src="<?php echo esc_attr($epasscard_logo ?? 'https://app.epasscard.com/assets/img/predefined-templates/assets/warrenty-logo.png'); ?>">
                             </div>
                             <div class="header-content">
-                                <?php if (! empty($headerInfo)) {
-                                    foreach ($headerInfo as $header) {?>
+                                <?php if (! empty($epasscard_header_info)) {
+                                    foreach ($epasscard_header_info as $epasscard_header) {?>
                                 <div class="content-text" data-field-id="default-field">
-                                    <p class="product-name" style="color:<?php echo esc_attr($labelColor ?? ''); ?>">
-                                        <?php echo esc_html($header['label'] ?? ''); ?></p>
-                                    <p class="product-value" style="color:<?php echo esc_attr($fgColor ?? ''); ?>">
-                                        <?php echo esc_html($header['value'] ?? ''); ?></p>
+                                    <p class="product-name" style="color:<?php echo esc_attr($epasscard_label_color ?? ''); ?>">
+                                        <?php echo esc_html($epasscard_header['label'] ?? ''); ?></p>
+                                    <p class="product-value" style="color:<?php echo esc_attr($epasscard_fg_color ?? ''); ?>">
+                                        <?php echo esc_html($epasscard_header['value'] ?? ''); ?></p>
                                 </div>
                                 <?php }
                                 } else {?>
@@ -35,10 +36,10 @@
                             </div>
                         </div>
                         <div class="coupon-strip"
-                            style="background-image: url(<?php echo esc_url($bgImage ?? 'https://app.epasscard.com/assets/img/predefined-templates/assets/warrenty-strip.png'); ?>);">
+                            style="background-image: url(<?php echo esc_url($epasscard_bg_image ?? 'https://app.epasscard.com/assets/img/predefined-templates/assets/warrenty-strip.png'); ?>);">
                             <div class="strip-content">
-                                <p class="strip-text"><?php echo isset($primaryLabel) ? esc_html($primaryLabel) : ''; ?></p>
-                                <p class="strip-text-uppercase"><?php echo isset($primaryValue) ? esc_html($primaryValue) : ''; ?></p>
+                                <p class="strip-text"><?php echo isset($epasscard_primary_label) ? esc_html($epasscard_primary_label) : ''; ?></p>
+                                <p class="strip-text-uppercase"><?php echo isset($epasscard_primary_value) ? esc_html($epasscard_primary_value) : ''; ?></p>
                             </div>
                             <div class="edit-button">
                                 <button class="edit-btn" data-epasscard-edit="primary-fields">Edit</button>
@@ -56,24 +57,24 @@
                         </div>
                         <div class="coupon-details">
                             <div class="details-container">
-                                <?php if (! empty($secondaryInfo) && is_array($secondaryInfo)) {
-                                        $index = 0;
+                                <?php if (! empty($epasscard_secondary_info) && is_array($epasscard_secondary_info)) {
+                                        $epasscard_index = 0;
                                         //$baseTimestamp = (int) round(microtime(true) * 1000);
-                                        foreach ($secondaryInfo as $field) {
-                                        //$timestamp = $baseTimestamp + $index; ?>
-                                <div class="detail-item" data-id="<?php echo esc_attr($index); ?>">
-                                    <p class="detail-label" style="color:<?php echo esc_attr($labelColor ?? ''); ?>">
-                                        <?php echo esc_html($field['label'] ?? ''); ?>
+                                        foreach ($epasscard_secondary_info as $epasscard_field) {
+                                        //$timestamp = $baseTimestamp + $epasscard_index; ?>
+                                <div class="detail-item" data-id="<?php echo esc_attr($epasscard_index); ?>">
+                                    <p class="detail-label" style="color:<?php echo esc_attr($epasscard_label_color ?? ''); ?>">
+                                        <?php echo esc_html($epasscard_field['label'] ?? ''); ?>
                                     </p>
-                                    <p class="detail-value" style="color:<?php echo esc_attr($fgColor ?? ''); ?>">
-                                        <?php echo esc_html($field['value'] ?? ''); ?></p>
+                                    <p class="detail-value" style="color:<?php echo esc_attr($epasscard_fg_color ?? ''); ?>">
+                                        <?php echo esc_html($epasscard_field['value'] ?? ''); ?></p>
                                 </div>
-                                <?php $index++;
+                                <?php $epasscard_index++;
                                         }
                                     } else {
 
-                                    for ($index = 0; $index < 2; $index++): ?>
-                                <div class="detail-item" data-id="<?php echo esc_attr($index); ?>">
+                                    for ($epasscard_index = 0; $epasscard_index < 2; $epasscard_index++): ?>
+                                <div class="detail-item" data-id="<?php echo esc_attr($epasscard_index); ?>">
                                     <p class="detail-label"></p>
                                     <p class="detail-value"></p>
                                 </div>
@@ -86,24 +87,24 @@
                         </div>
                         <div class="coupon-qrcode">
                             <div class="qrcode-container">
-                                <?php if (isset($barcodeInfo['format'])) {
-                                        $barcodeType = $barcodeInfo['format'];
-                                        if ($barcodeType === 'qrCode') {
-                                            $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
-                                        } elseif ($barcodeType === 'CODE_128') {
-                                            $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/barcode.png';
-                                        } elseif ($barcodeType === 'PDF_417') {
-                                            $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/barcode_pdf417.png';
-                                        } elseif ($barcodeType === 'AZTEC') {
-                                            $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/aztec.png';
+                                <?php if (isset($epasscard_barcode_info['format'])) {
+                                        $epasscard_barcode_type = $epasscard_barcode_info['format'];
+                                        if ($epasscard_barcode_type === 'qrCode') {
+                                            $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
+                                        } elseif ($epasscard_barcode_type === 'CODE_128') {
+                                            $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/barcode.png';
+                                        } elseif ($epasscard_barcode_type === 'PDF_417') {
+                                            $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/barcode_pdf417.png';
+                                        } elseif ($epasscard_barcode_type === 'AZTEC') {
+                                            $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/aztec.png';
                                         } else {
-                                            $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
+                                            $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
                                         }
                                     } else {
-                                        $barcodeImg = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
+                                        $epasscard_barcode_img = EPASSCARD_PLUGIN_URL . 'assets/img/images/qrcode.png';
                                     }
                                 ?>
-                                <img class="qrcode-img" src="<?php echo esc_url($barcodeImg); ?>">
+                                <img class="qrcode-img" src="<?php echo esc_url($epasscard_barcode_img); ?>">
                             </div>
                             <div class="edit-button">
                                 <button class="edit-btn" data-epasscard-edit="barcode-fields">Edit</button>

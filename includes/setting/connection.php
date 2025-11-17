@@ -1,12 +1,13 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div class="epasscard-form-container">
     <?php 
-    $api_key     = sanitize_text_field(get_option('epasscard_api_key', '')); ?>
+    $epasscard_api_key     = sanitize_text_field(get_option('epasscard_api_key', '')); ?>
     <form id="epasscard-connection-form" method="post">
         <?php wp_nonce_field('epasscard_connect', 'epasscard_nonce'); ?>
         <div class="form-group">
             <label for="epasscard-api-key"><?php esc_html_e('API Key', 'epasscard'); ?></label>
             <input type="text" id="epasscard-api-key" name="epasscard_api_key" class="regular-text"
-                value="<?php echo esc_attr($api_key); ?>" required>
+                value="<?php echo esc_attr($epasscard_api_key); ?>" required>
             <span class="validation-error" id="api-key-error"></span>
         </div>
 

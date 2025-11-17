@@ -1,6 +1,6 @@
 === EpassCard ===
 **Contributors:** wooxperto,xihad1 
-**Tags:** wallet, passbook, gift card, Apple Wallet, Google Wallet, membership card  
+**Tags:** wallet, passbook, gift card, Apple Wallet, Google Wallet  
 **Requires at least:** 5.0  
 **Tested up to:** 6.8
 **Requires PHP:** 7.2

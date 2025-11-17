@@ -67,7 +67,7 @@ jQuery(document).ready(function ($) {
       url: epasscard_admin.ajax_url,
       type: "POST",
       data: {
-        action: "epasscard_connect",
+        action: "Epasscard_connect",
         nonce: epasscard_admin.nonce,
         api_key: api_key,
       },
@@ -1260,7 +1260,7 @@ jQuery(document).ready(function ($) {
       url: epasscard_admin.ajax_url,
       type: "POST",
       data: {
-        action: "create_pass_template",
+        action: "Epasscard_create_pass_template",
         template_info: templateInfo,
         barcode_data: barcodeData,
         header_data: headerData,

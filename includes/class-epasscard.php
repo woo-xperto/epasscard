@@ -1,10 +1,11 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class Epasscard
 {
     /**
      * Initialize the plugin
      */
-    public function init()
+    public function Epasscard_init()
     {
         if (is_admin()) {
             // Load assets
@@ -14,23 +15,10 @@ class Epasscard
             new Epasscard_Admin();
 
             // Load contents in admin footer
-            new EpasscardAdminFooter();
+            new Epasscard_Admin_Footer();
         }
     }
 
-    /**
-     * Activation hook
-     */
-    public static function activate()
-    {
-        // Activation code if needed
-    }
-
-    /**
-     * Deactivation hook
-     */
-    public static function deactivate()
-    {
-        // Deactivation code if needed
-    }
 }
+
+

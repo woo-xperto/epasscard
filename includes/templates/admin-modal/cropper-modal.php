@@ -1,4 +1,4 @@
-<?php ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div id="epasscard-cropper-modal" style="display:none;">
     <div class="epasscard-cropper-backdrop">
         <div class="epasscard-cropper-container">

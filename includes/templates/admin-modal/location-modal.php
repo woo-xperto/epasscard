@@ -1,5 +1,5 @@
 <!-- Modal -->
-<?php ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
 <div id="location-modal" class="location-modal">
     <div class="modal-content">
         <span class="close close-location-modal" id="close-location-modal">&times;</span>

@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
             url: epasscard_admin.ajax_url,
             type: 'POST',
             data: {
-                action: 'epass_install_required_plugin',
+                action: 'Epasscard_install_required_plugin',
                 plugin_type: pluginType,
                 _ajax_nonce: epasscard_admin.nonce,
             },

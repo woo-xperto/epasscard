@@ -1330,17 +1330,6 @@ table#recharge-table {
   background-color: var(--grey-color) !important;
 }
 
-/* Create single pass CSS */
-.single-pass-wrap {
-  margin-top: 55px;
-}
-
-/* Push notification CSS */
-.push-notification-inner {
-  display: flex;
-  gap: 20px;
-}
-
 /* Main Tab CSS */
 .epasscard-tabcontent {
   padding: 6px 12px;

@@ -1,11 +1,12 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 // Load the JSON data
-$jsonData  = file_get_contents(EPASSCARD_PLUGIN_DIR . 'includes/JSON/epasscard-templates.json');
-$templates = json_decode($jsonData, true)['predefinedTemplates'] ?? [];
+$epasscard_json_data  = file_get_contents(EPASSCARD_PLUGIN_DIR . 'includes/JSON/epasscard-templates.json');
+$epasscard_templates = json_decode($epasscard_json_data, true)['predefinedTemplates'] ?? [];
 
 // Only declare the function if it doesn't already exist
-if (! function_exists('generate_card')) {
-    function generate_card($template, $index, $templateName)
+if (! function_exists('Epasscard_generate_card')) {
+    function Epasscard_generate_card($template, $index, $templateName)
     {
         $name         = isset($template['designObj']['primarySettings']['name']) ? esc_html($template['designObj']['primarySettings']['name']) : '';
         $previewImage = isset($template['previewImage']) ? esc_url($template['previewImage']) : '';
@@ -28,9 +29,9 @@ if (! function_exists('generate_card')) {
 // Generate the carousel
 echo '<div class="epasscard-card-carousel">';
 
-foreach ($templates as $index => $template) {
-    $templateName = $templateName ?? "";
-    print wp_kses_post(generate_card($template, $index, $templateName));
+foreach ($epasscard_templates as $epasscard_index => $epasscard_template) {
+    $epasscard_template_name = $epasscard_template_name ?? "";
+    print wp_kses_post(Epasscard_generate_card($epasscard_template, $epasscard_index, $epasscard_template_name));
 }
 
 // Add "More cards" item

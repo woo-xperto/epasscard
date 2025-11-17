@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class Epasscard_Ajax
 {
     /**
@@ -6,29 +7,29 @@ class Epasscard_Ajax
      */
     public function __construct()
     {
-        add_action('wp_ajax_epasscard_connect', [$this, 'handle_connect']);
+        add_action('wp_ajax_Epasscard_connect', [$this, 'Epasscard_connect']);
 
         //Get card list
-        add_action('wp_ajax_load_epasscard_templates', [$this, 'load_epasscard_templates_callback']);
-        add_action('wp_ajax_nopriv_load_epasscard_templates', [$this, 'load_epasscard_templates_callback']);
+        add_action('wp_ajax_Epasscard_templates_callback', [$this, 'Epasscard_templates_callback']);
+        add_action('wp_ajax_nopriv_Epasscard_templates_callback', [$this, 'Epasscard_templates_callback']);
 
         // Create Pass template
-        add_action('wp_ajax_create_pass_template', [$this, 'create_pass_template']);
-        add_action('wp_ajax_nopriv_create_pass_template', [$this, 'create_pass_template']);
+        add_action('wp_ajax_Epasscard_create_pass_template', [$this, 'Epasscard_create_pass_template']);
+        add_action('wp_ajax_nopriv_Epasscard_create_pass_template', [$this, 'Epasscard_create_pass_template']);
 
         //Get location
-        add_action('wp_ajax_get_epasscard_location', [$this, 'get_epasscard_location']);
-        add_action('wp_ajax_nopriv_get_epasscard_location', [$this, 'get_epasscard_location']);
+        add_action('wp_ajax_Epasscard_get_location', [$this, 'Epasscard_get_location']);
+        add_action('wp_ajax_nopriv_Epasscard_get_location', [$this, 'Epasscard_get_location']);
 
         // Download and Activate required plugins
-        add_action('wp_ajax_epass_install_required_plugin', [$this, 'epass_install_required_plugin']);
-        add_action('wp_ajax_nopriv_epass_install_required_plugin', [$this, 'epass_install_required_plugin']);
+        add_action('wp_ajax_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
+        add_action('wp_ajax_nopriv_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
     }
 
     /**
      * Handle the connect AJAX request
      */
-    public function handle_connect()
+    public function Epasscard_connect()
     {
         check_ajax_referer('epasscard_ajax_nonce', 'nonce');
 
@@ -78,7 +79,7 @@ class Epasscard_Ajax
     }
 
     // Get pass card list
-    public function load_epasscard_templates_callback()
+    public function Epasscard_templates_callback()
     {
         check_ajax_referer('epasscard_ajax_nonce');
         if (isset($_POST['request_identifier'])) {
@@ -119,7 +120,7 @@ class Epasscard_Ajax
     }
 
     // Create pass template
-    public function create_pass_template()
+    public function Epasscard_create_pass_template()
     {
         // Verify nonce for security
         check_ajax_referer('epasscard_ajax_nonce');
@@ -242,14 +243,15 @@ class Epasscard_Ajax
         $data['backFields'] = $backFields;
 
         // Call the template creation function with the full data array
-        echo $this->make_pass_template_request($data);
+        $this->Epasscard_make_pass_template_request($data);
 
         wp_die();
     }
 
     // Pass create method
-    public function make_pass_template_request(array $data)
+    public function Epasscard_make_pass_template_request(array $data)
     {
+
         $primarySettings = $data['template_data']['designObj']['primarySettings'] ?? [];
 
         $templateName = isset($primarySettings['name'])
@@ -297,7 +299,7 @@ class Epasscard_Ajax
     }
     
     //Get location
-    public function get_epasscard_location()
+    public function Epasscard_get_location()
     {
         check_ajax_referer('epasscard_ajax_nonce');
 
@@ -330,7 +332,7 @@ class Epasscard_Ajax
     }
 
     // Install required plugin
-    public function epass_install_required_plugin()
+    public function Epasscard_install_required_plugin()
     {
         require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/install-required-plugins.php';
     }

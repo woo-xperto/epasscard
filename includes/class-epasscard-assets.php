@@ -8,7 +8,7 @@ class Epasscard_Load_Assets
     {
         if (is_admin()) {
             // Load admin assets
-            add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+            add_action('admin_enqueue_scripts', [$this, 'Epasscard_enqueue_admin_assets']);
         }
 
     }
@@ -16,7 +16,7 @@ class Epasscard_Load_Assets
     /**
      * Enqueue admin assets
      */
-    public function enqueue_admin_assets($hook)
+    public function Epasscard_enqueue_admin_assets($hook)
     {
 
         if ('toplevel_page_epasscard' !== $hook) {
