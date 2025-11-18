@@ -126,53 +126,22 @@ class Epasscard_Ajax
         check_ajax_referer('epasscard_ajax_nonce');
 
         // Collect all POST data into a single array
-        // phpcs:ignore
-        $template_info = isset($_POST['template_info']) ? $_POST['template_info'] : [];
-
-        // phpcs:ignore
-        $barcode_data = isset($_POST['barcode_data']) ? $_POST['barcode_data'] : [];
-
-        // phpcs:ignore
-        $header_data = isset($_POST['header_data']) ? $_POST['header_data'] : [];
-
-        // phpcs:ignore
-        $primary_fields_data = isset($_POST['primary_fields_data']) ? $_POST['primary_fields_data'] : [];
-
-        // phpcs:ignore
-        $secondary_data = isset($_POST['secondary_data']) ? $_POST['secondary_data'] : [];
-
-        // phpcs:ignore
-        $back_field_data = isset($_POST['back_field_data']) ? $_POST['back_field_data'] : [];
-
-        // phpcs:ignore
-        $setting_data = isset($_POST['setting_data']) ? $_POST['setting_data'] : [];
-
-        // phpcs:ignore
-        $locations_data = isset($_POST['locations_data']) ? $_POST['locations_data'] : [];
-
-        // phpcs:ignore
-        $locations_setting_id = isset($_POST['locations_setting_id']) ? $_POST['locations_setting_id'] : "";
-
-        // phpcs:ignore
-        $notification_radius = isset($_POST['notification_radius']) ? $_POST['notification_radius'] : "";
-
-        // phpcs:ignore
-        $setting_values = isset($_POST['setting_values']) ? $_POST['setting_values'] : "";
-
-        // phpcs:ignore
-        $additional_properties = isset($_POST['additional_properties']) ? $_POST['additional_properties'] : [];
-
-        // phpcs:ignore
-        $recharge_field = isset($_POST['recharge_field']) ? $_POST['recharge_field'] : [];
-
-        // phpcs:ignore
-        $transaction_values = isset($_POST['transaction_values']) ? $_POST['transaction_values'] : [];
-
-        // phpcs:ignore
-        $pass_ids = isset($_POST['pass_ids']) ? $_POST['pass_ids'] : [];
-
-        // phpcs:ignore
-        $template_data = isset($_POST['template_data']) ? $_POST['template_data'] : [];
+        $template_info = isset($_POST['template_info']) ? filter_input(INPUT_POST, 'template_info', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $barcode_data = isset($_POST['barcode_data']) ? filter_input(INPUT_POST, 'barcode_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $header_data = isset($_POST['header_data']) ? filter_input(INPUT_POST, 'header_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $primary_fields_data = isset($_POST['primary_fields_data']) ? filter_input(INPUT_POST, 'primary_fields_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $secondary_data = isset($_POST['secondary_data']) ? filter_input(INPUT_POST, 'secondary_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $back_field_data = isset($_POST['back_field_data']) ? filter_input(INPUT_POST, 'back_field_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $setting_data = isset($_POST['setting_data']) ? filter_input(INPUT_POST, 'setting_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $locations_data = filter_input(INPUT_POST, 'locations_data', FILTER_DEFAULT);
+        $locations_setting_id = isset($_POST['locations_setting_id']) ? sanitize_text_field(wp_unslash($_POST['locations_setting_id'])) : "";
+        $notification_radius = isset($_POST['notification_radius']) ? sanitize_text_field(wp_unslash($_POST['notification_radius'])) : "";
+        $setting_values = isset($_POST['setting_values']) ? filter_input(INPUT_POST, 'setting_values', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $additional_properties = filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT);
+        $recharge_field = filter_input(INPUT_POST, 'recharge_field', FILTER_DEFAULT);
+        $transaction_values = filter_input(INPUT_POST, 'transaction_values', FILTER_DEFAULT);
+        $pass_ids = isset($_POST['pass_ids']) ? filter_input(INPUT_POST, 'pass_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $template_data = isset($_POST['template_data']) ? filter_input(INPUT_POST, 'template_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
 
         $data = [
             'template_info' => $template_info,
@@ -251,7 +220,8 @@ class Epasscard_Ajax
     // Pass create method
     public function Epasscard_make_pass_template_request(array $data)
     {
-
+          
+       
         $primarySettings = $data['template_data']['designObj']['primarySettings'] ?? [];
 
         $templateName = isset($primarySettings['name'])
@@ -266,15 +236,10 @@ class Epasscard_Ajax
         $headerFieldsJson = json_encode($data['headerFields'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $backFieldsJson = json_encode($data['backFields'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $secondaryFieldsJson = json_encode($data['secondaryFields'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        //$locationsDataJson   = json_encode($data['locations_data'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
         $locationsDataJson = stripslashes($data['locations_data']);
-
-        // Clean up stringified JSON fields
-        $additionalProperties = str_replace('\\', '', $data['additional_properties']);
-
-        $rechargeField = str_replace('\\', '', $data['recharge_field']);
-        $transactionValues = str_replace('\\', '', $data['transaction_values']);
+        $additionalProperties = $data['additional_properties'];
+        $rechargeField = $data['recharge_field'];
+        $transactionValues = $data['transaction_values'];
 
         // Extract IDs
         $pass_id = $data['pass_ids']['id'];

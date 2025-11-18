@@ -1046,6 +1046,18 @@ table#recharge-table {
   margin-top: 15px;
   border-collapse: collapse;
 }
+#epasscard_setting .unicode-input,#epasscard_setting .unicode-type {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+#epasscard_setting .unicode-type > div:first-child,
+#epasscard_setting .unicode-type > div:last-child{
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    align-items:center;
+}
 
 /* Mobile preview front CSS */
 
