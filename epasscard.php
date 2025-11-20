@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: EpassCard
- * Description: A plugin for managing Epasscard connections.
+ * Description: Manage digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.
  * Version: 1.0.0
  * Author: Your Name
  * License:           GPL v2 or later
