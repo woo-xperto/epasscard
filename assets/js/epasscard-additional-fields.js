@@ -88,21 +88,5 @@ jQuery(document).ready(function ($) {
     );
   });
 
-  //Show/hide unicode fields
-  jQuery(".epasscard_additional_properties .field-type-select").on("change", function () {
-    const selectedValue = $(this).val();
-    if (selectedValue == "randomUniqueCode") {
-      if (jQuery(".unicode-wrap.epasscard-hidden")) {
-        jQuery(".unicode-wrap").removeClass("epasscard-hidden");
-      }
-    } else {
-      if (!$(".epasscard_additional_properties .field-type-select").filter(function () {
-        return $(this).val() === "randomUniqueCode";
-      }).length) {
-        $(".unicode-wrap").addClass("epasscard-hidden");
-      }
-    }
-  });
-
 
 });

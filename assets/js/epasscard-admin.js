@@ -59,6 +59,7 @@ jQuery(document).ready(function ($) {
     $("#epasscard-response").html("");
 
     // Add loading state
+    $btn.css("padding-right", "40px");
     $btn.addClass("is-loading").prop("disabled", true);
     var api_key = $("#epasscard-api-key").val();
 
@@ -74,7 +75,7 @@ jQuery(document).ready(function ($) {
       success: function (response) {
         // Remove loading state
         $btn.removeClass("is-loading").prop("disabled", false);
-
+        $btn.css("padding-right", "10px");
         if (response.errors) {
           // Handle validation errors
           $.each(response.errors, function (field, message) {
@@ -134,8 +135,8 @@ jQuery(document).ready(function ($) {
   });
   // Front field script
   $(function () {
-    const wrapper = $("#epasscard_front_field");
-    const container = wrapper.find(".fields-container");
+    // const wrapper = $("#epasscard_front_field");
+    // const container = wrapper.find(".fields-container");
     // Header fields add/remove
     $(document).on("keyup", ".header-label-name", function () {
       const id = $(this)
@@ -253,6 +254,9 @@ jQuery(document).ready(function ($) {
     }
 
     // Secondary fields add/remove
+    const wrapper = $(".epasscard-secondary-fields");
+    const container = wrapper.find(".fields-container");
+
     function createFieldGroup(index) {
       const timestamp = Date.now() + index;
       const fieldGroup = $(`
@@ -278,7 +282,7 @@ jQuery(document).ready(function ($) {
     </div>
   `);
 
-      $(".mobile-preview .details-container").append(mobilePreview);
+      $(".mobile-preview .secondary-items-container").append(mobilePreview);
 
       return fieldGroup;
     }
@@ -302,7 +306,7 @@ jQuery(document).ready(function ($) {
       const fieldValue = fieldGroup.find(".secondary-value").val();
 
       // Update mobile preview
-      const mobileItem = $(`.mobile-preview .detail-item[data-id="${dataId}"]`);
+      const mobileItem = $(`.mobile-preview .secondary-items-container .detail-item[data-id="${dataId}"]`);
       mobileItem.find(".detail-label").text(labelValue || "New Label");
       mobileItem.find(".detail-value").text(fieldValue || "New Value");
     });
@@ -322,107 +326,7 @@ jQuery(document).ready(function ($) {
     });
   });
 
-  // Colors and images scripts
-  let epasscardCropper;
-  let epasscardCurrentPreviewSelector;
-  let epasscardOriginalImageData;
-
-  function closeEpasscardModal() {
-    $("#epasscard-cropper-modal").hide();
-    if (epasscardCropper) {
-      epasscardCropper.destroy();
-    }
-  }
-
-  function openEpasscardCropperModal(imageSrc, previewSelector) {
-    $("#epasscard-cropper-image").attr("src", imageSrc);
-    $("#epasscard-cropper-modal").show();
-    $("#epasscard-cropper-modal").attr("selected-image", previewSelector);
-    epasscardCurrentPreviewSelector = previewSelector;
-    epasscardOriginalImageData = imageSrc;
-
-    if (epasscardCropper) epasscardCropper.destroy();
-
-    epasscardCropper = new Cropper(
-      document.getElementById("epasscard-cropper-image"),
-      {
-        aspectRatio: NaN,
-        viewMode: 1,
-        autoCropArea: 1,
-      }
-    );
-  }
-
-  function handleEpasscardImageCrop(inputSelector, previewSelector) {
-    $(inputSelector).on("change", function () {
-      const input = this;
-      const previewsec = $(this)
-        .closest(".image-upload-wrapper")
-        .find(".preview");
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          openEpasscardCropperModal(e.target.result, previewSelector);
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    });
-  }
-
-  $("#epasscard-crop-btn").on("click", function () {
-    const canvas = epasscardCropper.getCroppedCanvas();
-    const croppedImage = canvas.toDataURL("image/png");
-    const selectedImage = $("#epasscard-cropper-modal").attr("selected-image");
-
-    $(epasscardCurrentPreviewSelector).attr("src", croppedImage).show();
-
-    if (selectedImage == ".preview-background") {
-      $(".coupon-strip")
-        .css("background-image", "url('" + croppedImage + "')")
-        .show();
-    } else if (selectedImage == ".preview-logo") {
-      $(".logo-img").attr("src", croppedImage);
-    }
-
-    closeEpasscardModal();
-  });
-
-  $("#epasscard-use-original-btn").on("click", function () {
-    const selectedImage = $("#epasscard-cropper-modal").attr("selected-image");
-
-    if (selectedImage === ".preview-background") {
-      // Update background and preview image
-      $(".coupon-strip")
-        .css("background-image", "url('" + epasscardOriginalImageData + "')")
-        .show();
-      $(".preview-background").attr("src", epasscardOriginalImageData).show();
-    } else if (selectedImage === ".preview-logo") {
-      // Update logo preview and logo-img
-      $(".preview-logo").attr("src", epasscardOriginalImageData).show();
-      $(".logo-img").attr("src", epasscardOriginalImageData).show();
-    } else {
-      // Default case for other previews
-      $(epasscardCurrentPreviewSelector)
-        .attr("src", epasscardOriginalImageData)
-        .show();
-    }
-
-    closeEpasscardModal();
-  });
-
-  $(".epasscard-cropper-close").on("click", closeEpasscardModal);
-
-  // Click outside to close
-  $("#epasscard-cropper-modal").on("click", function (e) {
-    if ($(e.target).closest(".epasscard-cropper-container").length === 0) {
-      closeEpasscardModal();
-    }
-  });
-
-  // Bind to your image inputs
-  handleEpasscardImageCrop(".background-image", ".preview-background");
-  handleEpasscardImageCrop(".icon", ".preview-icon");
-  handleEpasscardImageCrop(".logo", ".preview-logo");
+  ///images
 
   // More epasscard modal script
   // Open modal
@@ -498,6 +402,8 @@ jQuery(document).ready(function ($) {
       $(".epasscard-primary-fields").removeClass("epasscard-hidden");
     } else if (formFieldsTrack == "secondary-fields") {
       $(".epasscard-secondary-fields").removeClass("epasscard-hidden");
+    } else if (formFieldsTrack == "auxiliary-fields") {
+      $(".epasscard-auxiliary-fields").removeClass("epasscard-hidden");
     } else if (formFieldsTrack == "barcode-fields") {
       $(".epasscard-barcode-fields").removeClass("epasscard-hidden");
     }
@@ -547,6 +453,8 @@ jQuery(document).ready(function ($) {
   $(".primary-name, .primary-value").on("keyup", function () {
     $(".strip-text").text($(".primary-name").val());
     $(".strip-text-uppercase").text($(".primary-value").val().toUpperCase());
+    jQuery(".mobile-preview .epc-primary-label").text($(".primary-name").val());
+    jQuery(".mobile-preview .epc-primary-value").text($(".primary-value").val());
   });
 
   //  Secondary fields to mobile preview data pass
@@ -989,6 +897,31 @@ jQuery(document).ready(function ($) {
       return;
     }
 
+    //Auxiliary fileds data
+    let auxiliaryData = {
+      auxiliaryLabels: [],
+      auxiliaryValues: [],
+      auxiliaryMsgs: [],
+    };
+
+    jQuery(".epasscard-auxiliary-fields .auxiliary-label").each(function () {
+      if (jQuery(this).val().trim() !== "") {
+        auxiliaryData.auxiliaryLabels.push(jQuery(this).val());
+      }
+    });
+
+    jQuery(" .epasscard-auxiliary-fields .auxiliary-value").each(function () {
+      if (jQuery(this).val().trim() !== "") {
+        auxiliaryData.auxiliaryValues.push(jQuery(this).val());
+      } 
+    });
+
+    jQuery(" .epasscard-auxiliary-fields .auxiliary-msg").each(function () {
+      if (jQuery(this).val().trim() !== "") {
+        auxiliaryData.auxiliaryMsgs.push(jQuery(this).val());
+      } 
+    });
+
     // Barcode data
     let barcodeFormat = $("#create-template .scanner-code").val();
     let barcodeValue = $("#create-template .barcode-value").val();
@@ -1274,7 +1207,7 @@ jQuery(document).ready(function ($) {
         notification_radius: notificationRadius,
         setting_values: settingValues,
         additional_properties: JSON.stringify(additionalProperties),
-        //additional_properties: additionalProperties,
+        auxiliary_properties: JSON.stringify(auxiliaryData),
         recharge_field: JSON.stringify(rechargeField),
         transaction_values: JSON.stringify(transactionValues),
         pass_ids: dataIds,
@@ -1283,16 +1216,16 @@ jQuery(document).ready(function ($) {
       },
       success: function (response) {
         let message;
-        if (response.data && response.data.message){
+        if (response.data && response.data.message) {
           message = response.data.message;
-        }else{
+        } else {
           message = "Something wrong. Please try again later";
         }
-        
+
         $(".info-notification-data").html(message);
         $(".epass-info-modal").css("display", "block");
 
-        if(message == "Template Created successfully" || message == "Templated updated successfully") {
+        if (message == "Template Created successfully" || message == "Templated updated successfully") {
 
           const baseUrl = window.location.origin + window.location.pathname;
 
@@ -1322,15 +1255,17 @@ jQuery(document).ready(function ($) {
     if (!rawData) return;
 
     const parsedData = JSON.parse(rawData);
-
     const designObj = parsedData.designObj || {};
     const headerFields = parsedData.designObj.headerFields || [];
     const secondaryFields = parsedData.designObj.secondaryFields || [];
+    const auxiliaryFields = parsedData.designObj.auxiliaryFields || [];
+    const primaryFields = parsedData.designObj.primaryFields || [];
 
     const primarySettings = designObj.primarySettings || {};
+    const cardType = primarySettings.cardType || "";
     const images = designObj.images || {};
-
     const barCodeData = designObj.barcode || {};
+
 
     //Mobile screen color content change for pass edit mode
     if (pass_id) {
@@ -1379,11 +1314,29 @@ jQuery(document).ready(function ($) {
       $("#preview-logo").attr("src", images.logo);
       $("#preview-icon").attr("src", images.logo);
 
-      //Strip image
-      $(".phone-pass-preview .coupon-strip").css(
-        "background-image",
-        `url("${images.strip}")`
-      );
+      //Card image
+       jQuery(".mobile-preview .epc-image-block > img").attr("src", images.strip);
+       jQuery(".phone-pass-preview .coupon-strip").css(
+          "background-image",
+          `url("${images.strip}")`
+        );
+      if (cardType == "Generic pass") {
+        jQuery(".mobile-preview .epc-primary-label").text(primaryFields[0].label);
+        jQuery(".mobile-preview .epc-primary-value").text(primaryFields[0].value);
+        jQuery(".epasscard-primary-fields .primary-name").val(primaryFields[0].label);
+        jQuery(".epasscard-primary-fields .primary-value").val(primaryFields[0].value);
+        jQuery('.mobile-preview .coupon-strip').css('display', 'none');
+        jQuery(".mobile-preview .epc-mobile-hero").css('display', 'flex');
+        jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'flex');
+        jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "0px");
+      } else {
+        jQuery(".epasscard-primary-fields .primary-name").val("");
+        jQuery(".epasscard-primary-fields .primary-value").val("");
+        jQuery('.mobile-preview .coupon-strip').css('display', 'flex');
+        jQuery(".mobile-preview .epc-mobile-hero").css('display', 'none');
+        jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'none');
+        jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "60px");
+      }
 
       // Header fields
       if (headerFields && headerFields.length > 0) {
@@ -1396,25 +1349,25 @@ jQuery(document).ready(function ($) {
 
       // Secondary fields
       if (secondaryFields && secondaryFields.length >= 2) {
-        $(".detail-item:nth-child(1) .detail-label").text(
+        $(".secondary-items-container .detail-item:nth-child(1) .detail-label").text(
           secondaryFields[0].label
         );
         $(
           ".epasscard-secondary-fields .epasscard-field-group:nth-child(1) > input.model-label-name"
         ).val(secondaryFields[0].label);
-        $(".detail-item:nth-child(1) .detail-value").text(
+        $(".secondary-items-container .detail-item:nth-child(1) .detail-value").text(
           secondaryFields[0].value
         );
         $(
           ".epasscard-secondary-fields .epasscard-field-group:nth-child(1) > input.model-value.epasscard-watch-input"
         ).val(secondaryFields[0].value);
-        $(".detail-item:nth-child(2) .detail-label").text(
+        $(".secondary-items-container .detail-item:nth-child(2) .detail-label").text(
           secondaryFields[1].label
         );
         $(
           ".epasscard-secondary-fields .epasscard-field-group:nth-child(2) > input.purchase-label-name"
         ).val(secondaryFields[1].label);
-        $(".detail-item:nth-child(2) .detail-value").text(
+        $(".secondary-items-container .detail-item:nth-child(2) .detail-value").text(
           secondaryFields[1].value
         );
         $(
@@ -1435,6 +1388,40 @@ jQuery(document).ready(function ($) {
             dynamicValues.push(field.value);
           }
         });
+      }
+
+      if (auxiliaryFields && auxiliaryFields.length > 0) {
+        //Show default auxiliary data in auxiliary blocks
+        const auxiliaryFieldGroups = document.querySelectorAll(
+          ".epasscard-auxiliary-fields .epasscard-field-group"
+        );
+        // Loop through each field group and populate values
+        auxiliaryFields.forEach((field, index) => {
+          const group = auxiliaryFieldGroups[index];
+          if (group) {
+            group.querySelector(".auxiliary-label").value = field.label;
+            group.querySelector(".auxiliary-value").value = field.value;
+            group.querySelector("input[placeholder]").value = field.changeMsg;
+            dynamicValues.push(field.value);
+          }
+        });
+
+        //Auxiliary mobile preview value
+        $(".auxiliary-items-container .detail-item:nth-child(1) .detail-label").text(
+          auxiliaryFields[0].label
+        );
+
+        $(".auxiliary-items-container .detail-item:nth-child(1) .detail-value").text(
+          auxiliaryFields[0].value
+        );
+
+        $(".auxiliary-items-container .detail-item:nth-child(2) .detail-label").text(
+          auxiliaryFields[1].label
+        );
+
+        $(".auxiliary-items-container .detail-item:nth-child(2) .detail-value").text(
+          auxiliaryFields[1].value
+        );
       }
 
       //Setting dropdown

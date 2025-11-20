@@ -21,9 +21,7 @@ if (isset($_GET['pass_id'], $_GET['pass_uid'])) {
     }
 
     $epasscard_data = json_decode(wp_remote_retrieve_body($epasscard_response), true);
-
     $epasscard_template_info = $epasscard_data['templateInformation'];
-
     $epasscard_name = isset($epasscard_template_info['name']) ? $epasscard_template_info['name'] : '';
     $epasscard_description = isset($epasscard_template_info['description']) ? $epasscard_template_info['description'] : '';
     $epasscard_org_name = isset($epasscard_template_info['pass_org_name']) ? $epasscard_template_info['pass_org_name'] : '';
@@ -58,6 +56,9 @@ if (isset($_GET['pass_id'], $_GET['pass_uid'])) {
     //Back fields info
     $epasscard_back_fields_info = $epasscard_data['template_design']['backFields'];
 
+    //Auxiliary info
+    $epasscard_auxiliary_info = $epasscard_data['template_design']['auxiliaryFields'];
+
     //colors info
     $epasscard_colors_info = $epasscard_data['template_design']['primarySettings'];
     $epasscard_bg_color = isset($epasscard_colors_info['backgroundColor']) ? $epasscard_colors_info['backgroundColor'] : '';
@@ -65,6 +66,7 @@ if (isset($_GET['pass_id'], $_GET['pass_uid'])) {
     $epasscard_label_color = isset($epasscard_colors_info['labelColor']) ? $epasscard_colors_info['labelColor'] : 'fff';
     $epasscard_pass_type_id = isset($epasscard_colors_info['passTypeId']) ? $epasscard_colors_info['passTypeId'] : '';
     $epasscard_template_name = isset($epasscard_colors_info['name']) ? $epasscard_colors_info['name'] : '';
+    $epasscard_card_type = isset($epasscard_colors_info['cardType']) ? $epasscard_colors_info['cardType'] : '';
 
     //images info
     $epasscard_images_info = $epasscard_data['template_design']['images'];

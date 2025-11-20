@@ -6,7 +6,7 @@ $epasscard_is_webcartisan_giftcard_active = 0;
  }
 
  $epasscard_is_webcartisan_giftcard_extension_active = 0;
- if (class_exists('Epasscard_Giftcard_Extension')) {
+ if (class_exists('EGE_Giftcard_Extension')) {
    $epasscard_is_webcartisan_giftcard_extension_active = 1;
  }
 
@@ -17,7 +17,7 @@ $epasscard_is_webcartisan_giftcard_active = 0;
  }
 
 $epasscard_is_webcartisan_yith_extension_active = 0;
- if (class_exists('EY_Giftcard_Extension')) {
+ if (class_exists('EYE_Giftcard_Extension')) {
    $epasscard_is_webcartisan_yith_extension_active = 1;
  }
 
@@ -28,7 +28,7 @@ $epasscard_is_webcartisan_yith_extension_active = 0;
  }
 
 $epasscard_is_webcartisan_ultimate_extension_active = 0;
- if (class_exists('WODGC_Gift_Cards_Lite_Extension')) {
+ if (class_exists('GCLE_Gift_Cards_Lite_Extension')) {
    $epasscard_is_webcartisan_ultimate_extension_active = 1;
  }
 

@@ -124,6 +124,22 @@ class Epasscard_Load_Assets
         );
 
         wp_enqueue_script(
+            'epasscard-auxiliary-script',
+            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-auxiliary-fields.js',
+            ['jquery'],
+            EPASSCARD_VERSION,
+            true
+        );
+
+        wp_enqueue_script(
+            'epasscard-image-script',
+            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-image-script.js',
+            ['jquery'],
+            EPASSCARD_VERSION,
+            true
+        );
+
+        wp_enqueue_script(
             'elect-2-js',
             EPASSCARD_PLUGIN_URL . 'assets/js/select2.min.js',
             ['jquery'],

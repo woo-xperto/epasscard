@@ -137,11 +137,14 @@ class Epasscard_Ajax
         $locations_setting_id = isset($_POST['locations_setting_id']) ? sanitize_text_field(wp_unslash($_POST['locations_setting_id'])) : "";
         $notification_radius = isset($_POST['notification_radius']) ? sanitize_text_field(wp_unslash($_POST['notification_radius'])) : "";
         $setting_values = isset($_POST['setting_values']) ? filter_input(INPUT_POST, 'setting_values', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        //$additional_properties = isset($_POST['additional_properties']) ? filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
         $additional_properties = filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT);
+        $auxiliary_properties = filter_input(INPUT_POST, 'auxiliary_properties', FILTER_DEFAULT);
         $recharge_field = filter_input(INPUT_POST, 'recharge_field', FILTER_DEFAULT);
         $transaction_values = filter_input(INPUT_POST, 'transaction_values', FILTER_DEFAULT);
         $pass_ids = isset($_POST['pass_ids']) ? filter_input(INPUT_POST, 'pass_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
         $template_data = isset($_POST['template_data']) ? filter_input(INPUT_POST, 'template_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+
 
         $data = [
             'template_info' => $template_info,
@@ -206,10 +209,30 @@ class Epasscard_Ajax
             }
         }
 
+        //Auxiliary data
+        $auxiliaryFields = [];
+        $auxiliary_properties = json_decode($auxiliary_properties, true);
+        if (!empty($auxiliary_properties['auxiliaryLabels']) && !empty($auxiliary_properties['auxiliaryValues'])) {
+            foreach ($auxiliary_properties['auxiliaryLabels'] as $index => $label) {
+                $value = $auxiliary_properties['auxiliaryValues'][$index] ?? '';
+                $message = $auxiliary_properties['auxiliaryMsgs'][$index] ?? '';
+                // Build the desired structure
+                $auxiliaryFields[] = [
+                    'label' => $label,
+                    'value' => $value,
+                    'valueType' => 'fixed',
+                    'changeMsg' => $message, 
+                    'staticValueType' => 'text'
+                ];
+            }
+        }
+
         // Add processed fields to the data array
         $data['headerFields'] = $headerFields;
         $data['secondaryFields'] = $secondaryFields;
         $data['backFields'] = $backFields;
+        $data['auxiliary_properties'] = $auxiliaryFields;
+        
 
         // Call the template creation function with the full data array
         $this->Epasscard_make_pass_template_request($data);
@@ -238,6 +261,7 @@ class Epasscard_Ajax
         $secondaryFieldsJson = json_encode($data['secondaryFields'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $locationsDataJson = stripslashes($data['locations_data']);
         $additionalProperties = $data['additional_properties'];
+        $auxiliarylProperties = json_encode($data['auxiliary_properties'], JSON_PRETTY_PRINT);
         $rechargeField = $data['recharge_field'];
         $transactionValues = $data['transaction_values'];
 

@@ -174,46 +174,6 @@
                 </select>
             </div>
 
-           <!-- Unicode block -->
-            <div class="unicode-wrap epasscard-hidden">
-            <div class="unicode-input">
-                <div>
-                <label for="unique-name">Random unique code prefix</label>
-                <input class="input-field" type="text" id="unique-name">
-                </div>
-                <div>
-                <label>Random unique code length</label>
-                <input class="input-field" label="Unique number length" type="number">
-                <p id="unique_code_length_error"></p>
-                </div>
-                <div>
-                <label for="unique-name">Random unique code suffix</label>
-                <input class="input-field" type="text" id="unique-name">
-                </div>
-            </div>
-            <label>Random unique code format</label>
-            <div class="unicode-type">
-                <div>
-                <div>
-                    <input id="ingredient1" type="radio" value="Numeric">
-                    <div>
-                    <div class="p-radiobutton-icon" data-pc-section="icon"></div>
-                    </div>
-                </div>
-                <label for="ingredient1"> Numeric </label>
-                </div>
-                <div>
-                <div>
-                    <input id="ingredient1" type="radio" value="alphaNumeric">
-                    <div class="p-radiobutton-box" data-pc-section="box" bis_skin_checked="1">
-                    <div class="p-radiobutton-icon" data-pc-section="icon" bis_skin_checked="1"></div>
-                    </div>
-                </div>
-                <label for="alphaNumeric">Alpha numeric </label>
-                </div>
-            </div>
-            </div>
-
             <!-- Sharing Option -->
             <?php $epasscard_google_wallet_shareable = isset($epasscard_colors_info['googleWalletShareable']) ? $epasscard_colors_info['googleWalletShareable'] : ''; ?>
             <div class="setting-group">

@@ -14,6 +14,8 @@
             <?php require_once EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-edit-templates/primary-fields.php'; ?>
             <!-- Secondary fields -->
             <?php require_once EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-edit-templates/secondary-fields.php'; ?>
+            <!-- Auxiliary fields -->
+            <?php require_once EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-edit-templates/auxiliary-fields.php'; ?>
             <!-- Barcode setting fields -->
             <?php include EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-edit-templates/barcode-settings.php'; ?>
         </div>

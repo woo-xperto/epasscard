@@ -23,7 +23,7 @@ $epasscard_body    = '{
         },
         "headerFields": ' . $headerFieldsJson . ',
         "backFields": ' . $backFieldsJson . ',
-        "auxiliaryFields": [],
+        "auxiliaryFields": '.$auxiliarylProperties.',
         "images": {
             "logo": "' . $setting_data['headerLogo'] . '",
             "icon": "' . $setting_data['headerLogo'] . '",

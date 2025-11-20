@@ -21,6 +21,7 @@
                 </span>
             </button>
         </div>
+        <a href="https://app.epasscard.com/api-keys" target="_blank">Get your API key</a>
         <div id="epasscard-response"></div>
     </form>
 </div>

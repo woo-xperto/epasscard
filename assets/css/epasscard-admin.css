@@ -249,7 +249,7 @@
 
 .epasscard-admin #epasscard-connect-btn {
   position: relative;
-  padding-right: 40px;
+  /* padding-right: 40px; */
   transition: all 0.3s ease;
 }
 
@@ -1046,18 +1046,6 @@ table#recharge-table {
   margin-top: 15px;
   border-collapse: collapse;
 }
-#epasscard_setting .unicode-input,#epasscard_setting .unicode-type {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-#epasscard_setting .unicode-type > div:first-child,
-#epasscard_setting .unicode-type > div:last-child{
-    display: flex;
-    gap: .5rem;
-    flex-wrap: wrap;
-    align-items:center;
-}
 
 /* Mobile preview front CSS */
 
@@ -1175,6 +1163,51 @@ table#recharge-table {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+}
+.epc-mobile-hero-section{
+  position: relative;
+}
+.epc-mobile-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.epc-text-block {
+  width: 80%;
+}
+
+.epc-primary-label {
+  text-transform: uppercase;
+  font-size: 10px;
+  margin-left: 8px; /* Tailwind ml-2 = 0.5rem ≈ 8px */
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.epc-primary-value {
+  font-size: 25px;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.epc-image-block {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+}
+
+.epc-image-block img {
+  width: 80px; /* Tailwind w-20 = 5rem ≈ 80px */
+  height: auto;
 }
 
 .mobile-preview .strip-content {
