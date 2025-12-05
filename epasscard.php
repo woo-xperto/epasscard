@@ -17,7 +17,8 @@ define('EPASSCARD_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EPASSCARD_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('EPASSCARD_API_URL', 'https://api.epasscard.com/api/public/v1/');
 define('EPASSCARD_API_CERTIFICATES', 'https://api.epasscard.com/api/certificate/all-certificates/');
-
+define('EPASSCARD_API_KEY_GENERATE_URL', 'https://api.epasscard.com/api/public/v1/validate-api-key');
+define('EPASSCARD_API_KEY_REFRESH_URL', 'https://api.epasscard.com/api/public/v1/refresh-api-key');
 
 // Manually require all class files
 require_once EPASSCARD_PLUGIN_DIR . 'includes/class-epasscard-assets.php';
@@ -34,3 +35,4 @@ add_action('plugins_loaded', function () {
         $epasscard->Epasscard_init();
     }
 });
+

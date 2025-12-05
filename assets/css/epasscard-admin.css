@@ -246,14 +246,20 @@
   margin-top: 6px;
   font-size: 13px;
 }
-
+.epasscard-admin #epass-update-api-key,
 .epasscard-admin #epasscard-connect-btn {
   position: relative;
-  /* padding-right: 40px; */
   transition: all 0.3s ease;
 }
 
-.epasscard-admin #epasscard-connect-btn .btn-spinner {
+#epasscard-connection-form .epass-connect-btns {
+    flex-direction:row;
+}
+button#epass-update-api-key {
+    padding:0px 10px;
+}
+
+.epass-btn-spinner {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -264,21 +270,22 @@
   transition: opacity 0.3s ease;
 }
 
+.epasscard-admin #epass-update-api-key.is-loading .btn-text,
 .epasscard-admin #epasscard-connect-btn.is-loading .btn-text {
   opacity: 0.7;
 }
-
-.epasscard-admin #epasscard-connect-btn.is-loading .btn-spinner {
+.epasscard-admin #epass-update-api-key.is-loading .epass-btn-spinner,
+.epasscard-admin #epasscard-connect-btn.is-loading .epass-btn-spinner {
   opacity: 1;
 }
 
-.spinner-svg {
+.epass-btn-spinner .spinner-svg {
   width: 100%;
   height: 100%;
   animation: rotate 1.5s linear infinite;
 }
 
-.spinner-circle {
+.epass-btn-spinner .spinner-circle {
   stroke: currentColor;
   stroke-linecap: round;
   stroke-dasharray: 90, 150;

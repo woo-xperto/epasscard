@@ -11,15 +11,22 @@
             <span class="validation-error" id="api-key-error"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group epass-connect-btns">
             <button type="submit" id="epasscard-connect-btn" class="button button-primary">
                 <span class="btn-text"><?php esc_html_e('Connect', 'epasscard'); ?></span>
-                <span class="btn-spinner">
+                <span class="epass-btn-spinner">
                     <svg class="spinner-svg" viewBox="0 0 50 50">
                         <circle class="spinner-circle" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
                     </svg>
                 </span>
             </button>
+            <button id="epass-update-api-key">
+                <span class="btn-text"><?php esc_html_e('Update', 'epasscard'); ?></span>
+                <span class="epass-btn-spinner">
+                    <svg class="spinner-svg" viewBox="0 0 50 50">
+                        <circle class="spinner-circle" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                    </svg>
+                </span></button>
         </div>
         <a href="https://app.epasscard.com/api-keys" target="_blank">Get your API key</a>
         <div id="epasscard-response"></div>

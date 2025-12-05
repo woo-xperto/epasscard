@@ -1,5 +1,6 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (!defined('ABSPATH'))
+    exit; // Exit if accessed directly
 class Epasscard_Ajax
 {
     /**
@@ -24,7 +25,11 @@ class Epasscard_Ajax
         // Download and Activate required plugins
         add_action('wp_ajax_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
         add_action('wp_ajax_nopriv_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
-    }
+
+        //Update API key manually
+        add_action('wp_ajax_epasscard_update_api_key_manually', [$this, 'epasscard_update_api_key_manually']);
+
+    }  
 
     /**
      * Handle the connect AJAX request
@@ -58,16 +63,38 @@ class Epasscard_Ajax
             return;
         }
 
+
         try {
+            $response = wp_remote_post(EPASSCARD_API_KEY_GENERATE_URL, [
+                'body' => json_encode([
+                    'apiKey' => $api_key,
+                ]),
+                'headers' => ['Content-Type' => 'application/json']
+            ]);
 
-            // Save the settings
-            $api_key_saved = update_option('epasscard_api_key', $api_key);
+            $data = json_decode(wp_remote_retrieve_body($response), true);
 
-            if ($api_key_saved) {
-                $response['success'] = true;
-                $response['message'] = __('Settings saved successfully!', 'epasscard');
-            } else {
-                $response['message'] = __('Settings unchanged. The new values are identical to the existing ones.', 'epasscard');
+
+            if ($data['status'] == 200 && $data['data']['valid'] && $data['data']['activeStatus']) {
+
+                // Save the settings
+                $api_key_saved = update_option('epasscard_api_key', $data['data']['api_key']);
+                update_option('epasscard_org_id', $data['data']['org_id']);
+                update_option('epasscard_next_refresh', $data['data']['next_refresh']);
+
+                //Get next refresh calculated time
+                $next_refresh_time = $this->epasscard_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
+
+                wp_schedule_single_event($next_refresh_time, 'epasscard_refresh_event');
+
+                if ($api_key_saved) {
+                    $response['success'] = true;
+                    $response['message'] = __('Settings saved successfully!', 'epasscard');
+                } else {
+                    $response['message'] = __('Settings unchanged. The new values are identical to the existing ones.', 'epasscard');
+                }
+            }else{
+                $response['message'] = __($data['message'], 'epasscard');
             }
         } catch (Exception $e) {
             $response['message'] = __('An error occurred while saving the settings: ', 'epasscard') . esc_html($e->getMessage());
@@ -76,6 +103,89 @@ class Epasscard_Ajax
         }
 
         wp_send_json($response);
+
+    }
+
+
+    /**
+     * Refresh API key
+     */
+
+    public function epasscard_refresh_api_key() {
+    $apiKey = get_option('epasscard_api_key');
+    $orgId  = get_option('epasscard_org_id');
+
+    try {
+        $api_response = wp_remote_post( EPASSCARD_API_KEY_REFRESH_URL, [
+            'body' => json_encode([
+                'apiKey' => $apiKey,
+                'orgId'  => $orgId
+            ]),
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        if (is_wp_error($api_response)) {
+            wp_send_json([
+                'message' => __('Failed to contact API server.', 'epasscard')
+            ], 500);
+            return;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($api_response), true);
+
+        if (!empty($data['data']['api_key'])) {
+            update_option('epasscard_api_key', $data['data']['api_key']);
+            update_option('epass_next_refresh', $data['data']['next_refresh']);
+
+            //Get next refresh calculated time
+            $next_refresh_time = $this->epasscard_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
+
+            wp_schedule_single_event($next_refresh_time, 'epasscard_refresh_event');
+
+            // Success response
+            $response['success'] = true;
+            
+        } else {
+            //Failure response
+            $response['success'] = false;
+        }
+        
+        $response['message'] = __($data['message'], 'epasscard');
+
+    } catch (Exception $e) {
+        wp_send_json([
+            'message' => __('An error occurred: ', 'epasscard') . esc_html($e->getMessage())
+        ], 500);
+    }
+
+    wp_send_json($response);
+}
+
+  //Next Refresh time calculate by current time zone
+   public function epasscard_calculate_api_key_next_refresh_time($next_refresh_time) {
+
+    // Create a DateTime object in UTC
+    $dt = new DateTime($next_refresh_time, new DateTimeZone('UTC'));
+
+    // Get WordPress timezone setting
+    $wp_timezone = wp_timezone(); // returns a DateTimeZone object
+
+    // Convert to WordPress timezone
+    $dt->setTimezone($wp_timezone);
+
+    // Subtract 5 minutes
+    $dt->modify('-5 minutes');
+
+    // Return Unix timestamp in WP timezone
+    return strtotime($dt->format('Y-m-d H:i:s'));
+}
+
+
+    // Update API key manually
+    public function epasscard_update_api_key_manually() {
+         check_ajax_referer('epasscard_ajax_nonce', 'nonce');
+        $this->epasscard_refresh_api_key();
+        //wp_send_json_success(['message' => 'API key refreshed manually']);
     }
 
     // Get pass card list
@@ -126,24 +236,24 @@ class Epasscard_Ajax
         check_ajax_referer('epasscard_ajax_nonce');
 
         // Collect all POST data into a single array
-        $template_info = isset($_POST['template_info']) ? filter_input(INPUT_POST, 'template_info', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $barcode_data = isset($_POST['barcode_data']) ? filter_input(INPUT_POST, 'barcode_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $header_data = isset($_POST['header_data']) ? filter_input(INPUT_POST, 'header_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $primary_fields_data = isset($_POST['primary_fields_data']) ? filter_input(INPUT_POST, 'primary_fields_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $secondary_data = isset($_POST['secondary_data']) ? filter_input(INPUT_POST, 'secondary_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $back_field_data = isset($_POST['back_field_data']) ? filter_input(INPUT_POST, 'back_field_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $setting_data = isset($_POST['setting_data']) ? filter_input(INPUT_POST, 'setting_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $template_info = isset($_POST['template_info']) ? filter_input(INPUT_POST, 'template_info', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $barcode_data = isset($_POST['barcode_data']) ? filter_input(INPUT_POST, 'barcode_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $header_data = isset($_POST['header_data']) ? filter_input(INPUT_POST, 'header_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $primary_fields_data = isset($_POST['primary_fields_data']) ? filter_input(INPUT_POST, 'primary_fields_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $secondary_data = isset($_POST['secondary_data']) ? filter_input(INPUT_POST, 'secondary_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $back_field_data = isset($_POST['back_field_data']) ? filter_input(INPUT_POST, 'back_field_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $setting_data = isset($_POST['setting_data']) ? filter_input(INPUT_POST, 'setting_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
         $locations_data = filter_input(INPUT_POST, 'locations_data', FILTER_DEFAULT);
         $locations_setting_id = isset($_POST['locations_setting_id']) ? sanitize_text_field(wp_unslash($_POST['locations_setting_id'])) : "";
         $notification_radius = isset($_POST['notification_radius']) ? sanitize_text_field(wp_unslash($_POST['notification_radius'])) : "";
-        $setting_values = isset($_POST['setting_values']) ? filter_input(INPUT_POST, 'setting_values', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $setting_values = isset($_POST['setting_values']) ? filter_input(INPUT_POST, 'setting_values', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
         //$additional_properties = isset($_POST['additional_properties']) ? filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
         $additional_properties = filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT);
         $auxiliary_properties = filter_input(INPUT_POST, 'auxiliary_properties', FILTER_DEFAULT);
         $recharge_field = filter_input(INPUT_POST, 'recharge_field', FILTER_DEFAULT);
         $transaction_values = filter_input(INPUT_POST, 'transaction_values', FILTER_DEFAULT);
-        $pass_ids = isset($_POST['pass_ids']) ? filter_input(INPUT_POST, 'pass_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $template_data = isset($_POST['template_data']) ? filter_input(INPUT_POST, 'template_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
+        $pass_ids = isset($_POST['pass_ids']) ? filter_input(INPUT_POST, 'pass_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+        $template_data = isset($_POST['template_data']) ? filter_input(INPUT_POST, 'template_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
 
 
         $data = [
@@ -221,7 +331,7 @@ class Epasscard_Ajax
                     'label' => $label,
                     'value' => $value,
                     'valueType' => 'fixed',
-                    'changeMsg' => $message, 
+                    'changeMsg' => $message,
                     'staticValueType' => 'text'
                 ];
             }
@@ -232,7 +342,7 @@ class Epasscard_Ajax
         $data['secondaryFields'] = $secondaryFields;
         $data['backFields'] = $backFields;
         $data['auxiliary_properties'] = $auxiliaryFields;
-        
+
 
         // Call the template creation function with the full data array
         $this->Epasscard_make_pass_template_request($data);
@@ -243,8 +353,8 @@ class Epasscard_Ajax
     // Pass create method
     public function Epasscard_make_pass_template_request(array $data)
     {
-          
-       
+
+
         $primarySettings = $data['template_data']['designObj']['primarySettings'] ?? [];
 
         $templateName = isset($primarySettings['name'])
@@ -286,7 +396,7 @@ class Epasscard_Ajax
             require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/pass-create.php';
         }
     }
-    
+
     //Get location
     public function Epasscard_get_location()
     {
