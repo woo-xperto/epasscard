@@ -1,40 +1,36 @@
 <?php
 if (!defined('ABSPATH'))
     exit; // Exit if accessed directly
-class Epasscard_Ajax
+class EPASSC_Ajax
 {
     /**
      * Constructor
      */
     public function __construct()
     {
-        add_action('wp_ajax_Epasscard_connect', [$this, 'Epasscard_connect']);
+        add_action('wp_ajax_epassc_connect', [$this, 'epassc_connect']);
 
         //Get card list
-        add_action('wp_ajax_Epasscard_templates_callback', [$this, 'Epasscard_templates_callback']);
-        add_action('wp_ajax_nopriv_Epasscard_templates_callback', [$this, 'Epasscard_templates_callback']);
+        add_action('wp_ajax_epassc_templates_callback', [$this, 'epassc_templates_callback']);
+        add_action('wp_ajax_nopriv_epassc_templates_callback', [$this, 'epassc_templates_callback']);
 
         // Create Pass template
-        add_action('wp_ajax_Epasscard_create_pass_template', [$this, 'Epasscard_create_pass_template']);
-        add_action('wp_ajax_nopriv_Epasscard_create_pass_template', [$this, 'Epasscard_create_pass_template']);
+        add_action('wp_ajax_epassc_create_pass_template', [$this, 'epassc_create_pass_template']);
+        add_action('wp_ajax_nopriv_epassc_create_pass_template', [$this, 'epassc_create_pass_template']);
 
         //Get location
-        add_action('wp_ajax_Epasscard_get_location', [$this, 'Epasscard_get_location']);
-        add_action('wp_ajax_nopriv_Epasscard_get_location', [$this, 'Epasscard_get_location']);
-
-        // Download and Activate required plugins
-        add_action('wp_ajax_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
-        add_action('wp_ajax_nopriv_Epasscard_install_required_plugin', [$this, 'Epasscard_install_required_plugin']);
+        add_action('wp_ajax_epassc_get_location', [$this, 'epassc_get_location']);
+        add_action('wp_ajax_nopriv_epassc_get_location', [$this, 'epassc_get_location']);
 
         //Update API key manually
-        add_action('wp_ajax_epasscard_update_api_key_manually', [$this, 'epasscard_update_api_key_manually']);
+        add_action('wp_ajax_epassc_update_api_key_manually', [$this, 'epassc_update_api_key_manually']);
 
-    }  
+    }
 
     /**
      * Handle the connect AJAX request
      */
-    public function Epasscard_connect()
+    public function epassc_connect()
     {
         check_ajax_referer('epasscard_ajax_nonce', 'nonce');
 
@@ -65,7 +61,7 @@ class Epasscard_Ajax
 
 
         try {
-            $response = wp_remote_post(EPASSCARD_API_KEY_GENERATE_URL, [
+            $response = wp_remote_post(EPASSC_API_KEY_VALID_URL, [
                 'body' => json_encode([
                     'apiKey' => $api_key,
                 ]),
@@ -78,14 +74,20 @@ class Epasscard_Ajax
             if ($data['status'] == 200 && $data['data']['valid'] && $data['data']['activeStatus']) {
 
                 // Save the settings
-                $api_key_saved = update_option('epasscard_api_key', $data['data']['api_key']);
-                update_option('epasscard_org_id', $data['data']['org_id']);
-                update_option('epasscard_next_refresh', $data['data']['next_refresh']);
+                $api_key_saved = update_option('epassc_api_key', $data['data']['api_key']);
+                update_option('epassc_org_id', $data['data']['org_id']);
+                update_option('epassc_next_refresh', $data['data']['next_refresh']);
+
+
+                // First, clear any existing scheduled event
+                $next_schedule = wp_next_scheduled('epassc_refresh_event');
+                if ($next_schedule) {
+                    wp_unschedule_event($next_schedule, 'epassc_refresh_event');
+                }
 
                 //Get next refresh calculated time
-                $next_refresh_time = $this->epasscard_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
-
-                wp_schedule_single_event($next_refresh_time, 'epasscard_refresh_event');
+                $next_refresh_time = $this->epassc_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
+                wp_schedule_single_event($next_refresh_time, 'epassc_refresh_event');
 
                 if ($api_key_saved) {
                     $response['success'] = true;
@@ -93,8 +95,8 @@ class Epasscard_Ajax
                 } else {
                     $response['message'] = __('Settings unchanged. The new values are identical to the existing ones.', 'epasscard');
                 }
-            }else{
-                $response['message'] = __($data['message'], 'epasscard');
+            } else {
+                $response['message'] = $data['message'];
             }
         } catch (Exception $e) {
             $response['message'] = __('An error occurred while saving the settings: ', 'epasscard') . esc_html($e->getMessage());
@@ -111,85 +113,94 @@ class Epasscard_Ajax
      * Refresh API key
      */
 
-    public function epasscard_refresh_api_key() {
-    $apiKey = get_option('epasscard_api_key');
-    $orgId  = get_option('epasscard_org_id');
+    public function epassc_refresh_api_key()
+    {
+        $apiKey = EPASSC_API_KEY;
+        $orgId = get_option('epassc_org_id');
 
-    try {
-        $api_response = wp_remote_post( EPASSCARD_API_KEY_REFRESH_URL, [
-            'body' => json_encode([
-                'apiKey' => $apiKey,
-                'orgId'  => $orgId
-            ]),
-            'headers' => ['Content-Type' => 'application/json']
-        ]);
+        try {
+            $api_response = wp_remote_post(EPASSC_API_KEY_REFRESH_URL, [
+                'body' => json_encode([
+                    'apiKey' => $apiKey,
+                    'orgId' => $orgId
+                ]),
+                'headers' => ['Content-Type' => 'application/json']
+            ]);
 
-        if (is_wp_error($api_response)) {
+            if (is_wp_error($api_response)) {
+                wp_send_json([
+                    'message' => __('Failed to contact API server.', 'epasscard')
+                ], 500);
+                return;
+            }
+
+            $data = json_decode(wp_remote_retrieve_body($api_response), true);
+
+            if (!empty($data['data']['api_key'])) {
+                update_option('epassc_api_key', $data['data']['api_key']);
+                update_option('epassc_next_refresh', $data['data']['next_refresh']);
+
+
+                // First, clear any existing scheduled event
+                $next_schedule = wp_next_scheduled('epassc_refresh_event');
+                if ($next_schedule) {
+                    wp_unschedule_event($next_schedule, 'epassc_refresh_event');
+                }
+
+                //Get next refresh calculated time
+                $next_refresh_time = $this->epassc_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
+
+                wp_schedule_single_event($next_refresh_time, 'epassc_refresh_event');
+
+                // Success response
+                $response['success'] = true;
+
+            } else {
+                //Failure response
+                $response['success'] = false;
+            }
+
+            $response['message'] = $data['message'];
+
+        } catch (Exception $e) {
             wp_send_json([
-                'message' => __('Failed to contact API server.', 'epasscard')
+                'message' => __('An error occurred: ', 'epasscard') . esc_html($e->getMessage())
             ], 500);
-            return;
         }
 
-        $data = json_decode(wp_remote_retrieve_body($api_response), true);
-
-        if (!empty($data['data']['api_key'])) {
-            update_option('epasscard_api_key', $data['data']['api_key']);
-            update_option('epass_next_refresh', $data['data']['next_refresh']);
-
-            //Get next refresh calculated time
-            $next_refresh_time = $this->epasscard_calculate_api_key_next_refresh_time($data['data']['next_refresh']);
-
-            wp_schedule_single_event($next_refresh_time, 'epasscard_refresh_event');
-
-            // Success response
-            $response['success'] = true;
-            
-        } else {
-            //Failure response
-            $response['success'] = false;
-        }
-        
-        $response['message'] = __($data['message'], 'epasscard');
-
-    } catch (Exception $e) {
-        wp_send_json([
-            'message' => __('An error occurred: ', 'epasscard') . esc_html($e->getMessage())
-        ], 500);
+        wp_send_json($response);
     }
 
-    wp_send_json($response);
-}
+    //Next Refresh time calculate by current time zone
+    public function epassc_calculate_api_key_next_refresh_time($next_refresh_time)
+    {
 
-  //Next Refresh time calculate by current time zone
-   public function epasscard_calculate_api_key_next_refresh_time($next_refresh_time) {
+        // Create a DateTime object in UTC
+        $dt = new DateTime($next_refresh_time, new DateTimeZone('UTC'));
 
-    // Create a DateTime object in UTC
-    $dt = new DateTime($next_refresh_time, new DateTimeZone('UTC'));
+        // Get WordPress timezone setting
+        $wp_timezone = wp_timezone(); // returns a DateTimeZone object
 
-    // Get WordPress timezone setting
-    $wp_timezone = wp_timezone(); // returns a DateTimeZone object
+        // Convert to WordPress timezone
+        $dt->setTimezone($wp_timezone);
 
-    // Convert to WordPress timezone
-    $dt->setTimezone($wp_timezone);
+        // Subtract 5 minutes
+        $dt->modify('-5 minutes');
 
-    // Subtract 5 minutes
-    $dt->modify('-5 minutes');
-
-    // Return Unix timestamp in WP timezone
-    return strtotime($dt->format('Y-m-d H:i:s'));
-}
+        // Return Unix timestamp in WP timezone
+        return strtotime($dt->format('Y-m-d H:i:s'));
+    }
 
 
     // Update API key manually
-    public function epasscard_update_api_key_manually() {
-         check_ajax_referer('epasscard_ajax_nonce', 'nonce');
-        $this->epasscard_refresh_api_key();
-        //wp_send_json_success(['message' => 'API key refreshed manually']);
+    public function epassc_update_api_key_manually()
+    {
+        check_ajax_referer('epasscard_ajax_nonce', 'nonce');
+        $this->epassc_refresh_api_key();
     }
 
     // Get pass card list
-    public function Epasscard_templates_callback()
+    public function epassc_templates_callback()
     {
         check_ajax_referer('epasscard_ajax_nonce');
         if (isset($_POST['request_identifier'])) {
@@ -200,9 +211,9 @@ class Epasscard_Ajax
 
                 $place_id = isset($_POST['place_id']) ? sanitize_text_field(wp_unslash($_POST['place_id'])) : '';
 
-                $api_key = get_option('epasscard_api_key', '');
+                $api_key = EPASSC_API_KEY;
 
-                $api_url = 'https://api.epasscard.com/api/google/geocode/' . urlencode($place_id);
+                $api_url = EPASSC_LOCATION_API_URL . urlencode($place_id);
                 $args = [
                     'headers' => [
                         'x-api-key' => $api_key,
@@ -214,9 +225,7 @@ class Epasscard_Ajax
 
                 // Check for errors
                 if (is_wp_error($response)) {
-                    // Handle error
                     $error_message = $response->get_error_message();
-                    // Log or display error
                 } else {
                     $body = wp_remote_retrieve_body($response);
                     $data = json_decode($body, true);
@@ -229,31 +238,107 @@ class Epasscard_Ajax
         wp_die();
     }
 
+
+    //Check Epasscard API key valid or not
+    public function epassc_check_api_key()
+    {
+        $response = [
+            'success' => false,
+            'message' => '',
+        ];
+
+        $api_key = EPASSC_API_KEY;
+
+        if (empty($api_key)) {
+            $response['errors']['api_key'] = __('API key is required', 'epasscard');
+            return $response; // return instead of wp_send_json
+        }
+
+        try {
+            $remote = wp_remote_post(EPASSC_API_KEY_VALID_URL, [
+                'body' => json_encode(['apiKey' => $api_key]),
+                'headers' => ['Content-Type' => 'application/json'],
+            ]);
+
+            $data = json_decode(wp_remote_retrieve_body($remote), true);
+
+            return $data;
+        } catch (Exception $e) {
+            $response['message'] = __('An error occurred while saving the settings: ', 'epasscard') . esc_html($e->getMessage());
+        }
+
+        return $response; // return instead of wp_send_json
+    }
+
+
+
     // Create pass template
-    public function Epasscard_create_pass_template()
+    public function epassc_create_pass_template()
     {
         // Verify nonce for security
         check_ajax_referer('epasscard_ajax_nonce');
 
         // Collect all POST data into a single array
-        $template_info = isset($_POST['template_info']) ? filter_input(INPUT_POST, 'template_info', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $barcode_data = isset($_POST['barcode_data']) ? filter_input(INPUT_POST, 'barcode_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $header_data = isset($_POST['header_data']) ? filter_input(INPUT_POST, 'header_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $primary_fields_data = isset($_POST['primary_fields_data']) ? filter_input(INPUT_POST, 'primary_fields_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $secondary_data = isset($_POST['secondary_data']) ? filter_input(INPUT_POST, 'secondary_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $back_field_data = isset($_POST['back_field_data']) ? filter_input(INPUT_POST, 'back_field_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $setting_data = isset($_POST['setting_data']) ? filter_input(INPUT_POST, 'setting_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $locations_data = filter_input(INPUT_POST, 'locations_data', FILTER_DEFAULT);
+        $template_info_raw = isset($_POST['template_info']) ? sanitize_textarea_field(wp_unslash($_POST['template_info'])) : "";
+        $template_info = [];
+        if (!empty($template_info_raw)) {
+            $template_info = json_decode($template_info_raw, true);
+        }
+
+        $barcode_data_raw = isset($_POST['barcode_data']) ? sanitize_textarea_field(wp_unslash($_POST['barcode_data'])) : "";
+        $barcode_data = [];
+        if (!empty($barcode_data_raw)) {
+            $barcode_data = json_decode($barcode_data_raw, true);
+        }
+
+        $header_data_raw = isset($_POST['header_data']) ? sanitize_textarea_field(wp_unslash($_POST['header_data'])) : "";
+        $header_data = [];
+        if (!empty($header_data_raw)) {
+            $header_data = json_decode($header_data_raw, true);
+        }
+        
+        $primary_fields_data_raw = isset($_POST['primary_fields_data']) ? sanitize_textarea_field(wp_unslash($_POST['primary_fields_data'])) : "";
+        $primary_fields_data = [];
+        if (!empty($primary_fields_data_raw)) {
+            $primary_fields_data = json_decode($primary_fields_data_raw, true);
+        }
+        
+        $secondary_data = isset($_POST['secondary_data']) ? sanitize_textarea_field(wp_unslash($_POST['secondary_data'])) : "";
+
+        $back_field_data_raw = isset($_POST['back_field_data']) ? sanitize_textarea_field(wp_unslash($_POST['back_field_data'])) : "";
+        $back_field_data = [];
+        if (!empty($back_field_data_raw)) {
+            $back_field_data = json_decode($back_field_data_raw, true);
+        }
+
+        $setting_data_raw = isset($_POST['setting_data']) ? sanitize_textarea_field(wp_unslash($_POST['setting_data'])) : "";
+        $setting_data = [];
+        if (!empty($setting_data_raw)) {
+            $setting_data = json_decode($setting_data_raw, true);
+        }
+
+        $locations_data = isset($_POST['locations_data']) ? sanitize_textarea_field(wp_unslash($_POST['locations_data'])) : "";
         $locations_setting_id = isset($_POST['locations_setting_id']) ? sanitize_text_field(wp_unslash($_POST['locations_setting_id'])) : "";
         $notification_radius = isset($_POST['notification_radius']) ? sanitize_text_field(wp_unslash($_POST['notification_radius'])) : "";
-        $setting_values = isset($_POST['setting_values']) ? filter_input(INPUT_POST, 'setting_values', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        //$additional_properties = isset($_POST['additional_properties']) ? filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY): [];
-        $additional_properties = filter_input(INPUT_POST, 'additional_properties', FILTER_DEFAULT);
-        $auxiliary_properties = filter_input(INPUT_POST, 'auxiliary_properties', FILTER_DEFAULT);
-        $recharge_field = filter_input(INPUT_POST, 'recharge_field', FILTER_DEFAULT);
-        $transaction_values = filter_input(INPUT_POST, 'transaction_values', FILTER_DEFAULT);
-        $pass_ids = isset($_POST['pass_ids']) ? filter_input(INPUT_POST, 'pass_ids', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
-        $template_data = isset($_POST['template_data']) ? filter_input(INPUT_POST, 'template_data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) : [];
+
+        $setting_values_raw = isset($_POST['setting_values']) ? sanitize_textarea_field(wp_unslash($_POST['setting_values'])) : "";
+        $setting_values = [];
+        if (!empty($setting_values_raw)) {
+            $setting_values = json_decode($setting_values_raw, true);
+        }
+
+        $additional_properties = isset($_POST['additional_properties']) ? sanitize_textarea_field(wp_unslash($_POST['additional_properties'])) : "";
+        $auxiliary_properties = isset($_POST['auxiliary_properties']) ? sanitize_textarea_field(wp_unslash($_POST['auxiliary_properties'])) : "";
+        $recharge_field = isset($_POST['recharge_field']) ? sanitize_textarea_field(wp_unslash($_POST['recharge_field'])) : "";
+        $transaction_values = isset($_POST['transaction_values']) ? sanitize_textarea_field(wp_unslash($_POST['transaction_values'])) : "";
+        $pass_ids = isset($_POST['pass_ids']) ? sanitize_textarea_field(wp_unslash($_POST['pass_ids'])) : "";
+        $template_data_raw = isset($_POST['template_data']) ? sanitize_textarea_field(wp_unslash($_POST['template_data'])) : "";
+
+        $template_data = [];
+        if (!empty($template_data_raw)) {
+            $template_data = json_decode($template_data_raw, true);
+
+        }
 
 
         $data = [
@@ -261,7 +346,7 @@ class Epasscard_Ajax
             'barcode_data' => $barcode_data,
             'header_data' => $header_data,
             'primary_fields_data' => $primary_fields_data,
-            'secondary_data' => $secondary_data,
+            //'secondary_data' => $secondary_data,
             'back_field_data' => $back_field_data,
             'setting_data' => $setting_data,
             'locations_data' => $locations_data,
@@ -291,18 +376,22 @@ class Epasscard_Ajax
 
         // Process secondary fields
         $secondaryFields = [];
-        if (!empty($data['secondary_data']['secondaryLabels']) && !empty($data['secondary_data']['secondaryValues'])) {
-            $count = min(count($data['secondary_data']['secondaryLabels']), count($data['secondary_data']['secondaryValues']));
-            for ($i = 0; $i < $count; $i++) {
-                $secondaryFields[] = [
-                    "label" => $data['secondary_data']['secondaryLabels'][$i],
-                    "value" => $data['secondary_data']['secondaryValues'][$i],
-                    "valueType" => "fixed",
-                    "changeMsg" => $data['secondary_data']['secondaryLabels'][$i] . " is updated",
-                    "staticValueType" => "text",
-                ];
+        if (!empty($secondary_data)) {
+            $decoded = json_decode($secondary_data, true);
+
+            if (is_array($decoded)) {
+                foreach ($decoded as $field) {
+                    $secondaryFields[] = [
+                        "label" => sanitize_textarea_field($field['label']),
+                        "value" => sanitize_textarea_field($field['value']),
+                        "valueType" => "fixed",
+                        "changeMsg" => sanitize_textarea_field($field['changeMsg']),
+                        "staticValueType" => "text",
+                    ];
+                }
             }
         }
+
 
         // Process back fields
         $backFields = [];
@@ -345,13 +434,13 @@ class Epasscard_Ajax
 
 
         // Call the template creation function with the full data array
-        $this->Epasscard_make_pass_template_request($data);
+        $this->epassc_make_pass_template_request($data);
 
         wp_die();
     }
 
     // Pass create method
-    public function Epasscard_make_pass_template_request(array $data)
+    public function epassc_make_pass_template_request(array $data)
     {
 
 
@@ -376,9 +465,10 @@ class Epasscard_Ajax
         $transactionValues = $data['transaction_values'];
 
         // Extract IDs
-        $pass_id = $data['pass_ids']['id'];
-        $pass_uid = $data['pass_ids']['uid'];
-        $organization_id = $data['pass_ids']['org_id'];
+        $decoded_ids = json_decode($data['pass_ids'], true);
+        $pass_id = sanitize_textarea_field($decoded_ids['id']);
+        $pass_uid = sanitize_textarea_field($decoded_ids['uid']);
+        $organization_id = sanitize_textarea_field($decoded_ids['org_id']);
 
         // Make variables accessible to included file
         $template_info = $data['template_info'];
@@ -391,26 +481,26 @@ class Epasscard_Ajax
 
         // Include appropriate file
         if ($pass_id && $pass_uid) {
-            require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/pass-update.php';
+            require EPASSC_PLUGIN_DIR . 'includes/admin/ajax-files/pass-update.php';
         } else {
-            require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/pass-create.php';
+            require EPASSC_PLUGIN_DIR . 'includes/admin/ajax-files/pass-create.php';
         }
     }
 
     //Get location
-    public function Epasscard_get_location()
+    public function epassc_get_location()
     {
         check_ajax_referer('epasscard_ajax_nonce');
 
         $place_name = isset($_GET['search']) ? sanitize_text_field(wp_unslash($_GET['search'])) : '';
-        $api_key = get_option('epasscard_api_key', '');
+        $api_key = EPASSC_API_KEY;
 
         if (empty($place_name)) {
             wp_send_json_error('Place name is required');
         }
 
         // Use the dynamic place name in the API URL
-        $api_url = 'https://api.epasscard.com/api/google/places/' . urlencode($place_name);
+        $api_url = EPASSC_PLACE_API_URL . urlencode($place_name);
 
         $args = [
             'headers' => [
@@ -428,12 +518,6 @@ class Epasscard_Ajax
             $data = json_decode($body, true);
             wp_send_json_success($data);
         }
-    }
-
-    // Install required plugin
-    public function Epasscard_install_required_plugin()
-    {
-        require EPASSCARD_PLUGIN_DIR . 'includes/admin/ajax-files/install-required-plugins.php';
     }
 
 }

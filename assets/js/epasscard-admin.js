@@ -40,188 +40,16 @@ jQuery(document).ready(function ($) {
 
   // Handle close button click for notices
   $(document).on("click", ".notice-dismiss", function () {
-    $(this)
-      .closest(".notice")
-      .fadeOut(200, function () {
-        $(this).remove();
+    $(this).closest(".notice").fadeOut(200, function () {
+         $(this).remove();
+      });
+   
+    $(this).closest(".epassc-notice").fadeOut(200, function () {
+         $(this).remove();
       });
   });
 
-  $("#epasscard-connect-btn").on("click", function (e) {
-    e.preventDefault();
-
-    // Get button and spinner elements
-    var $btn = $("#epasscard-connect-btn");
-    var $spinner = $btn.find(".epass-btn-spinner");
-
-    // Reset UI
-    $(".validation-error").text("");
-    $("#epasscard-response").html("");
-
-    // Add loading state
-    $btn.css("padding-right", "40px");
-    $btn.addClass("is-loading").prop("disabled", true);
-    var api_key = $("#epasscard-api-key").val();
-
-    // AJAX request
-    $.ajax({
-      url: epasscard_admin.ajax_url,
-      type: "POST",
-      data: {
-        action: "Epasscard_connect",
-        nonce: epasscard_admin.nonce,
-        api_key: api_key,
-      },
-      success: function (response) {
-        // Remove loading state
-        $btn.removeClass("is-loading").prop("disabled", false);
-        $btn.css("padding-right", "10px");
-        if (response.errors) {
-          // Handle validation errors
-          $.each(response.errors, function (field, message) {
-            $("#epasscard-" + field).css("border-color", "#d63638");
-            $("#" + field + "-error").text(message);
-          });
-        } else if (response.success) {
-          // Success message with close button
-          $("#epasscard-response").html(
-            '<div class="notice notice-success is-dismissible">' +
-            "<p>" +
-            response.message +
-            "</p>" +
-            '<button type="button" class="notice-dismiss">' +
-            '<span class="screen-reader-text">Dismiss this notice.</span>' +
-            "</button>" +
-            "</div>"
-          );
-
-          // Auto-dismiss after 3 seconds
-          setTimeout(function () {
-            $("#epasscard-response .notice").fadeOut(200, function () {
-              $(this).remove();
-            });
-          }, 3000);
-        } else {
-          // Error message with close button
-          $("#epasscard-response").html(
-            '<div class="notice notice-error is-dismissible">' +
-            "<p>" +
-            response.message +
-            "</p>" +
-            '<button type="button" class="notice-dismiss">' +
-            '<span class="screen-reader-text">Dismiss this notice.</span>' +
-            "</button>" +
-            "</div>"
-          );
-        }
-      },
-      error: function (xhr, status, error) {
-        // Remove loading state
-        $btn.removeClass("is-loading").prop("disabled", false);
-
-        // Error message with close button
-        $("#epasscard-response").html(
-          '<div class="notice notice-error is-dismissible">' +
-          "<p>" +
-          error +
-          "</p>" +
-          '<button type="button" class="notice-dismiss">' +
-          '<span class="screen-reader-text">Dismiss this notice.</span>' +
-          "</button>" +
-          "</div>"
-        );
-      },
-    });
-  });
-
-
-  //Update api key
-   $("#epass-update-api-key").on("click", function (e) {
-    e.preventDefault();
-    let $btn = $(this);
-    var $spinner = $btn.find(".epass-btn-spinner");
-
-    $("#epasscard-response").html("");
-
-    // Add loading state
-    $btn.css("padding-right", "40px");
-    $btn.addClass("is-loading").prop("disabled", true);
-
-     // AJAX request
-    $.ajax({
-      url: epasscard_admin.ajax_url,
-      type: "POST",
-      data: {
-        action: "epasscard_update_api_key_manually",
-        nonce: epasscard_admin.nonce,
-      },
-      success: function (response) {
-        // Remove loading state
-        $btn.removeClass("is-loading").prop("disabled", false);
-        $btn.css("padding-right", "10px");
-        if (response.errors) {
-          // Handle validation errors
-          $.each(response.errors, function (field, message) {
-            $("#epasscard-" + field).css("border-color", "#d63638");
-            $("#" + field + "-error").text(message);
-          });
-        } else if (response.success) {
-          // Success message with close button
-          $("#epasscard-response").html(
-            '<div class="notice notice-success is-dismissible">' +
-            "<p>" +
-            response.message +
-            "</p>" +
-            '<button type="button" class="notice-dismiss">' +
-            '<span class="screen-reader-text">Dismiss this notice.</span>' +
-            "</button>" +
-            "</div>"
-          );
-
-          // Auto-dismiss after 3 seconds
-          setTimeout(function () {
-            $("#epasscard-response .notice").fadeOut(200, function () {
-              $(this).remove();
-            });
-          }, 3000);
-   
-          location.reload();
-
-        } else {
-          // Error message with close button
-          $("#epasscard-response").html(
-            '<div class="notice notice-error is-dismissible">' +
-            "<p>" +
-            response.message +
-            "</p>" +
-            '<button type="button" class="notice-dismiss">' +
-            '<span class="screen-reader-text">Dismiss this notice.</span>' +
-            "</button>" +
-            "</div>"
-          );
-        }
-      },
-      error: function (xhr, status, error) {
-        // Remove loading state
-        $btn.removeClass("is-loading").prop("disabled", false);
-
-        // Error message with close button
-        $("#epasscard-response").html(
-          '<div class="notice notice-error is-dismissible">' +
-          "<p>" +
-          error +
-          "</p>" +
-          '<button type="button" class="notice-dismiss">' +
-          '<span class="screen-reader-text">Dismiss this notice.</span>' +
-          "</button>" +
-          "</div>"
-        );
-      },
-    });
-});
-
-
-
+ 
   // Front field script
   $(function () {
     // const wrapper = $("#epasscard_front_field");
@@ -608,9 +436,11 @@ jQuery(document).ready(function ($) {
     event.preventDefault();
 
     // Retrieve pass ids
-    let dataIds = $(this).attr("pass-ids")
-      ? JSON.parse($(this).attr("pass-ids"))
-      : [];
+    let rawIds = $(this).attr("pass-ids");
+
+    // parse JSON safely
+    let dataIds = rawIds ? JSON.parse(rawIds) : {};
+
 
     // Setting data
     let settingData = {};
@@ -839,11 +669,6 @@ jQuery(document).ready(function ($) {
     ).val();
 
     //Secondary fields
-    let secondaryIsValid = true;
-    let secondaryData = {
-      secondaryLabels: [],
-      secondaryValues: [],
-    };
 
     // if (
     //   $(`${selectedScreenId} .epasscard-secondary-fields .model-label-name`)
@@ -957,6 +782,13 @@ jQuery(document).ready(function ($) {
     //   }
     // );
 
+
+    
+    /*let secondaryData = {
+      secondaryLabels: [],
+      secondaryValues: [],
+    };
+
     $(".epasscard-secondary-fields .secondary-label").each(function () {
       if ($(this).val().trim() === "") {
         $(this).addClass("epasscard-input-error");
@@ -974,6 +806,30 @@ jQuery(document).ready(function ($) {
       } else {
         $(this).removeClass("epasscard-input-error");
         secondaryData.secondaryValues.push($(this).val());
+      }
+    });*/
+
+    // Collect secondary fields
+    let secondaryIsValid = true;
+    let secondaryProperties = [];
+
+    $(".epasscard-secondary-fields .epasscard-field-group").each(function () {
+      const label = $(this).find(".secondary-label").val().trim();
+      const value = $(this).find(".secondary-value").val().trim();
+
+      if (label === "" || value === "") {
+        $(this).find(".secondary-label, .secondary-value").addClass("epasscard-input-error");
+        secondaryIsValid = false;
+      } else {
+        $(this).find(".secondary-label, .secondary-value").removeClass("epasscard-input-error");
+
+        secondaryProperties.push({
+          label: label,
+          value: value,
+          valueType: "fixed",
+          changeMsg: label + " is updated",
+          staticValueType: "text",
+        });
       }
     });
 
@@ -1273,6 +1129,7 @@ jQuery(document).ready(function ($) {
     );
     const parsedTemplateData = templateData ? JSON.parse(templateData) : {};
 
+
     // Create pass template
     var $button = $(this);
     $button.prop("disabled", true);
@@ -1282,25 +1139,24 @@ jQuery(document).ready(function ($) {
       url: epasscard_admin.ajax_url,
       type: "POST",
       data: {
-        action: "Epasscard_create_pass_template",
-        template_info: templateInfo,
-        barcode_data: barcodeData,
-        header_data: headerData,
-        primary_fields_data: primaryFieldsData,
-        secondary_data: secondaryData,
-        back_field_data: backFieldData,
-        setting_data: settingData,
+        action: "epassc_create_pass_template",
+        template_info: JSON.stringify(templateInfo),
+        barcode_data: JSON.stringify(barcodeData),
+        header_data: JSON.stringify(headerData),
+        primary_fields_data: JSON.stringify(primaryFieldsData),
+        secondary_data:JSON.stringify(secondaryProperties),
+        back_field_data: JSON.stringify(backFieldData),
+        setting_data: JSON.stringify(settingData),
         locations_data: JSON.stringify(allLocations),
-        //locations_data: allLocations,
         locations_setting_id: locationSettingId,
         notification_radius: notificationRadius,
-        setting_values: settingValues,
+        setting_values: JSON.stringify(settingValues),
         additional_properties: JSON.stringify(additionalProperties),
         auxiliary_properties: JSON.stringify(auxiliaryData),
         recharge_field: JSON.stringify(rechargeField),
         transaction_values: JSON.stringify(transactionValues),
-        pass_ids: dataIds,
-        template_data: parsedTemplateData,
+        pass_ids: JSON.stringify(dataIds),
+        template_data: JSON.stringify(parsedTemplateData),
         _ajax_nonce: epasscard_admin.nonce,
       },
       success: function (response) {
@@ -1319,7 +1175,7 @@ jQuery(document).ready(function ($) {
           const baseUrl = window.location.origin + window.location.pathname;
 
           setTimeout(function () {
-            const redirectUrl = `${templateEpassVars.templateBaseUrl}&tab=templates&_wpnonce=${templateEpassVars.nonce}`;
+            const redirectUrl = `${epasscTemplateVars.templateBaseUrl}&tab=templates&_wpnonce=${epasscTemplateVars.nonce}`;
             window.location.href = redirectUrl;
           }, 3000);
 
@@ -1409,7 +1265,7 @@ jQuery(document).ready(function ($) {
           "background-image",
           `url("${images.strip}")`
         );
-      if (cardType == "Generic pass") {
+      if (cardType == "Generic") {
         jQuery(".mobile-preview .epc-primary-label").text(primaryFields[0].label);
         jQuery(".mobile-preview .epc-primary-value").text(primaryFields[0].value);
         jQuery(".epasscard-primary-fields .primary-name").val(primaryFields[0].label);

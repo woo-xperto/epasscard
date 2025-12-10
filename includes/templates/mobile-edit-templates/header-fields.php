@@ -8,18 +8,18 @@
         <button class="add-header-field-btn epasscard-primary-btn">Add Field</button>
         <div class="fields-container">
             <!-- One default field group -->
-            <?php if (! empty($epasscard_header_info)) {
-                foreach ($epasscard_header_info as $epasscard_header) {?>
+            <?php if (! empty($epassc_header_info)) {
+                foreach ($epassc_header_info as $epassc_header) {?>
             <div class="epasscard-field-group">
                 <label>Label <span>*</span></label>
-                <input type="text" class="header-label-name" value="<?php echo esc_attr($epasscard_header['label'] ?? ''); ?>">
+                <input type="text" class="header-label-name" value="<?php echo esc_attr($epassc_header['label'] ?? ''); ?>">
                 <label>Value <span>*</span></label>
                 <input type="text" class="product-name-label epasscard-watch-input"
-                    value="<?php echo esc_attr($epasscard_header['value'] ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_header['value'] ?? ''); ?>">
 
                 <label>Change message (This message will be displayed when value is changed)</label>
                 <input type="text" class="change-message-header" placeholder="Eg. Name changed to {name}"
-                    value="<?php echo esc_attr($epasscard_header['changeMsg'] ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_header['changeMsg'] ?? ''); ?>">
 
                 <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
             </div>

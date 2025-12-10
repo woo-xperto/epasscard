@@ -34,7 +34,7 @@
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-logo.png",
           "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-logo.png",
           "thumbnail": "",
-          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-strip.png",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-strip.jpg",
           "footer": ""
         },
         "primaryFields": [
@@ -123,7 +123,7 @@
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-logo.png",
           "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-logo.png",
           "thumbnail": "",
-          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-strip.png",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-strip.jpg",
           "footer": ""
         },
         "primaryFields": [
@@ -212,7 +212,7 @@
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-logo.png",
           "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-logo.png",
           "thumbnail": "",
-          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-strip.png",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-strip.jpg",
           "footer": ""
         },
         "primaryFields": [
@@ -301,7 +301,7 @@
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-logo.png",
           "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-logo.png",
           "thumbnail": "",
-          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-strip.png",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-strip.jpg",
           "footer": ""
         },
         "primaryFields": [
@@ -390,7 +390,7 @@
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-logo.png",
           "icon": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-logo.png",
           "thumbnail": "",
-          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-strip.png",
+          "strip": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-strip.jpg",
           "footer": ""
         },
         "primaryFields": [

@@ -11,15 +11,15 @@
             <div class="epasscard-field-group">
                 <label>label <span>*</span></label>
                 <input type="text" class="primary-name" placeholder="Eg. Name"
-                    value="<?php echo esc_attr($epasscard_primary_label ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_primary_label ?? ''); ?>">
 
                 <label>Value <span>*</span></label>
                 <input type="text" class="primary-value epasscard-watch-input"
-                    value="<?php echo esc_attr($epasscard_primary_value ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_primary_value ?? ''); ?>">
 
                 <label>Change message (This message will be displayed when value is changed)</label>
                 <input type="text" class="primary-message" placeholder="Eg. Name changed to {name}"
-                    value="<?php echo esc_attr($epasscard_primary_change_msg ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_primary_change_msg ?? ''); ?>">
             </div>
         </div>
     </div>

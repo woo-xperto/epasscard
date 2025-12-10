@@ -278,7 +278,7 @@
       "previewImage": "https://app.epasscard.com/assets/img/predefined-templates/id/id.png",
       "designObj": {
         "primarySettings": {
-          "cardType": "Generic pass",
+          "cardType": "Generic",
           "name": "Generic pass",
           "organizationName": "",
           "description": "",

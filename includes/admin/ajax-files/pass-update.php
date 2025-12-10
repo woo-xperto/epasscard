@@ -1,10 +1,9 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-$epasscard_api_url = EPASSCARD_API_URL."update-pass-template/$pass_uid";
-$epasscard_api_key = get_option('epasscard_api_key', '');
+$EPASSC_API_URL = EPASSC_API_URL."update-pass-template/$pass_uid";
 
 // Fix 1: Ensure settings block is properly included
-$epasscard_settings_block = '
+$epassc_settings_block = '
     "settings": {
         "id": ' . (!empty($locations_setting_id) ? $locations_setting_id : 'null') . ',
         "is_active": 1,
@@ -13,21 +12,21 @@ $epasscard_settings_block = '
     },';
 
 // Decode JSON to PHP array
-$epasscard_recharge_data = json_decode($rechargeField, true);
+$epassc_recharge_data = json_decode($rechargeField, true);
 
 // Extract the 'name' values
-$epasscard_recharge_data = array_column($epasscard_recharge_data, 'name');
+$epassc_recharge_data = array_column($epassc_recharge_data, 'name');
 
 // Create a comma-separated string
-$epasscard_recharge_field = implode(',', $epasscard_recharge_data);
+$epassc_recharge_field = implode(',', $epassc_recharge_data);
 
 
-$epasscard_data = '{
+$epassc_data = '{
     "template": {
         "template_id": ' . $pass_id . ',
         "template_uid": "' . $pass_uid . '",
         "locations": {
-            ' . $epasscard_settings_block . '
+            ' . $epassc_settings_block . '
             "locations": ' . $locationsDataJson . '
         },
         "beacons": {},
@@ -59,7 +58,7 @@ $epasscard_data = '{
             "reedem_field": "{}",
             "org_id": ' . $organization_id . ',
             "expire_settings": ' . (filter_var($setting_values['is_expire'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0') . ',
-            "recharge_field": "' . $epasscard_recharge_field . '",
+            "recharge_field": "' . $epassc_recharge_field . '",
             "card_type": null,
             "reciver_email": "{}",
             "batch_size": null,
@@ -142,20 +141,20 @@ $epasscard_data = '{
     }
 }';
 
-$epasscard_response = wp_remote_request($epasscard_api_url, [
+$epassc_response = wp_remote_request($EPASSC_API_URL, [
     'method'  => 'PUT',
     'headers' => [
         'Content-Type' => 'application/json',
-        'x-api-key'    => $epasscard_api_key,
+        'x-api-key'    => EPASSC_API_KEY,
     ],
-    'body'    => $epasscard_data,
+    'body'    => $epassc_data,
     'timeout' => 60,
 ]);
 
-if (is_wp_error($epasscard_response)) {
-    wp_send_json_error($epasscard_response->get_error_message());
+if (is_wp_error($epassc_response)) {
+    wp_send_json_error($epassc_response->get_error_message());
 } else {
-    $epasscard_body = wp_remote_retrieve_body($epasscard_response);
-    $epasscard_data = json_decode($epasscard_body, true);
-    wp_send_json_success($epasscard_data);
+    $epassc_body = wp_remote_retrieve_body($epassc_response);
+    $epassc_data = json_decode($epassc_body, true);
+    wp_send_json_success($epassc_data);
 }

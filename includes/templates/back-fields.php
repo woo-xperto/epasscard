@@ -5,28 +5,28 @@
             <div>
                 <div class="phone-pass-preview">
                     <img class="phone"
-                        src="<?php echo esc_url(EPASSCARD_PLUGIN_URL . 'assets/img/images/mobile_portrait.png'); ?>"
+                        src="<?php echo esc_url(EPASSC_PLUGIN_URL . 'assets/img/images/mobile_portrait.png'); ?>"
                         alt="Back Preview">
                     <div class="pass-inner">
                         <div class="coupon-container">
                             <div class="coupon-item">
                                 <img
-                                    src="<?php echo esc_url(EPASSCARD_PLUGIN_URL . 'assets/img/images/backfieldSwitch.jpg'); ?>">
+                                    src="<?php echo esc_url(EPASSC_PLUGIN_URL . 'assets/img/images/backfieldSwitch.jpg'); ?>">
                             </div>
                             <div class="spacer"></div>
                             <div class="coupon-bottom">
-                                <?php if (isset($epasscard_back_fields_info) && ! empty($epasscard_back_fields_info)) {
-                                        $epasscard_index         = 0;
-                                        $epasscard_base_time_stamp = (int) round(microtime(true) * 1000);
-                                        foreach ($epasscard_back_fields_info as $epasscard_field) {
-                                        $epasscard_timestamp = $epasscard_base_time_stamp + $epasscard_index; ?>
-                                <div class="coupon-field-display" data-id="<?php echo esc_attr($epasscard_timestamp); ?>">
+                                <?php if (isset($epassc_back_fields_info) && ! empty($epassc_back_fields_info)) {
+                                        $epassc_index         = 0;
+                                        $epassc_base_time_stamp = (int) round(microtime(true) * 1000);
+                                        foreach ($epassc_back_fields_info as $epassc_field) {
+                                        $epassc_timestamp = $epassc_base_time_stamp + $epassc_index; ?>
+                                <div class="coupon-field-display" data-id="<?php echo esc_attr($epassc_timestamp); ?>">
                                     <div class="display-name">
-                                        <?php echo isset($epasscard_field['label']) ? esc_html($epasscard_field['label']) : ''; ?></div>
+                                        <?php echo isset($epassc_field['label']) ? esc_html($epassc_field['label']) : ''; ?></div>
                                     <div class="display-value">
-                                        <?php echo isset($epasscard_field['label']) ? esc_html($epasscard_field['value']) : ''; ?></div>
+                                        <?php echo isset($epassc_field['label']) ? esc_html($epassc_field['value']) : ''; ?></div>
                                 </div>
-                                <?php $epasscard_index++;
+                                <?php $epassc_index++;
                                         }
                                     }
                                 ?>
@@ -45,28 +45,28 @@
         <button class="add-field-btn epasscard-primary-btn">Add Field</button>
         <div class="fields-container">
             <!-- Default field group -->
-            <?php if (isset($epasscard_back_fields_info) && ! empty($epasscard_back_fields_info)) {
-                    $epasscard_index         = 0;
-                    $epasscard_base_time_stamp = (int) round(microtime(true) * 1000);
-                    foreach ($epasscard_back_fields_info as $epasscard_field) {
-                        $epasscard_timestamp = $epasscard_base_time_stamp + $epasscard_index;
+            <?php if (isset($epassc_back_fields_info) && ! empty($epassc_back_fields_info)) {
+                    $epassc_index         = 0;
+                    $epassc_base_time_stamp = (int) round(microtime(true) * 1000);
+                    foreach ($epassc_back_fields_info as $epassc_field) {
+                        $epassc_timestamp = $epassc_base_time_stamp + $epassc_index;
                     ?>
-            <div class="epasscard-field-group back-fields-wrap" data-id="<?php echo esc_attr($epasscard_timestamp); ?>">
+            <div class="epasscard-field-group back-fields-wrap" data-id="<?php echo esc_attr($epassc_timestamp); ?>">
                 <label>Label (Name) <span>*</span></label>
                 <input type="text" class="field-name" placeholder="Eg. Name"
-                    value="<?php echo isset($epasscard_field['label']) ? esc_attr($epasscard_field['label']) : ''; ?>">
+                    value="<?php echo isset($epassc_field['label']) ? esc_attr($epassc_field['label']) : ''; ?>">
 
                 <label>Value <span>*</span></label>
                 <textarea class="field-value epasscard-watch-input" rows="4" cols="100%"
-                    placeholder="Write your message here..."><?php echo isset($epasscard_field['value']) ? esc_html($epasscard_field['value']) : ''; ?></textarea>
+                    placeholder="Write your message here..."><?php echo isset($epassc_field['value']) ? esc_html($epassc_field['value']) : ''; ?></textarea>
 
                 <label>Change message (This message will be displayed when value is changed)</label>
                 <input type="text" class="change-message" placeholder="eg. Name changed to {name}"
-                    value="<?php echo isset($epasscard_field['changeMsg']) ? esc_attr($epasscard_field['changeMsg']) : ''; ?>">
+                    value="<?php echo isset($epassc_field['changeMsg']) ? esc_attr($epassc_field['changeMsg']) : ''; ?>">
 
                 <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
             </div>
-            <?php $epasscard_index++;
+            <?php $epassc_index++;
                     }
             }?>
         </div>

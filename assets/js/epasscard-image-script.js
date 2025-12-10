@@ -1,14 +1,13 @@
-
 jQuery(document).ready(function ($) {
-    // images scripts
-    let epasscardCropper;
+    let epasscardCroppie;
     let epasscardCurrentPreviewSelector;
     let epasscardOriginalImageData;
 
     function closeEpasscardModal() {
         $("#epasscard-cropper-modal").hide();
-        if (epasscardCropper) {
-            epasscardCropper.destroy();
+        if (epasscardCroppie) {
+            epasscardCroppie.destroy();
+            epasscardCroppie = null;
         }
     }
 
@@ -19,24 +18,20 @@ jQuery(document).ready(function ($) {
         epasscardCurrentPreviewSelector = previewSelector;
         epasscardOriginalImageData = imageSrc;
 
-        if (epasscardCropper) epasscardCropper.destroy();
+        if (epasscardCroppie) epasscardCroppie.destroy();
 
-        epasscardCropper = new Cropper(
-            document.getElementById("epasscard-cropper-image"),
-            {
-                aspectRatio: NaN,
-                viewMode: 1,
-                autoCropArea: 1,
-            }
-        );
+        epasscardCroppie = new Croppie(document.getElementById("epasscard-cropper-image"), {
+            viewport: { width: 250, height: 250, type: 'square' },
+            boundary: { width: 300, height: 300 },
+            showZoomer: true
+        });
+
+        epasscardCroppie.bind({ url: imageSrc });
     }
 
     function handleEpasscardImageCrop(inputSelector, previewSelector) {
         $(inputSelector).on("change", function () {
             const input = this;
-            const previewsec = $(this)
-                .closest(".image-upload-wrapper")
-                .find(".preview");
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
@@ -48,53 +43,26 @@ jQuery(document).ready(function ($) {
     }
 
     $("#epasscard-crop-btn").on("click", function () {
-        const canvas = epasscardCropper.getCroppedCanvas();
-        const croppedImage = canvas.toDataURL("image/png");
-        const selectedImage = $("#epasscard-cropper-modal").attr("selected-image");
+        epasscardCroppie.result({ type: 'base64', format: 'png' }).then(function (croppedImage) {
+            const selectedImage = $("#epasscard-cropper-modal").attr("selected-image");
 
-        $(epasscardCurrentPreviewSelector).attr("src", croppedImage);
+            $(epasscardCurrentPreviewSelector).attr("src", croppedImage);
 
-        if (selectedImage == ".preview-background") {
-            $(".coupon-strip")
-                .css("background-image", "url('" + croppedImage + "')");
-        } else if (selectedImage == ".preview-logo") {
-            $(".logo-img").attr("src", croppedImage);
-        }
+            if (selectedImage == ".preview-background") {
+                $(".coupon-strip").css("background-image", "url('" + croppedImage + "')");
+            } else if (selectedImage == ".preview-logo") {
+                $(".logo-img").attr("src", croppedImage);
+            }
 
-        //Show image for card Generic Pass
-        jQuery(".mobile-preview .epc-image-block > img").attr("src", epasscardOriginalImageData);
+            // Show image for card Generic Pass
+            $(".mobile-preview .epc-image-block > img").attr("src", croppedImage);
 
-
-        closeEpasscardModal();
-    });
-
-    $("#epasscard-use-original-btn").on("click", function () {
-        const selectedImage = $("#epasscard-cropper-modal").attr("selected-image");
-
-        if (selectedImage === ".preview-background") {
-            // Update background and preview image
-            $(".coupon-strip")
-                .css("background-image", "url('" + epasscardOriginalImageData + "')");
-            $(".preview-background").attr("src", epasscardOriginalImageData).show();
-        } else if (selectedImage === ".preview-logo") {
-            // Update logo preview and logo-img
-            $(".preview-logo").attr("src", epasscardOriginalImageData).show();
-            $(".logo-img").attr("src", epasscardOriginalImageData).show();
-        } else {
-            // Default case for other previews
-            $(epasscardCurrentPreviewSelector)
-                .attr("src", epasscardOriginalImageData);
-        }
-
-        //Show image for card Generic Pass
-        jQuery(".mobile-preview .epc-image-block > img").attr("src", epasscardOriginalImageData);
-
-        closeEpasscardModal();
+            closeEpasscardModal();
+        });
     });
 
     $(".epasscard-cropper-close").on("click", closeEpasscardModal);
 
-    // Click outside to close
     $("#epasscard-cropper-modal").on("click", function (e) {
         if ($(e.target).closest(".epasscard-cropper-container").length === 0) {
             closeEpasscardModal();
@@ -105,5 +73,4 @@ jQuery(document).ready(function ($) {
     handleEpasscardImageCrop(".background-image", ".preview-background");
     handleEpasscardImageCrop(".icon", ".preview-icon");
     handleEpasscardImageCrop(".logo", ".preview-logo");
-
 });

@@ -1,6 +1,6 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-class Epasscard_Admin
+class EPASSC_Admin
 {
     /**
      * Constructor
@@ -8,9 +8,9 @@ class Epasscard_Admin
     public function __construct()
     {
 
-        new Epasscard_Menu();
+        new EPASSC_Menu();
         // Load admin AJAX handlers
-        new Epasscard_Ajax();
+        new EPASSC_Ajax();
 
     }
 }

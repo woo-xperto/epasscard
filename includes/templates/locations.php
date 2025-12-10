@@ -2,7 +2,7 @@
 <div id="epasscard-location">
     <div class="left">
         <!-- Mobile preview -->
-        <?php include EPASSCARD_PLUGIN_DIR . 'includes/templates/mobile-preview.php'; ?>
+        <?php include EPASSC_PLUGIN_DIR . 'includes/templates/mobile-preview.php'; ?>
     </div>
 
 
@@ -15,41 +15,41 @@
         <div class="form-group">
             <label for="notification-radius">Notification Radius (meters)</label>
             <input type="number" id="notification-radius" placeholder="Enter radius"
-                value="<?php echo isset($epasscard_location_settings['notification_radius']) ? esc_attr($epasscard_location_settings['notification_radius']) : ''; ?>">
+                value="<?php echo isset($epassc_location_settings['notification_radius']) ? esc_attr($epassc_location_settings['notification_radius']) : ''; ?>">
         </div>
 
         <button class="add-location-btn epasscard-primary-btn">Add Location</button>
 
         <div class="location-container"
-            locationSettingId="<?php echo isset($epasscard_location_setting_id) ? esc_attr($epasscard_location_setting_id) : ''; ?>">
-            <?php if (! empty($epasscard_location_list)) {
-                foreach ($epasscard_location_list as $epasscard_location) {?>
+            locationSettingId="<?php echo isset($epassc_location_setting_id) ? esc_attr($epassc_location_setting_id) : ''; ?>">
+            <?php if (! empty($epassc_location_list)) {
+                foreach ($epassc_location_list as $epassc_location) {?>
             <div class="location-block epasscard-field-group"
-                location-uid="<?php echo isset($epasscard_location['uid']) ? esc_attr($epasscard_location['uid']) : ''; ?>">
-                <?php require_once EPASSCARD_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
+                location-uid="<?php echo isset($epassc_location['uid']) ? esc_attr($epassc_location['uid']) : ''; ?>">
+                <?php require_once EPASSC_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
                 <button class="search-btn epasscard-primary-btn">Search Location</button>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Title</label>
                         <input type="text" class="location-title" placeholder="Eg. My Location"
-                            value="<?php echo isset($epasscard_location['title']) ? esc_attr($epasscard_location['title']) : ''; ?>">
+                            value="<?php echo isset($epassc_location['title']) ? esc_attr($epassc_location['title']) : ''; ?>">
                     </div>
                     <div class="form-group">
                         <label>Latitude<span>*</span></label>
                         <input type="text" class="location-latitude" placeholder="Eg. 37.7749"
-                            value="<?php echo isset($epasscard_location['latitude']) ? esc_attr($epasscard_location['latitude']) : ''; ?>">
+                            value="<?php echo isset($epassc_location['latitude']) ? esc_attr($epassc_location['latitude']) : ''; ?>">
                     </div>
                     <div class="form-group">
                         <label>Longitude<span>*</span></label>
                         <input type="text" class="location-longitude" placeholder="Eg. -122.4194"
-                            value="<?php echo isset($epasscard_location['longitude']) ? esc_attr($epasscard_location['longitude']) : ''; ?>">
+                            value="<?php echo isset($epassc_location['longitude']) ? esc_attr($epassc_location['longitude']) : ''; ?>">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Altitude</label>
                         <input type="text" class="location-altitude" placeholder="Eg. 30"
-                            value="<?php echo isset($epasscard_location['altitude']) ? esc_attr($epasscard_location['altitude']) : ''; ?>">
+                            value="<?php echo isset($epassc_location['altitude']) ? esc_attr($epassc_location['altitude']) : ''; ?>">
                     </div>
                     <div class="form-group">
                         <label>Notification Text</label>
@@ -63,7 +63,7 @@
 
             <!-- Location blocks will be appended here -->
             <div class="location-block epasscard-field-group">
-                <?php require_once EPASSCARD_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
+                <?php require_once EPASSC_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
                 <button class="search-btn epasscard-primary-btn">Search Location</button>
                 <div class="form-row">
                     <div class="form-group">

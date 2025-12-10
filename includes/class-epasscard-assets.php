@@ -1,5 +1,5 @@
 <?php
-class Epasscard_Load_Assets
+class EPASSC_Assets
 {
     /**
      * Constructor
@@ -8,7 +8,7 @@ class Epasscard_Load_Assets
     {
         if (is_admin()) {
             // Load admin assets
-            add_action('admin_enqueue_scripts', [$this, 'Epasscard_enqueue_admin_assets']);
+            add_action('admin_enqueue_scripts', [$this, 'epassc_enqueue_admin_assets']);
         }
 
     }
@@ -16,7 +16,7 @@ class Epasscard_Load_Assets
     /**
      * Enqueue admin assets
      */
-    public function Epasscard_enqueue_admin_assets($hook)
+    public function epassc_enqueue_admin_assets($hook)
     {
 
         if ('toplevel_page_epasscard' !== $hook) {
@@ -25,133 +25,133 @@ class Epasscard_Load_Assets
 
         wp_enqueue_style(
             'epasscard-admin-css',
-            EPASSCARD_PLUGIN_URL . 'assets/css/epasscard-admin.css',
+            EPASSC_PLUGIN_URL . 'assets/css/epasscard-admin.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_style(
             'epasscard-admin-responsive-css',
-            EPASSCARD_PLUGIN_URL . 'assets/css/epasscard-admin-responsive.css',
+            EPASSC_PLUGIN_URL . 'assets/css/epasscard-admin-responsive.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_style(
             'select-2-css',
-            EPASSCARD_PLUGIN_URL . 'assets/css/select2.min.css',
+            EPASSC_PLUGIN_URL . 'assets/css/select2.min.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_style(
             'cropper-css',
-            EPASSCARD_PLUGIN_URL . 'assets/css/cropper.min.css',
+            EPASSC_PLUGIN_URL . 'assets/css/croppie.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_style(
             'jquery-ui',
-            EPASSCARD_PLUGIN_URL . 'assets/css/jquery-ui.css',
+            EPASSC_PLUGIN_URL . 'assets/css/jquery-ui.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_style(
             'color-picker-css',
-            EPASSCARD_PLUGIN_URL . 'assets/css/evol-colorpicker.min.css',
+            EPASSC_PLUGIN_URL . 'assets/css/evol-colorpicker.min.css',
             [],
-            EPASSCARD_VERSION
+            EPASSC_VERSION
         );
 
         wp_enqueue_script('jquery');
 
         wp_enqueue_script(
             'epasscard-admin-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-admin.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-admin.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'lockscreen-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/lockscreen.js',
+            EPASSC_PLUGIN_URL . 'assets/js/lockscreen.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'setting-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-setting.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-setting.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-admin-javascript',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-admin-javascript.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-admin-javascript.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-info',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-info.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-info.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-backfields-script',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-back-fields-script.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-back-fields-script.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-additional-script',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-additional-fields.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-additional-fields.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-auxiliary-script',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-auxiliary-fields.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-auxiliary-fields.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-image-script',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-image-script.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-image-script.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'elect-2-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/select2.min.js',
+            EPASSC_PLUGIN_URL . 'assets/js/select2.min.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
-        wp_enqueue_script(
+         wp_enqueue_script(
             'cropper-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/cropper.min.js',
+            EPASSC_PLUGIN_URL . 'assets/js/croppie.min.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
@@ -161,22 +161,22 @@ class Epasscard_Load_Assets
 
         wp_enqueue_script(
             'color-picker-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/evol-colorpicker.min.js',
+            EPASSC_PLUGIN_URL . 'assets/js/evol-colorpicker.min.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
         wp_enqueue_script(
             'epasscard-extensions-js',
-            EPASSCARD_PLUGIN_URL . 'assets/js/epasscard-extensions.js',
+            EPASSC_PLUGIN_URL . 'assets/js/epasscard-connection.js',
             ['jquery'],
-            EPASSCARD_VERSION,
+            EPASSC_VERSION,
             true
         );
 
 
-        $api_key         = get_option('epasscard_api_key', '');
+        $api_key         = get_option('epassc_api_key', '');
 
         $localization_data = [
             'ajax_url'           => admin_url('admin-ajax.php'),

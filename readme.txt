@@ -2,7 +2,7 @@
 **Contributors:** wooxperto,xihad1 
 **Tags:** wallet, passbook, gift card, Apple Wallet, Google Wallet  
 **Requires at least:** 5.0  
-**Tested up to:** 6.8
+**Tested up to:** 6.9
 **Requires PHP:** 7.2
 **Stable tag:** 1.0.0  
 **License:** GPLv2 or later  
@@ -24,6 +24,53 @@ With the **Epasscard to Gift Card Extension**, you can automatically generate a 
 - Automatically generates Epasscard pass when gift card is issued
 - Customizable pass design and metadata
 - Easy to use and developer-friendly
+
+
+== External Services ==
+
+This plugin relies on external services provided by **EpassCard** to generate, validate, and manage digital wallet passes.
+
+The following APIs are used:
+
+- **Pass Creation and Management**  
+  Service: https://api.epasscard.com/api/public/v1/  
+  Purpose: To create, update, and retrieve digital pass templates and details.  
+  Data Sent: Pass metadata (design, user-provided information such as gift card details) when a pass is created or updated.  
+
+- **Certificates**  
+  Service: https://api.epasscard.com/api/certificate/all-certificates/  
+  Purpose: To fetch available certificates required for pass generation.  
+  Data Sent: None from the user; only plugin requests certificate information.  
+
+- **API Key Validation and Refresh**  
+  Services:  
+  - https://api.epasscard.com/api/public/v1/validate-api-key  
+  - https://api.epasscard.com/api/public/v1/refresh-api-key  
+  Purpose: To validate and refresh your EpassCard API key.  
+  Data Sent: API key provided by the site administrator.  
+
+- **Location and Place Services**  
+  Services:  
+  - https://api.epasscard.com/api/google/geocode/  
+  - https://api.epasscard.com/api/google/places/  
+  Purpose: To resolve geolocation and place information for passes.  
+  Data Sent: Location or place identifiers when configured in pass metadata.  
+
+- **API Key Management Portal**  
+  Service: https://app.epasscard.com/api-keys  
+  Purpose: To allow administrators to generate and manage API keys.  
+  Data Sent: Administrator account information when accessing the portal (handled directly by EpassCard).
+
+**Important:**  
+- Data is only transmitted when you configure or generate passes.  
+- No personal data is sent unless you explicitly include it in the pass metadata.  
+- All services are provided by **EpassCard**.  
+
+
+Epasscard api documentation: https://documenter.getpostman.com/view/47181495/2sB3QQHSXL
+Terms of Service: https://epasscard.com/terms  
+Privacy Policy: https://epasscard.com/privacy
+
 
 == Installation ==
 

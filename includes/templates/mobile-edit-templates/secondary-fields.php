@@ -8,29 +8,29 @@
         <button class="add-secondary-field-btn epasscard-primary-btn">Add Field</button>
         <div class="fields-container">
             <!-- One default field group -->
-            <?php if (! empty($epasscard_secondary_info) && is_array($epasscard_secondary_info)) {
-                    $epasscard_index = 0;
-                    foreach ($epasscard_secondary_info as $epasscard_field) { ?>
-            <div class="epasscard-field-group" data-id="<?php echo esc_attr($epasscard_index); ?>">
+            <?php if (! empty($epassc_secondary_info) && is_array($epassc_secondary_info)) {
+                    $epassc_index = 0;
+                    foreach ($epassc_secondary_info as $epassc_field) { ?>
+            <div class="epasscard-field-group" data-id="<?php echo esc_attr($epassc_index); ?>">
                 <label>Label <span>*</span></label>
-                <input type="text" class="secondary-label" value="<?php echo esc_attr($epasscard_field['label'] ?? ''); ?>">
+                <input type="text" class="secondary-label" value="<?php echo esc_attr($epassc_field['label'] ?? ''); ?>">
 
                 <label>Value <span>*</span></label>
                 <input type="text" class="secondary-value epasscard-watch-input"
-                    value="<?php echo esc_attr($epasscard_field['value'] ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_field['value'] ?? ''); ?>">
 
                 <label>Change message (This message will be displayed when value is changed)</label>
                 <input type="text" class="change-message-secondary" placeholder="Eg. Value changed to {new}"
-                    value="<?php echo esc_attr($epasscard_field['changeMsg'] ?? ''); ?>">
+                    value="<?php echo esc_attr($epassc_field['changeMsg'] ?? ''); ?>">
 
                 <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
             </div>
-            <?php $epasscard_index++;
+            <?php $epassc_index++;
                     }
                 } else {
 
-                for ($epasscard_index = 0; $epasscard_index < 2; $epasscard_index++): ?>
-            <div class="epasscard-field-group" data-id="<?php echo esc_attr($epasscard_index); ?>">
+                for ($epassc_index = 0; $epassc_index < 2; $epassc_index++): ?>
+            <div class="epasscard-field-group" data-id="<?php echo esc_attr($epassc_index); ?>">
                 <label>label <span>*</span></label>
                 <input type="text" class="secondary-label">
                  

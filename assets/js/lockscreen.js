@@ -78,7 +78,7 @@ jQuery(document).ready(function ($) {
         delay: 250,
         data: function (params) {
           return {
-            action: "Epasscard_get_location",
+            action: "epassc_get_location",
             search: params.term || "",
             _ajax_nonce: epasscard_admin.nonce,
           };
@@ -140,7 +140,7 @@ jQuery(document).ready(function ($) {
         delay: 250,
         data: function (params) {
           return {
-            action: "Epasscard_get_location",
+            action: "epassc_get_location",
             search: params.term || "", // search term
             _ajax_nonce: epasscard_admin.nonce,
           };
@@ -193,7 +193,7 @@ jQuery(document).ready(function ($) {
         url: epasscard_admin.ajax_url,
         type: "POST",
         data: {
-          action: "Epasscard_templates_callback",
+          action: "epassc_templates_callback",
           place_id: placeId,
           request_identifier: "epass-search-location-details",
           _ajax_nonce: epasscard_admin.nonce,
