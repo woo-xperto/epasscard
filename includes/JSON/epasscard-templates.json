@@ -28,7 +28,29 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+        "backFields": [
+          {
+            "label": "Customer name",
+            "value": "{Customer name}",
+            "valueType": "fixed",
+            "changeMsg": "Customer name is updated to",
+            "staticValueType": "textarea"
+          },
+          {
+            "label": "Customer phone number",
+            "value": "{Customer phone number}",
+            "valueType": "fixed",
+            "changeMsg": "Customer phone number is updated to",
+            "staticValueType": "textarea"
+          },
+          {
+            "label": "Customer care",
+            "value": "{Customer care}",
+            "valueType": "fixed",
+            "changeMsg": "Customer phone number is updated to",
+            "staticValueType": "textarea"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/warrenty-logo.png",
@@ -117,7 +139,29 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+        "backFields": [
+          {
+            "label": "Connection status",
+            "value": "{Connection status}",
+            "valueType": "fixed",
+            "changeMsg": "Connection status is updated to",
+            "staticValueType": "textarea"
+          },
+          {
+            "label": "Billing date",
+            "value": "{Billing date}",
+            "valueType": "fixed",
+            "changeMsg": "Billing date is updated to",
+            "staticValueType": "textarea"
+          },
+          {
+            "label": "Customer care",
+            "value": "{Customer care}",
+            "valueType": "fixed",
+            "changeMsg": "Customer care is updated to",
+            "staticValueType": "textarea"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/isp-logo.png",
@@ -206,7 +250,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+        "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/gift-logo.png",
@@ -295,7 +347,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/customer-logo.png",
@@ -384,7 +444,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/member-logo.png",
@@ -473,7 +541,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/assets/coupon-logo.png",

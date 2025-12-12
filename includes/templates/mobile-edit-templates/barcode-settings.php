@@ -1,4 +1,9 @@
-<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
+$epassc_barcode_value = $epassc_barcode_info['value'] ?? "";
+$epassc_barcode_hide = ($epassc_barcode_value == "systemId" || $epassc_barcode_value == "") ? "epasscard-hidden": "";
+$epassc_barcode_check = ($epassc_barcode_value == "systemId" || $epassc_barcode_value == "") ? "checked": "";
+?>
 <div class="mobile-edit-field epasscard-barcode-fields epasscard-hidden">
     <div class="epasscard-field-group">
         <h3>Barcode Setting</h3> 
@@ -22,33 +27,19 @@
                 AZTEC</option>
         </select>
 
-        <label>Barcode Value <span>*</span></label>
-        <select class="barcode-value">
-            <option value="" disabled
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === '') ? 'selected' : ''; ?>>Please
-                select one</option>
-            <option value="template_name"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === 'template_name') ? 'selected' : ''; ?>>
-                Template name</option>
-            <option value="organization_name"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === 'organization_name') ? 'selected' : ''; ?>>
-                Organization name</option>
-            <option value="description"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === 'description') ? 'selected' : ''; ?>>
-                Description</option>
-            <option value="systemId"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === 'systemId') ? 'selected' : ''; ?>>
-                System generated ID</option>
-            <option value="{Product name}"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === '{Product name}') ? 'selected' : ''; ?>>
-                Product name</option>
-            <option value="{Model}"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === '{Model}') ? 'selected' : ''; ?>>
-                Model</option>
-            <option value="{Purchase Date}"
-                <?php echo(isset($epassc_barcode_info['value']) && $epassc_barcode_info['value'] === '{Purchase Date}') ? 'selected' : ''; ?>>
-                Purchase Date</option>
-        </select>
+        <!-- Barcode value -->
+        <div class="epassc-barcode-value-wrap <?php echo esc_attr($epassc_barcode_hide); ?>">
+            <label>Barcode Value <span>*</span></label>
+            <input type="text" class="barcode-value" value="<?php echo esc_attr($epassc_barcode_value); ?>" placeholder="<?php echo esc_attr($epassc_barcode_value); ?>">
+        </div>
+  
+        <!-- Use system generated Pass ID -->
+        <div class="setting-group">
+            <div class="toggle-label">
+                <input type="checkbox" id="epassc-system-generated-id" <?php echo esc_attr($epassc_barcode_check); ?>>
+                <span>Use system generated Pass ID</span>
+            </div>
+        </div>
 
         <div class="setting-group">
             <div class="toggle-label">

@@ -41,15 +41,15 @@ jQuery(document).ready(function ($) {
   // Handle close button click for notices
   $(document).on("click", ".notice-dismiss", function () {
     $(this).closest(".notice").fadeOut(200, function () {
-         $(this).remove();
-      });
-   
+      $(this).remove();
+    });
+
     $(this).closest(".epassc-notice").fadeOut(200, function () {
-         $(this).remove();
-      });
+      $(this).remove();
+    });
   });
 
- 
+
   // Front field script
   $(function () {
     // const wrapper = $("#epasscard_front_field");
@@ -405,12 +405,29 @@ jQuery(document).ready(function ($) {
     changeBarcodeImage(selectedValue);
   });
 
-  // Push notification scripts
-  $(document).on("click", ".send-notification > a", function (event) {
-    event.preventDefault();
-    $("#epasscard-template-wrap").addClass("epasscard-hidden");
-    $(".epasscard-push-notification").removeClass("epasscard-hidden");
+  // Barcode data condition
+  const epasscBarcodeValueWrap = $('.epassc-barcode-value-wrap');
+  const epasscBarcodeValue = epasscBarcodeValueWrap.find('.barcode-value');
+  $('#epassc-system-generated-id').on('change', function () {
+    if ($(this).is(':checked')) {
+      // Hide barcode value when checkbox is checked
+      epasscBarcodeValueWrap.addClass('epasscard-hidden');
+      epasscBarcodeValue.attr("value", "systemId");
+    } else {
+      // Show barcode value when checkbox is unchecked
+      epasscBarcodeValueWrap.removeClass('epasscard-hidden');
+      epasscBarcodeValue.attr("value", "");
+      
+    }
   });
+
+
+  // Push notification scripts
+  // $(document).on("click", ".send-notification > a", function (event) {
+  //   event.preventDefault();
+  //   $("#epasscard-template-wrap").addClass("epasscard-hidden");
+  //   $(".epasscard-push-notification").removeClass("epasscard-hidden");
+  // });
 
   //Mobile preview color on tab change
   $(document).on("click", ".epasscard-tab-item", function (event) {
@@ -783,7 +800,7 @@ jQuery(document).ready(function ($) {
     // );
 
 
-    
+
     /*let secondaryData = {
       secondaryLabels: [],
       secondaryValues: [],
@@ -858,13 +875,13 @@ jQuery(document).ready(function ($) {
     jQuery(" .epasscard-auxiliary-fields .auxiliary-value").each(function () {
       if (jQuery(this).val().trim() !== "") {
         auxiliaryData.auxiliaryValues.push(jQuery(this).val());
-      } 
+      }
     });
 
     jQuery(" .epasscard-auxiliary-fields .auxiliary-msg").each(function () {
       if (jQuery(this).val().trim() !== "") {
         auxiliaryData.auxiliaryMsgs.push(jQuery(this).val());
-      } 
+      }
     });
 
     // Barcode data
@@ -890,12 +907,12 @@ jQuery(document).ready(function ($) {
     if (barcodeValue == "" || barcodeValue == null) {
       barcodeInfo = false;
       $(
-        ".epasscard-barcode-fields .barcode-value + .select2 > .selection span.select2-selection.select2-selection--single"
+        ".epasscard-barcode-fields .barcode-value"
       ).addClass("epasscard-input-error");
     } else {
       barcodeData.barcodeValue = barcodeValue;
       $(
-        ".epasscard-barcode-fields .barcode-value + .select2 > .selection span.select2-selection.select2-selection--single"
+        ".epasscard-barcode-fields .barcode-value"
       ).removeClass("epasscard-input-error");
     }
 
@@ -1144,7 +1161,7 @@ jQuery(document).ready(function ($) {
         barcode_data: JSON.stringify(barcodeData),
         header_data: JSON.stringify(headerData),
         primary_fields_data: JSON.stringify(primaryFieldsData),
-        secondary_data:JSON.stringify(secondaryProperties),
+        secondary_data: JSON.stringify(secondaryProperties),
         back_field_data: JSON.stringify(backFieldData),
         setting_data: JSON.stringify(settingData),
         locations_data: JSON.stringify(allLocations),
@@ -1202,10 +1219,10 @@ jQuery(document).ready(function ($) {
     const parsedData = JSON.parse(rawData);
     const designObj = parsedData.designObj || {};
     const headerFields = parsedData.designObj.headerFields || [];
+    const backFields = parsedData.designObj.backFields || [];
     const secondaryFields = parsedData.designObj.secondaryFields || [];
     const auxiliaryFields = parsedData.designObj.auxiliaryFields || [];
     const primaryFields = parsedData.designObj.primaryFields || [];
-
     const primarySettings = designObj.primarySettings || {};
     const cardType = primarySettings.cardType || "";
     const images = designObj.images || {};
@@ -1260,11 +1277,11 @@ jQuery(document).ready(function ($) {
       $("#preview-icon").attr("src", images.logo);
 
       //Card image
-       jQuery(".mobile-preview .epc-image-block > img").attr("src", images.strip);
-       jQuery(".phone-pass-preview .coupon-strip").css(
-          "background-image",
-          `url("${images.strip}")`
-        );
+      jQuery(".mobile-preview .epc-image-block > img").attr("src", images.strip);
+      jQuery(".phone-pass-preview .coupon-strip").css(
+        "background-image",
+        `url("${images.strip}")`
+      );
       if (cardType == "Generic") {
         jQuery(".mobile-preview .epc-primary-label").text(primaryFields[0].label);
         jQuery(".mobile-preview .epc-primary-value").text(primaryFields[0].value);
@@ -1291,6 +1308,46 @@ jQuery(document).ready(function ($) {
         $(".epasscard-header-fields .header-label-name").val(header.label);
         dynamicValues.push(header.value);
       }
+
+      //Back fields
+      if (backFields && backFields.length > 0) {
+        // Clear existing blocks first
+        $("#BackFields .right .fields-container").empty();
+        $(".mobile-preview .coupon-bottom").empty();
+
+        backFields.forEach(field => {
+          const backFieldsTimestamp = Date.now() + Math.random(); // ensure unique id
+
+          const backFieldBlocks = $(`
+      <div class="epasscard-field-group back-fields-wrap" data-id="${backFieldsTimestamp}">
+        <label>Label (Name) <span>*</span></label>
+        <input type="text" class="field-name" placeholder="Eg. Name" value="${field.label}">
+
+        <label>Value <span>*</span></label>
+        <textarea class="field-value epasscard-watch-input" rows="4" cols="100%" 
+          placeholder="Write your message here...">${field.value}</textarea>
+
+        <label>Change message (This message will be displayed when value is changed)</label>
+        <input type="text" class="change-message" 
+          placeholder="eg. Name changed to {name}" value="${field.changeMsg}">
+
+        <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
+      </div>
+    `);
+
+          const backFieldsMobile = $(`
+      <div class="coupon-field-display" data-id="${backFieldsTimestamp}">
+        <div class="display-name">${field.label}</div>
+        <div class="display-value">${field.value}</div>
+      </div>
+    `);
+
+          $(".mobile-preview .coupon-bottom").append(backFieldsMobile);
+          $("#BackFields .right .fields-container").append(backFieldBlocks);
+        });
+      }
+
+
 
       // Secondary fields
       if (secondaryFields && secondaryFields.length >= 2) {
@@ -1386,23 +1443,37 @@ jQuery(document).ready(function ($) {
       $(".setting-dynamic-data").html(settingRechargeableDropdown);
 
       // Additional properties
-      const allFields = headerFields.concat(secondaryFields);
+      const additionalData = headerFields.concat(secondaryFields).concat(backFields);
+      if (additionalData && additionalData.length > 0) {
+        const additionalFieldsWrap = $(".epasscard_additional_properties .fields-container");
+        additionalFieldsWrap.empty();
+        additionalData.forEach((field, index) => {
+          const fieldBlock = $(`
+      <div class="field-block epasscard-field-group">
+                  <label>Name</label>
+                  <input type="text" class="additional-field-name" value="${field.label}">
+                  <label>Field Type</label>
+                  <select>
+                      <option value="text">Text</option>
+                      <option value="textarea">Textarea</option>
+                      <option value="file">File</option>
+                      <option value="datetime-local">Date Time</option>
+                      <option value="date">Date</option>
+                      <option value="number">Number</option>
+                      <option value="email">Email</option>
+                      <option value="randomUniqueCode">Random unique code</option>
+                      <option value="color">Color</option>
+                  </select>
+                  <div class="checkbox-group">
+                      <input type="checkbox" id="required" checked>
+                      <label for="required">Is This Field Required?</label>
+                  </div>
+                  <button type="button" class="remove-btn epasscard-remove-btn">Remove</button>
+              </div>`);
 
-      // Select all field blocks
-      const fieldBlocks = document.querySelectorAll(
-        ".epasscard_additional_properties .field-block.epasscard-field-group"
-      );
-
-      // Loop through and assign label values
-      allFields.forEach((field, index) => {
-        const block = fieldBlocks[index];
-        if (block) {
-          const input = block.querySelector(".additional-field-name");
-          if (input) {
-            input.value = field.label;
-          }
-        }
-      });
+          additionalFieldsWrap.append(fieldBlock);
+        });
+      }
 
       //Barcode image change in mobile preview
       const barcodeFormat = barCodeData.format;

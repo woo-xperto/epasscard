@@ -71,9 +71,11 @@
                 <button type="button" class="remove-btn epasscard-remove-btn">Remove</button>
             </div>
             <?php }
-                } else if(!isset($template_id)) {
+                } 
+                
+                else if(!isset($template_id)) {
                 for ($epassc_index = 0; $epassc_index < 3; $epassc_index++): ?>
-            <div class="field-block epasscard-field-group">
+            <!-- <div class="field-block epasscard-field-group">
                 <label>Name</label>
                 <input type="text" class="additional-field-name">
                 <label>Field Type</label>
@@ -93,7 +95,7 @@
                     <label for="required">Is This Field Required?</label>
                 </div>
                 <button type="button" class="remove-btn epasscard-remove-btn">Remove</button>
-            </div>
+            </div> -->
             <?php endfor;
             }?>
         </div>

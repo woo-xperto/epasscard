@@ -182,19 +182,18 @@
                     <option disabled value="" <?php echo($epassc_google_wallet_shareable === '') ? 'selected' : ''; ?>>Please
                         select one</option>
                     <option value="STATUS_UNSPECIFIED"
-                        <?php echo($epassc_google_wallet_shareable === 'STATUS_UNSPECIFIED') ? 'selected' : ''; ?>>Default
+                        <?php echo($epassc_google_wallet_shareable === 'STATUS_UNSPECIFIED') ? 'selected' : ''; ?>>Shareable with multiple users
                     </option>
-                    <option value="MULTIPLE_HOLDERS"
-                        <?php echo($epassc_google_wallet_shareable === 'MULTIPLE_HOLDERS') ? 'selected' : ''; ?>>Allow for all
-                    </option>
-                    <option value="ONE_USER_ALL_DEVICES"
-                        <?php echo($epassc_google_wallet_shareable === 'ONE_USER_ALL_DEVICES') ? 'selected' : ''; ?>>Allow
-                        multiple device (same account)</option>
                     <option value="ONE_USER_ONE_DEVICE"
-                        <?php echo($epassc_google_wallet_shareable === 'ONE_USER_ONE_DEVICE') ? 'selected' : ''; ?>>Allow single
-                        device</option>
+                        <?php echo($epassc_google_wallet_shareable === 'ONE_USER_ONE_DEVICE') ? 'selected' : ''; ?>>Not shareable</option>
                 </select>
             </div>
+            <!-- Public access -->
+            <div class="toggle-label epassc-public-access-wrap">
+                <input type="checkbox" id="epassc-public-access" <?php echo isset($epassc_transaction_log) && $epassc_transaction_log ? 'checked' : ''; ?>>
+                <span>Access for public pass create (Allows user to create pass without login)</span>
+            </div>
+
         </div>
     </div>
 </div>

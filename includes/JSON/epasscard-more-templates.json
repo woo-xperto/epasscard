@@ -28,7 +28,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/coupon/logo.png",
@@ -117,7 +125,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/store/logo.png",
@@ -206,7 +222,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [],
         "images": {
           "logo": "https://app.epasscard.com//assets/img/predefined-templates/event/logo.png",
@@ -302,7 +326,15 @@
             "staticValueType": ""
           }
         ],
-        "backFields": [],
+         "backFields": [
+          {
+            "label": "Website",
+            "value": "{website}",
+            "valueType": "fixed",
+            "changeMsg": "Website is updated",
+            "staticValueType": "text"
+          }
+        ],
         "auxiliaryFields": [
           {
             "label": "Phone",

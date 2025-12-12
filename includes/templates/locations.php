@@ -23,7 +23,7 @@
         <div class="location-container"
             locationSettingId="<?php echo isset($epassc_location_setting_id) ? esc_attr($epassc_location_setting_id) : ''; ?>">
             <?php if (! empty($epassc_location_list)) {
-                foreach ($epassc_location_list as $epassc_location) {?>
+                foreach ($epassc_location_list as $epassc_location) { ?>
             <div class="location-block epasscard-field-group"
                 location-uid="<?php echo isset($epassc_location['uid']) ? esc_attr($epassc_location['uid']) : ''; ?>">
                 <?php require_once EPASSC_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
@@ -59,39 +59,9 @@
                 </div>
             </div>
             <?php }
-            } else {?>
-
-            <!-- Location blocks will be appended here -->
-            <div class="location-block epasscard-field-group">
-                <?php require_once EPASSC_PLUGIN_DIR . 'includes/templates/admin-modal/location-modal.php'; ?>
-                <button class="search-btn epasscard-primary-btn">Search Location</button>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="location-title" placeholder="Eg. My Location">
-                    </div>
-                    <div class="form-group">
-                        <label>Latitude</label>
-                        <input type="text" class="location-latitude" placeholder="Eg. 37.7749">
-                    </div>
-                    <div class="form-group">
-                        <label>Longitude</label>
-                        <input type="text" class="location-longitude" placeholder="Eg. -122.4194">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Altitude</label>
-                        <input type="text" class="location-altitude" placeholder="Eg. 30">
-                    </div>
-                    <div class="form-group">
-                        <label>Notification Text</label>
-                        <input type="text" class="location-notify" placeholder="Eg. You are near ...">
-                    </div>
-                </div>
-            </div>
-
-            <?php }?>
+            } ?>
+            
+           
         </div>
     </div>
 </div>

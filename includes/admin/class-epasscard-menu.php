@@ -74,8 +74,10 @@ class EPASSC_Menu
         //Check API key is active or not
         $epassc_ajax = new EPASSC_Ajax();
         $epassc_api_key_status = $epassc_ajax->epassc_check_api_key();
-        $epassc_api_key_message = $epassc_api_key_status['message'];
-        $epassc_api_key_status = $epassc_api_key_status['status'];
+        //$epassc_api_key_message = $epassc_api_key_status['message'];
+        $epassc_api_key_message = $epassc_api_key_status['message'] ?? "Server Down";
+        //$epassc_api_key_status = $epassc_api_key_status['status'];
+        $epassc_api_key_status = $epassc_api_key_status['status'] ?? 404;
         $epassc_nav_inactive = ($epassc_api_key_status != "200") ? 'epassc-nav-inactive' : "";
 
         
