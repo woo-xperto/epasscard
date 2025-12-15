@@ -46,7 +46,7 @@ class EPASSC_Assets
 
         wp_enqueue_style(
             'cropper-css',
-            EPASSC_PLUGIN_URL . 'assets/css/croppie.min.css',
+            EPASSC_PLUGIN_URL . 'assets/css/croppie.css',
             [],
             EPASSC_VERSION
         );
