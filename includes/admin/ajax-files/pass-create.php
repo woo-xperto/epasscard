@@ -1,8 +1,9 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-$EPASSC_API_URL = EPASSC_API_URL."create-template";
+if (!defined('ABSPATH'))
+    exit; // Exit if accessed directly
+$EPASSC_API_URL = EPASSC_API_URL . "create-template";
 
-$epassc_body    = '{
+$epassc_body = '{
     "passSettings": {
         "primarySettings": {
             "name": "' . $templateName . '",
@@ -22,7 +23,7 @@ $epassc_body    = '{
         },
         "headerFields": ' . $headerFieldsJson . ',
         "backFields": ' . $backFieldsJson . ',
-        "auxiliaryFields": '.$auxiliarylProperties.',
+        "auxiliaryFields": ' . $auxiliarylProperties . ',
         "images": {
             "logo": "' . $setting_data['headerLogo'] . '",
             "icon": "' . $setting_data['headerLogo'] . '",
@@ -81,7 +82,7 @@ $epassc_body    = '{
         "initialMsg": "",
         "locationRadius": "' . $notification_radius . '"
     },
-    "additionalFields":'. $additionalProperties .',
+    "additionalFields":' . $additionalProperties . ',
     "advancedSettings": {
         "isExpire": ' . (filter_var($setting_values['is_expire'], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false') . ',
         "expireType": "date",
@@ -107,16 +108,16 @@ $epassc_body    = '{
 $epassc_response = wp_remote_post($EPASSC_API_URL, [
     'headers' => [
         'Content-Type' => 'application/json',
-        'x-api-key'    => EPASSC_API_KEY,
+        'x-api-key' => EPASSC_API_KEY,
     ],
-    'body'    => $epassc_body,
+    'body' => $epassc_body,
     'timeout' => 30,
 ]);
 
 
 if (is_wp_error($epassc_response)) {
     wp_send_json_error($epassc_response->get_error_message());
-}else {
+} else {
     $epassc_body = wp_remote_retrieve_body($epassc_response);
     $epassc_data = json_decode($epassc_body, true);
     wp_send_json_success($epassc_data);

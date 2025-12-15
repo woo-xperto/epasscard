@@ -1,6 +1,6 @@
 <?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
-$epassc_barcode_value = $epassc_barcode_info['value'] ?? "";
+$epassc_barcode_value = $epassc_barcode_info['value'] ?? "systemId";
 $epassc_barcode_hide = ($epassc_barcode_value == "systemId" || $epassc_barcode_value == "") ? "epasscard-hidden": "";
 $epassc_barcode_check = ($epassc_barcode_value == "systemId" || $epassc_barcode_value == "") ? "checked": "";
 ?>
@@ -30,7 +30,7 @@ $epassc_barcode_check = ($epassc_barcode_value == "systemId" || $epassc_barcode_
         <!-- Barcode value -->
         <div class="epassc-barcode-value-wrap <?php echo esc_attr($epassc_barcode_hide); ?>">
             <label>Barcode Value <span>*</span></label>
-            <input type="text" class="barcode-value" value="<?php echo esc_attr($epassc_barcode_value); ?>" placeholder="<?php echo esc_attr($epassc_barcode_value); ?>">
+            <input type="text" class="barcode-value epasscard-watch-input" value="<?php echo esc_attr($epassc_barcode_value); ?>" placeholder="<?php echo esc_attr($epassc_barcode_value); ?>">
         </div>
   
         <!-- Use system generated Pass ID -->

@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
   var pluginUrl = epasscard_admin.epasscardPluginUrl;
   //var organization_id = epasscard_admin.organization_id;
-  var dynamicValues = [];
+  //var dynamicValues = [];
   var apiKey = epasscard_admin.api_key;
   var epassCardApiUrl = "https://api.epasscard.com/api/public/v1/";
   var epassCardUrl = "https://api.epasscard.com/";
@@ -16,7 +16,6 @@ jQuery(document).ready(function ($) {
   });
 
   // Epasscard admin tab scripts
-
   $(".epasscard-tab-bar button").click(function () {
     // Remove active class from all buttons
     $(".epasscard-tab-bar button").removeClass("active");
@@ -52,8 +51,6 @@ jQuery(document).ready(function ($) {
 
   // Front field script
   $(function () {
-    // const wrapper = $("#epasscard_front_field");
-    // const container = wrapper.find(".fields-container");
     // Header fields add/remove
     $(document).on("keyup", ".header-label-name", function () {
       const id = $(this)
@@ -374,30 +371,6 @@ jQuery(document).ready(function ($) {
     jQuery(".mobile-preview .epc-primary-value").text($(".primary-value").val());
   });
 
-  //  Secondary fields to mobile preview data pass
-  // $(".model-label-name").on("keyup", function () {
-  //   $(".model-label").text($(".model-label-name").val());
-  // });
-
-  // $(".model-value").on("keyup", function () {
-  //   $(".model-value-show").text($(".model-value").val());
-  // });
-
-  // $(".purchase-label-name").on("keyup", function () {
-  //   $(".purchase-label-show").text($(".purchase-label-name").val());
-  // });
-
-  // $(".purchase-value").on("keyup", function () {
-  //   $(".purchase-value-show").text($(".purchase-value").val());
-  // });
-
-  // $(document).on("keyup", ".label-name-data", function () {
-  //   $(".name-label-show").text($(this).val());
-  // });
-
-  // $(document).on("keyup", ".label-name-value", function () {
-  //   $(".name-value-show").text($(this).val());
-  // });
 
   //Scanning selection scripts
   $(".scanner-code").on("change", function () {
@@ -417,17 +390,10 @@ jQuery(document).ready(function ($) {
       // Show barcode value when checkbox is unchecked
       epasscBarcodeValueWrap.removeClass('epasscard-hidden');
       epasscBarcodeValue.attr("value", "");
-      
+
     }
   });
 
-
-  // Push notification scripts
-  // $(document).on("click", ".send-notification > a", function (event) {
-  //   event.preventDefault();
-  //   $("#epasscard-template-wrap").addClass("epasscard-hidden");
-  //   $(".epasscard-push-notification").removeClass("epasscard-hidden");
-  // });
 
   //Mobile preview color on tab change
   $(document).on("click", ".epasscard-tab-item", function (event) {
@@ -466,18 +432,6 @@ jQuery(document).ready(function ($) {
       settingData.setting_id = settingId;
     }
     // Colors
-    // settingData.bgColor = $("#create-template .color-images .background-color")
-    //   .siblings(".evo-pointer")
-    //   .css("background-color");
-    // settingData.labelColor = $("#create-template .color-images .label-color")
-    //   .siblings(".evo-pointer")
-    //   .css("background-color");
-    // settingData.textColor = $(
-    //   "#create-template .color-images .foreground-color"
-    // )
-    //   .siblings(".evo-pointer")
-    //   .css("background-color");
-
     function rgbToHex(color) {
       if (color.startsWith("#")) return color; // already hex
 
@@ -577,7 +531,6 @@ jQuery(document).ready(function ($) {
       );
       passInfo = false;
     } else {
-      //organizationName = $(".organization-name").val();
       templateInfo.organizationName = $(
         "#create-template .organization-name"
       ).val();
@@ -590,7 +543,6 @@ jQuery(document).ready(function ($) {
       passInfo = false;
       $("#create-template .created-passes").addClass("epasscard-input-error");
     } else {
-      //createdPasses = $(".created-passes").val();
       templateInfo.createdPasses = $("#create-template .created-passes").val();
       $("#create-template .created-passes").removeClass(
         "epasscard-input-error"
@@ -685,146 +637,6 @@ jQuery(document).ready(function ($) {
       "#create-template .primary-message"
     ).val();
 
-    //Secondary fields
-
-    // if (
-    //   $(`${selectedScreenId} .epasscard-secondary-fields .model-label-name`)
-    //     .val()
-    //     .trim() === ""
-    // ) {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .model-label-name`
-    //   ).addClass("epasscard-input-error");
-    //   secondaryIsValid = false;
-    // } else {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .model-label-name`
-    //   ).removeClass("epasscard-input-error");
-
-    //   secondaryData.secondaryLabels.push(
-    //     $(
-    //       `${selectedScreenId} .epasscard-secondary-fields .model-label-name`
-    //     ).val()
-    //   );
-    // }
-
-    // if (
-    //   $(`${selectedScreenId} .epasscard-secondary-fields .model-value`)
-    //     .val()
-    //     .trim() === ""
-    // ) {
-    //   $(".epasscard-secondary-fields .model-value").addClass(
-    //     "epasscard-input-error"
-    //   );
-    //   secondaryIsValid = false;
-    // } else {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .model-value`
-    //   ).removeClass("epasscard-input-error");
-
-    //   secondaryData.secondaryValues.push(
-    //     $(`${selectedScreenId} .epasscard-secondary-fields .model-value`).val()
-    //   );
-    // }
-
-    // if (
-    //   $(`${selectedScreenId} .epasscard-secondary-fields .purchase-label-name`)
-    //     .val()
-    //     .trim() === ""
-    // ) {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .purchase-label-name`
-    //   ).addClass("epasscard-input-error");
-    //   secondaryIsValid = false;
-    // } else {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .purchase-label-name`
-    //   ).removeClass("epasscard-input-error");
-    //   secondaryData.secondaryLabels.push(
-    //     $(
-    //       `${selectedScreenId} .epasscard-secondary-fields .purchase-label-name`
-    //     ).val()
-    //   );
-    // }
-
-    // if (
-    //   $(`${selectedScreenId} .epasscard-secondary-fields .purchase-value`)
-    //     .val()
-    //     .trim() === ""
-    // ) {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .purchase-value`
-    //   ).addClass("epasscard-input-error");
-    //   secondaryIsValid = false;
-    // } else {
-    //   $(
-    //     `${selectedScreenId} .epasscard-secondary-fields .purchase-value`
-    //   ).removeClass("epasscard-input-error");
-    //   secondaryData.secondaryValues.push(
-    //     $(
-    //       `${selectedScreenId} .epasscard-secondary-fields .purchase-value`
-    //     ).val()
-    //   );
-    // }
-
-    // $(`${selectedScreenId} .epasscard-secondary-fields .label-name-data`).each(
-    //   function () {
-    //     if ($(this).val().trim() === "") {
-    //       $(this).addClass("epasscard-input-error");
-    //       secondaryIsValid = false;
-    //     } else {
-    //       $(this).removeClass("epasscard-input-error");
-    //       secondaryData.secondaryLabels.push(
-    //         $(
-    //           `${selectedScreenId} .epasscard-secondary-fields .label-name-data`
-    //         ).val()
-    //       );
-    //     }
-    //   }
-    // );
-
-    // $(`${selectedScreenId} .epasscard-secondary-fields .label-name-value`).each(
-    //   function () {
-    //     if ($(this).val().trim() === "") {
-    //       $(this).addClass("epasscard-input-error");
-    //       secondaryIsValid = false;
-    //     } else {
-    //       $(this).removeClass("epasscard-input-error");
-    //       secondaryData.secondaryValues.push(
-    //         $(
-    //           `${selectedScreenId} .epasscard-secondary-fields .label-name-value`
-    //         ).val()
-    //       );
-    //     }
-    //   }
-    // );
-
-
-
-    /*let secondaryData = {
-      secondaryLabels: [],
-      secondaryValues: [],
-    };
-
-    $(".epasscard-secondary-fields .secondary-label").each(function () {
-      if ($(this).val().trim() === "") {
-        $(this).addClass("epasscard-input-error");
-        secondaryIsValid = false;
-      } else {
-        $(this).removeClass("epasscard-input-error");
-        secondaryData.secondaryLabels.push($(this).val());
-      }
-    });
-
-    $(" .epasscard-secondary-fields .secondary-value").each(function () {
-      if ($(this).val().trim() === "") {
-        $(this).addClass("epasscard-input-error");
-        secondaryIsValid = false;
-      } else {
-        $(this).removeClass("epasscard-input-error");
-        secondaryData.secondaryValues.push($(this).val());
-      }
-    });*/
 
     // Collect secondary fields
     let secondaryIsValid = true;
@@ -1227,6 +1039,8 @@ jQuery(document).ready(function ($) {
     const cardType = primarySettings.cardType || "";
     const images = designObj.images || {};
     const barCodeData = designObj.barcode || {};
+    var dynamicValues = [];
+
 
 
     //Mobile screen color content change for pass edit mode
@@ -1251,7 +1065,21 @@ jQuery(document).ready(function ($) {
         $("#foreground-color")
           .siblings(".evo-pointer")
           .css("background-color", primarySettings.forgroundColor);
+
+
+
+        //Condition for generic pass card    
+        if (cardType == "Generic") {
+          jQuery('.mobile-preview .coupon-strip').css('display', 'none');
+          jQuery(".mobile-preview .epc-mobile-hero-section").css('display', 'flex');
+          jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'flex');
+        } else {
+          jQuery('.mobile-preview .coupon-strip').css('display', 'flex');
+          jQuery(".mobile-preview .epc-mobile-hero-section").css('display', 'none');
+          jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'none');
+        }
       }
+
     } else {
       //Mobile screen color content change for new pass create mode
       $(".mobile-preview .coupon").css(
@@ -1290,18 +1118,19 @@ jQuery(document).ready(function ($) {
         jQuery('.mobile-preview .coupon-strip').css('display', 'none');
         jQuery(".mobile-preview .epc-mobile-hero").css('display', 'flex');
         jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'flex');
-        jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "0px");
+        //jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "0px");
       } else {
         jQuery(".epasscard-primary-fields .primary-name").val("");
         jQuery(".epasscard-primary-fields .primary-value").val("");
         jQuery('.mobile-preview .coupon-strip').css('display', 'flex');
         jQuery(".mobile-preview .epc-mobile-hero").css('display', 'none');
         jQuery('.mobile-preview .auxiliary-items-wrap').css('display', 'none');
-        jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "60px");
+        //jQuery(".mobile-preview .coupon-qrcode").css("margin-top", "60px");
       }
 
       // Header fields
       if (headerFields && headerFields.length > 0) {
+
         const header = headerFields[0];
         $(".header-content .product-name").text(header.label);
         $(".header-content .product-value").text(header.value);
@@ -1344,6 +1173,7 @@ jQuery(document).ready(function ($) {
 
           $(".mobile-preview .coupon-bottom").append(backFieldsMobile);
           $("#BackFields .right .fields-container").append(backFieldBlocks);
+          dynamicValues.push(field.value);
         });
       }
 
@@ -1392,55 +1222,69 @@ jQuery(document).ready(function ($) {
         });
       }
 
+
+      //Auxiliary blocks
       if (auxiliaryFields && auxiliaryFields.length > 0) {
-        //Show default auxiliary data in auxiliary blocks
-        const auxiliaryFieldGroups = document.querySelectorAll(
-          ".epasscard-auxiliary-fields .epasscard-field-group"
-        );
-        // Loop through each field group and populate values
-        auxiliaryFields.forEach((field, index) => {
-          const group = auxiliaryFieldGroups[index];
-          if (group) {
-            group.querySelector(".auxiliary-label").value = field.label;
-            group.querySelector(".auxiliary-value").value = field.value;
-            group.querySelector("input[placeholder]").value = field.changeMsg;
-            dynamicValues.push(field.value);
-          }
+        const $auxiliaryContainer = $(".epasscard-auxiliary-fields .fields-container");
+        const $detailContainer = $(".details-container.auxiliary-items-container");
+
+        // Clear existing content before appending new
+        $auxiliaryContainer.empty();
+        $detailContainer.empty();
+
+        $.each(auxiliaryFields, function (index, field) {
+
+          // --- Build field group markup ---
+          const groupHTML = `
+              <div class="epasscard-field-group" data-id="${index}">
+                <label>Label <span>*</span></label>
+                <input type="text" class="auxiliary-label" value="${field.label}">
+                
+                <label>Value <span>*</span></label>
+                <input type="text" class="auxiliary-value epasscard-watch-input" value="${field.value}">
+                
+                <label>Change message</label>
+                <input type="text" class="auxiliary-msg" placeholder="Model is updated to" value="${field.changeMsg || ""}">
+                
+                <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
+              </div>
+            `;
+                  $auxiliaryContainer.append(groupHTML);
+
+                  // --- Build detail item markup ---
+                  const detailHTML = `
+              <div class="detail-item" data-id="${index}">
+                <div class="detail-label"><p>${field.label}</p></div>
+                <div class="detail-value"><p>${field.value}</p></div>
+              </div>
+            `;
+          $detailContainer.append(detailHTML);
+
+          // Push dynamic values if needed
+          dynamicValues.push(field.value);
         });
-
-        //Auxiliary mobile preview value
-        $(".auxiliary-items-container .detail-item:nth-child(1) .detail-label").text(
-          auxiliaryFields[0].label
-        );
-
-        $(".auxiliary-items-container .detail-item:nth-child(1) .detail-value").text(
-          auxiliaryFields[0].value
-        );
-
-        $(".auxiliary-items-container .detail-item:nth-child(2) .detail-label").text(
-          auxiliaryFields[1].label
-        );
-
-        $(".auxiliary-items-container .detail-item:nth-child(2) .detail-value").text(
-          auxiliaryFields[1].value
-        );
       }
 
       //Setting dropdown
-      const settingDropdown = `
-        <option value="${headerFields[0].label}">${headerFields[0].label}</option>
-        <option value="${secondaryFields[0].label}">${secondaryFields[0].label}</option>
-        <option value="${secondaryFields[1].label}">${secondaryFields[1].label}</option>
-      `;
+      // Merge headerFields and backFields into one array
+      const epasscSettingDropdownsData = headerFields.concat(secondaryFields).concat(auxiliaryFields).concat(backFields);
+
+      // Build dropdown options dynamically
+      const settingDropdown = epasscSettingDropdownsData
+        .map(field => `<option value="${field.label}">${field.label}</option>`)
+        .join("");
+
+      // Apply to first dropdown
       $(".recharge-select").html(settingDropdown);
 
-      //Setting rechargeable dropdown
-      const settingRechargeableDropdown = `
-        <option value="{${headerFields[0].label}}">${headerFields[0].label}</option>
-        <option value="{${secondaryFields[0].label}}">${secondaryFields[0].label}</option>
-        <option value="{${secondaryFields[1].label}}">${secondaryFields[1].label}</option>
-      `;
+      // Build rechargeable dropdown with curly braces around value
+      const settingRechargeableDropdown = epasscSettingDropdownsData
+        .map(field => `<option value="{${field.label}}">${field.label}</option>`)
+        .join("");
+
+      // Apply to second dropdown
       $(".setting-dynamic-data").html(settingRechargeableDropdown);
+
 
       // Additional properties
       const additionalData = headerFields.concat(secondaryFields).concat(backFields);
@@ -1482,6 +1326,9 @@ jQuery(document).ready(function ($) {
 
     // Initialize values
     dynamicValues.push("{pass_link}");
+    dynamicValues.push("{systemId}");
+    
+
     let activeInput = null;
     let suppressSuggestions = false;
 

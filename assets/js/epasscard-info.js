@@ -2,6 +2,19 @@ jQuery(document).ready(function ($) {
   $(".created-passes").on("input", function () {
     let maximumPass = $(this).val();
 
+    // Convert to integer
+    maximumPass = parseInt(maximumPass, 10);
+
+    // Check if value is not a number or negative
+    if (isNaN(maximumPass) || maximumPass < 0) {
+      $(".info-notification-data").html(
+        "Please enter a valid non-negative integer value."
+      );
+      $(".epass-info-modal").css("display", "block");
+      $(".created-passes").val(0);
+      return; // Stop further execution
+    }
+
     const passData = JSON.parse(
       $("#PassInfo .pass-limit-check").attr("data-pass-stats")
     );
@@ -25,3 +38,4 @@ jQuery(document).ready(function ($) {
     $(".epass-info-modal").css("display", "none");
   });
 });
+

@@ -71,33 +71,7 @@
                 <button type="button" class="remove-btn epasscard-remove-btn">Remove</button>
             </div>
             <?php }
-                } 
-                
-                else if(!isset($template_id)) {
-                for ($epassc_index = 0; $epassc_index < 3; $epassc_index++): ?>
-            <!-- <div class="field-block epasscard-field-group">
-                <label>Name</label>
-                <input type="text" class="additional-field-name">
-                <label>Field Type</label>
-                <select>
-                    <option value="text">Text</option>
-                    <option value="textarea">Textarea</option>
-                    <option value="file">File</option>
-                    <option value="datetime-local">Date Time</option>
-                    <option value="date">Date</option>
-                    <option value="number">Number</option>
-                    <option value="email">Email</option>
-                    <option value="randomUniqueCode">Random unique code</option>
-                    <option value="color">Color</option>
-                </select>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="required" checked>
-                    <label for="required">Is This Field Required?</label>
-                </div>
-                <button type="button" class="remove-btn epasscard-remove-btn">Remove</button>
-            </div> -->
-            <?php endfor;
-            }?>
+                } ?>
         </div>
     </div>
 </div>

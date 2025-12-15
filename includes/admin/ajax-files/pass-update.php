@@ -1,6 +1,7 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-$EPASSC_API_URL = EPASSC_API_URL."update-pass-template/$pass_uid";
+if (!defined('ABSPATH'))
+    exit; // Exit if accessed directly
+$EPASSC_API_URL = EPASSC_API_URL . "update-pass-template/$pass_uid";
 
 // Fix 1: Ensure settings block is properly included
 $epassc_settings_block = '
@@ -93,7 +94,7 @@ $epassc_data = '{
          },
         "headerFields": ' . $headerFieldsJson . ',
         "backFields": ' . $backFieldsJson . ',
-        "auxiliaryFields": '.$auxiliarylProperties.',
+        "auxiliaryFields": ' . $auxiliarylProperties . ',
          "images": {
              "logo": "' . $setting_data['headerLogo'] . '",
              "icon": "' . $setting_data['headerLogo'] . '",
@@ -142,12 +143,12 @@ $epassc_data = '{
 }';
 
 $epassc_response = wp_remote_request($EPASSC_API_URL, [
-    'method'  => 'PUT',
+    'method' => 'PUT',
     'headers' => [
         'Content-Type' => 'application/json',
-        'x-api-key'    => EPASSC_API_KEY,
+        'x-api-key' => EPASSC_API_KEY,
     ],
-    'body'    => $epassc_data,
+    'body' => $epassc_data,
     'timeout' => 60,
 ]);
 

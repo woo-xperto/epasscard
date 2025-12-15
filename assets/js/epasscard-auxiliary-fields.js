@@ -37,7 +37,7 @@ const container = wrapper.find(".fields-container");
     let containerLength = 1;
     wrapper.find(".add-auxiliary-field-btn").on("click", function () {
     
-      if (containerLength >= 1) {
+      if (containerLength >= 2) {
         $(this).addClass("epasscard-hidden");
       }
 

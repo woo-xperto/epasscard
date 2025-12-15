@@ -27,22 +27,7 @@
             </div>
             <?php $epassc_index++;
                     }
-                } else {
-
-                for ($epassc_index = 0; $epassc_index < 2; $epassc_index++): ?>
-            <div class="epasscard-field-group" data-id="<?php echo esc_attr($epassc_index); ?>">
-                <label>label <span>*</span></label>
-                <input type="text" class="auxiliary-label">
-                <label>Value <span>*</span></label>
-                <input type="text" class="auxiliary-value epasscard-watch-input">
-
-                <label>Change message</label>
-                <input type="text" class="auxiliary-msg" placeholder="Model is updated to">
-
-                <button type="button" class="remove-field-btn epasscard-remove-btn">Remove</button>
-            </div>
-            <?php endfor; ?>
-            <?php }?>
+                } ?>
         </div>
     </div>
 </div>

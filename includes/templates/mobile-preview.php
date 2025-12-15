@@ -1,23 +1,23 @@
 <?php if (!defined('ABSPATH'))
     exit; // Exit if accessed directly 
- $epassc_display_mode = isset($epassc_card_type) && ($epassc_card_type == "Generic pass" || $epassc_card_type == "Generic") ? "none": "flex" ;
- $epassc_qrcode_margin = isset($epassc_card_type) && ($epassc_card_type == "Generic pass" || $epassc_card_type == "Generic") ? "10px": "60px";
- if(isset($epassc_card_type) && ($epassc_card_type == "Generic pass" || $epassc_card_type == "Generic")){
+
+$epassc_display_mode = (isset($epassc_card_type) && $epassc_card_type === "Generic") ? "none": "flex";
+$epassc_qrcode_margin = (isset($epassc_card_type) && $epassc_card_type === "Generic") ? "35px" : "35px";
+if ((isset($epassc_card_type) && $epassc_card_type === "Generic")) {
     $epassc_display_mode_all_cards = "flex";
     $epassc_bg_image = isset($epassc_images_info['thumbnail']) ? $epassc_images_info['thumbnail'] : '';
- }else if(isset($epassc_card_type) && ($epassc_card_type != "Generic pass" || $epassc_card_type != "Generic") && !empty($epassc_card_type)){
+} else if (isset($epassc_card_type) &&  $epassc_card_type != "Generic" && !empty($epassc_card_type)) {
     $epassc_display_mode_all_cards = "none";
- }else{
+} else {
     $epassc_display_mode_all_cards = "";
- }
- 
- ?>
+}
+
+?>
 <div class="mobile-preview mobile_portrait relative">
     <div>
         <div class="phone-pass-preview" id="phone-pass-preview">
             <img class="phone-img" id="phone"
-                src="<?php echo esc_url(EPASSC_PLUGIN_URL . 'assets/img/images/mobile_portrait.png'); ?>"
-                alt="image">
+                src="<?php echo esc_url(EPASSC_PLUGIN_URL . 'assets/img/images/mobile_portrait.png'); ?>" alt="image">
             <div id="pass-inner" class="coupon"
                 style="background-color:<?php echo esc_attr($epassc_bg_color ?? ''); ?>;">
                 <div class="coupon-container">
@@ -70,15 +70,21 @@
                         </div>
 
                         <!-- Banner Image for card Generic pass-->
-                        <div class="epc-mobile-hero-section" style="display:<?php echo esc_attr($epassc_display_mode_all_cards); ?>">
+                        <div class="epc-mobile-hero-section"
+                            style="display:<?php echo esc_attr($epassc_display_mode_all_cards); ?>">
                             <div class="epc-mobile-hero">
                                 <div class="epc-text-block">
-                                    <p class="epc-primary-label"><?php echo isset($epassc_primary_label) ? esc_html($epassc_primary_label) : ''; ?></p>
-                                    <p class="epc-primary-value"><?php echo isset($epassc_primary_value) ? esc_html($epassc_primary_value) : ''; ?></p>
+                                    <p class="epc-primary-label">
+                                        <?php echo isset($epassc_primary_label) ? esc_html($epassc_primary_label) : ''; ?>
+                                    </p>
+                                    <p class="epc-primary-value">
+                                        <?php echo isset($epassc_primary_value) ? esc_html($epassc_primary_value) : ''; ?>
+                                    </p>
                                 </div>
 
                                 <div class="epc-image-block">
-                                    <img src="<?php echo esc_url($epassc_bg_image ?? EPASSC_PLUGIN_URL . 'assets/img/card-images/warrenty-strip.png'); ?>">
+                                    <img
+                                        src="<?php echo esc_url($epassc_bg_image ?? EPASSC_PLUGIN_URL . 'assets/img/card-images/warrenty-strip.png'); ?>">
                                 </div>
                             </div>
                             <div class="edit-button">
@@ -129,7 +135,8 @@
                         </div>
 
                         <!-- Auxiliary fields -->
-                        <div class="coupon-details auxiliary-items-wrap" style="display:<?php echo esc_attr($epassc_display_mode_all_cards); ?>">
+                        <div class="coupon-details auxiliary-items-wrap"
+                            style="display:<?php echo esc_attr($epassc_display_mode_all_cards); ?>">
                             <div class="details-container auxiliary-items-container">
                                 <?php if (!empty($epassc_auxiliary_info) && is_array($epassc_auxiliary_info)) {
                                     $epassc_index = 0;
@@ -146,7 +153,9 @@
                                         </div>
                                         <?php $epassc_index++;
                                     }
-                                } else {
+                                }
+
+                                /*else {
 
                                     for ($epassc_index = 0; $epassc_index < 2; $epassc_index++): ?>
                                         <div class="detail-item" data-id="<?php echo esc_attr($epassc_index); ?>">
@@ -154,7 +163,7 @@
                                             <p class="detail-value"></p>
                                         </div>
                                     <?php endfor; ?>
-                                <?php } ?>
+                                <?php }*/ ?>
                             </div>
                             <div class="edit-button">
                                 <button class="edit-btn" data-epasscard-edit="auxiliary-fields">Edit</button>

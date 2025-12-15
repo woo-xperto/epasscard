@@ -188,12 +188,6 @@
                         <?php echo($epassc_google_wallet_shareable === 'ONE_USER_ONE_DEVICE') ? 'selected' : ''; ?>>Not shareable</option>
                 </select>
             </div>
-            <!-- Public access -->
-            <div class="toggle-label epassc-public-access-wrap">
-                <input type="checkbox" id="epassc-public-access" <?php echo isset($epassc_transaction_log) && $epassc_transaction_log ? 'checked' : ''; ?>>
-                <span>Access for public pass create (Allows user to create pass without login)</span>
-            </div>
-
         </div>
     </div>
 </div>
