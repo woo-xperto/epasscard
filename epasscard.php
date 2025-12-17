@@ -1,14 +1,17 @@
 <?php
 /**
- * Plugin Name: EpassCard
- * Description: Manage digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.
- * Version: 1.0.0
- * Author: Your Name
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: epasscard
- */
-
+Plugin Name:       EpassCard
+Plugin URI:        https://webcartisan.com/plugins/epasscard
+Description:       Manage digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.
+Version:           1.0.0
+Author:            WebCartisan
+Author URI:        https://webcartisan.com/
+License:           GPL v2 or later
+License URI:       https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+Text Domain:       epasscard
+Requires at least: 5.6
+Requires PHP:      7.2
+*/
 defined('ABSPATH') || exit;
 
 // Define plugin constants
