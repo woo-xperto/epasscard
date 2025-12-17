@@ -1,12 +1,13 @@
 === EpassCard ===
-**Contributors:** wooxperto,xihad1 
-**Tags:** wallet, passbook, gift card, Apple Wallet, Google Wallet  
-**Requires at least:** 5.0  
+ 
+**Contributors:** wooxperto
+**Tags:  wallet, passbook, gift card, Apple Wallet, Google Wallet
+**Requires at least:** 5.0
 **Tested up to:** 6.9
 **Requires PHP:** 7.2
-**Stable tag:** 1.0.0  
-**License:** GPLv2 or later  
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
+**Stable tag:** 1.0.6
+**License:** GPL v2 or later
+**License URI:** https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 **Create digital wallet passes for Apple Wallet, Google Wallet, and EpassCard.**
 
@@ -18,12 +19,12 @@ With the **Epasscard to Gift Card Extension**, you can automatically generate a 
 
 **Key Features:**
 
-- Create and manage electronic wallet passes
+- Create and manage google and apple wallet passes
 - Compatible with Apple Wallet and Google Wallet formats
 - Integrates with Gift Card for WooCommerce via extension plugin
 - Automatically generates Epasscard pass when gift card is issued
 - Customizable pass design and metadata
-- Easy to use and developer-friendly
+- Easy to use
 
 
 == External Services ==
