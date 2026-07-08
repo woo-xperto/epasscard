@@ -1,0 +1,14 @@
+# IDE / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local / generated reports
+epasscard-epasscard-php-*.md
+*.log
+
+# Composer (keep lockfile; vendor is tracked for WordPress.org packaging)
+# vendor/ is intentionally committed so Appsero ships with plugin zips.

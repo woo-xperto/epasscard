@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Passes &amp; email — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="passes-and-email">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Passes &amp; email</nav>
+				<h1>Passes &amp; email</h1>
+				<p class="doc-lead">Issue wallet passes and deliver pass links by email, order notifications, or member self-service.</p>
+
+				<h2>Issued passes list</h2>
+				<p>Each integration shows record ID, member, plan, pass ID, link, status, and actions: <strong>Create</strong>, <strong>Update</strong>, <strong>Email pass link</strong>.</p>
+
+				<h2>Automatic pass creation</h2>
+				<ol>
+					<li>Collect source field values from the membership record</li>
+					<li>Call the EpassCard API to create or update the pass</li>
+					<li>Store <code>pass_uid</code> and <code>pass_link</code> locally</li>
+				</ol>
+
+				<h2>Email delivery channels</h2>
+				<div class="integration-grid">
+					<div class="integration-card">
+						<h3>Automatic</h3>
+						<p>Enable on <a href="connection.html">Connection</a> — sent when a new pass is created.</p>
+					</div>
+					<div class="integration-card">
+						<h3>Manual (admin)</h3>
+						<p>Click <strong>Email pass link</strong> on Issued passes or member lists.</p>
+					</div>
+					<div class="integration-card">
+						<h3>WooCommerce orders</h3>
+						<p>Pass links appended to customer order emails when enabled.</p>
+					</div>
+				</div>
+
+				<h2>Member self-service</h2>
+				<ul>
+					<li>WooCommerce <strong>My Account → Wallet passes</strong></li>
+					<li>MemberPress <strong>Wallet Passes</strong> account tab</li>
+					<li>Shortcode <code>[epc_my_passes]</code></li>
+				</ul>
+				<p>See <a href="my-account.html">My Account &amp; shortcode</a> for details.</p>
+
+				<h2>Troubleshooting email</h2>
+				<ul>
+					<li>Confirm <code>wp_mail</code> works (try an SMTP plugin)</li>
+					<li>Member must have a valid user email</li>
+					<li>Pass must exist with a <code>pass_link</code></li>
+				</ul>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

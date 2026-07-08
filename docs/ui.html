@@ -1,0 +1,358 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>EpassCard - Reminders Settings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "on-primary-fixed-variant": "#004493",
+                            "primary-fixed": "#d8e2ff",
+                            "on-surface-variant": "#414755",
+                            "on-secondary-fixed-variant": "#28496b",
+                            "on-primary-fixed": "#001a41",
+                            "tertiary-fixed-dim": "#ffb595",
+                            "on-tertiary": "#ffffff",
+                            "surface-dim": "#dadada",
+                            "warning": "#F59E0B",
+                            "surface-container": "#eeeeee",
+                            "secondary-fixed": "#d1e4ff",
+                            "error-container": "#ffdad6",
+                            "on-surface": "#1b1b1b",
+                            "on-primary": "#ffffff",
+                            "secondary-fixed-dim": "#a9c9f2",
+                            "surface-container-highest": "#e2e2e2",
+                            "success": "#10B981",
+                            "tertiary-fixed": "#ffdbcc",
+                            "surface": "#f9f9f9",
+                            "surface-bright": "#f9f9f9",
+                            "outline": "#717786",
+                            "on-primary-container": "#fefcff",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-container-high": "#e8e8e8",
+                            "surface-container-low": "#f3f3f3",
+                            "secondary": "#416184",
+                            "outline-variant": "#c1c6d7",
+                            "on-tertiary-container": "#fffbff",
+                            "secondary-container": "#b4d4fe",
+                            "surface-variant": "#e2e2e2",
+                            "error": "#ba1a1a",
+                            "on-error-container": "#93000a",
+                            "on-secondary-fixed": "#001d36",
+                            "on-secondary": "#ffffff",
+                            "on-background": "#1b1b1b",
+                            "border-muted": "#E2E8F0",
+                            "inverse-primary": "#adc6ff",
+                            "tertiary-container": "#c64f00",
+                            "on-tertiary-fixed-variant": "#7c2e00",
+                            "primary": "#0058bc",
+                            "background": "#f9f9f9",
+                            "primary-container": "#0070eb",
+                            "on-secondary-container": "#3c5c7f",
+                            "tertiary": "#9e3d00",
+                            "inverse-surface": "#303030",
+                            "on-error": "#ffffff",
+                            "primary-fixed-dim": "#adc6ff",
+                            "inverse-on-surface": "#f1f1f1",
+                            "surface-tint": "#005bc1",
+                            "surface-subtle": "#F8FAFC",
+                            "on-tertiary-fixed": "#351000"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "container-max": "1280px",
+                            "gutter": "24px",
+                            "margin": "32px",
+                            "unit": "4px"
+                        },
+                        "fontFamily": {
+                            "label-sm": ["Inter"],
+                            "label-md": ["Inter"],
+                            "headline-sm": ["DM Sans"],
+                            "body-lg": ["Inter"],
+                            "headline-lg": ["DM Sans"],
+                            "headline-md": ["DM Sans"],
+                            "body-md": ["Inter"],
+                            "headline-lg-mobile": ["DM Sans"]
+                        },
+                        "fontSize": {
+                            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "600" }],
+                            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                            "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }]
+                        }
+                    },
+                },
+            }
+        </script>
+    <style>
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+            body { font-family: 'Inter', sans-serif; }
+            h1, h2, h3 { font-family: 'DM Sans', sans-serif; }
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+        </style>
+    </head>
+    <body class="bg-background text-on-surface">
+    <!-- SideNavBar -->
+    <aside class="h-full w-64 fixed left-0 top-0 bg-surface border-r border-outline-variant shadow-sm flex flex-col gap-2 p-4 h-screen z-50">
+    <div class="flex items-center gap-3 mb-6 px-2">
+    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+    <span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+    </div>
+    <div>
+    <h1 class="font-display-lg text-display-lg font-bold text-primary leading-tight">EpassCard</h1>
+    <p class="font-label-sm text-label-sm text-on-surface-variant">v7.0 Stable</p>
+    </div>
+    </div>
+    <nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">dashboard</span> Overview
+                </a>
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">settings_accessibility</span> Pass Behavior
+                </a>
+    <a class="flex items-center gap-3 p-3 bg-primary-container text-on-primary-container rounded-lg font-semibold font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">notifications_active</span> Reminders
+                </a>
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">send_to_mobile</span> Push Notifications
+                </a>
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">map</span> Template Mapping
+                </a>
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">confirmation_number</span> Issued Passes
+                </a>
+    </nav>
+    <div class="pt-4 border-t border-outline-variant space-y-1">
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">code</span> API Logs
+                </a>
+    <a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-highest transition-colors duration-200 font-label-md text-label-md" href="#">
+    <span class="material-symbols-outlined">settings</span> Settings
+                </a>
+    <button class="w-full mt-4 bg-surface-container-high text-primary font-semibold py-2.5 rounded-lg border border-outline-variant hover:bg-surface-container-highest transition-all">
+                    Support Ticket
+                </button>
+    </div>
+    </aside>
+    <!-- TopAppBar -->
+    <header class="flex justify-between items-center px-8 py-4 ml-64 bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40 shadow-sm">
+    <div class="flex items-center gap-6">
+    <h2 class="font-headline-sm text-headline-sm font-extrabold text-primary">EpassCard Dashboard</h2>
+    
+    </div>
+    <div class="flex items-center gap-4"><nav class="flex items-center gap-6 mr-4"><a href="#" class="text-label-md font-medium text-on-surface-variant hover:text-primary transition-colors">Docs</a><a href="#" class="text-label-md font-medium text-on-surface-variant hover:text-primary transition-colors">Help Center</a><a href="#" class="text-label-md font-medium text-on-surface-variant hover:text-primary transition-colors">Feedback</a></nav></div>
+    </header>
+    <!-- Main Content -->
+    <main class="ml-64 p-8 max-w-[1280px]">
+    <!-- License Alert -->
+    <div class="mb-8 flex items-center justify-between p-4 bg-error-container border-l-4 border-error rounded-r-lg">
+    <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-error">warning</span>
+    <p class="font-body-md text-on-error-container">Gift Rocket Pro requires an active license.</p>
+    </div>
+    <a class="text-primary font-semibold hover:underline" href="#">Activate your license</a>
+    </div>
+    <!-- Section Header -->
+    <div class="mb-8">
+    <h1 class="font-headline-md text-headline-md text-on-surface mb-2">MemberPress Reminders</h1>
+    <p class="font-body-md text-on-surface-variant max-w-3xl">Manage how and when your members receive push notifications for subscription lifecycle events. This integration syncs directly with your MemberPress automated email rules.</p>
+    </div>
+    <!-- Two-Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left: Config & Placeholders -->
+    <div class="lg:col-span-1 space-y-6">
+    <!-- Reminder Timing Card -->
+    <div class="bg-surface-container-lowest border border-border-muted p-6 rounded-xl">
+    <div class="flex items-center gap-2 mb-4">
+    <span class="material-symbols-outlined text-primary">schedule</span>
+    <h3 class="font-headline-sm text-headline-sm">Reminder Timing</h3>
+    </div>
+    <p class="font-body-md text-on-surface-variant mb-6">Execution is controlled by MemberPress's core reminder system. Days before/after triggers are set globally.</p>
+    <button class="w-full py-2.5 px-4 bg-white border border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                            Open MemberPress Settings <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+    </button>
+    </div>
+    <!-- Placeholders Card -->
+    <div class="bg-surface-container-lowest border border-border-muted p-6 rounded-xl">
+    <div class="flex items-center gap-2 mb-4">
+    <span class="material-symbols-outlined text-primary">data_object</span>
+    <h3 class="font-headline-sm text-headline-sm">Dynamic Tags</h3>
+    </div>
+    <p class="font-label-sm text-label-sm text-on-surface-variant mb-4 uppercase tracking-wider">Available Placeholders</p>
+    <div class="flex flex-wrap gap-2">
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{membership_title}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{membership_expires}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{next_payment_date}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{trial_end_date}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{card_expiry_date}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{user_display_name}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{user_first_name}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{user_last_name}</span>
+    <span class="bg-surface-container-high px-2 py-1 rounded text-primary font-mono text-[11px] border border-outline-variant">{user_email}</span>
+    </div>
+    </div>
+    </div>
+    <!-- Right: Copy Configuration -->
+    <div class="lg:col-span-2 space-y-6">
+    <div class="bg-surface-container-lowest border border-border-muted rounded-xl overflow-hidden">
+    <div class="p-6 border-b border-border-muted flex justify-between items-center">
+    <h3 class="font-headline-sm text-headline-sm">Push Notification Copy</h3>
+    <div class="flex gap-2">
+    <span class="px-3 py-1 bg-success/10 text-success rounded-full text-label-sm border border-success/20">Syncing Active</span>
+    </div>
+    </div>
+    <!-- Reminder Row 1 -->
+    <div class="p-6 border-b border-border-muted last:border-0 hover:bg-surface-subtle transition-colors group">
+    <div class="flex items-start justify-between mb-4">
+    <div>
+    <h4 class="font-label-md text-label-md text-on-surface">Membership / Subscription Expiring</h4>
+    <p class="text-label-sm text-on-surface-variant">Sent according to membership end date.</p>
+    </div>
+    <div class="flex items-center gap-2">
+    <span class="text-label-sm text-on-surface-variant font-medium">Enabled</span>
+    <label class="relative inline-flex items-center cursor-pointer">
+    <input checked="" class="sr-only peer" type="checkbox">
+    <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+    </label>
+    </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Title</label>
+    <input class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary" type="text" value="Membership ending soon">
+    </div>
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Message</label>
+    <textarea class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" rows="3">Your {membership_title} membership expires on {membership_expires}. Renew to keep your pass active.</textarea>
+    </div>
+    </div>
+    </div>
+    <!-- Reminder Row 2 -->
+    <div class="p-6 border-b border-border-muted last:border-0 hover:bg-surface-subtle transition-colors group">
+    <div class="flex items-start justify-between mb-4">
+    <div>
+    <h4 class="font-label-md text-label-md text-on-surface">Subscription Renewing</h4>
+    <p class="text-label-sm text-on-surface-variant">Notification sent before next payment is charged.</p>
+    </div>
+    <div class="flex items-center gap-2">
+    <span class="text-label-sm text-on-surface-variant font-medium">Enabled</span>
+    <label class="relative inline-flex items-center cursor-pointer">
+    <input checked="" class="sr-only peer" type="checkbox">
+    <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+    </label>
+    </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Title</label>
+    <input class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary" type="text" value="Membership renewal coming up">
+    </div>
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Message</label>
+    <textarea class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" rows="3">Your {membership_title} membership renews on {next_payment_date}.</textarea>
+    </div>
+    </div>
+    </div>
+    <!-- Reminder Row 3 -->
+    <div class="p-6 border-b border-border-muted last:border-0 hover:bg-surface-subtle transition-colors group">
+    <div class="flex items-start justify-between mb-4">
+    <div>
+    <h4 class="font-label-md text-label-md text-on-surface">Trial Ending</h4>
+    <p class="text-label-sm text-on-surface-variant">Sent when trial access period is nearing completion.</p>
+    </div>
+    <div class="flex items-center gap-2">
+    <span class="text-label-sm text-on-surface-variant font-medium">Enabled</span>
+    <label class="relative inline-flex items-center cursor-pointer">
+    <input class="sr-only peer" type="checkbox">
+    <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+    </label>
+    </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Title</label>
+    <input class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary" type="text" value="Trial ending soon">
+    </div>
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Message</label>
+    <textarea class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" rows="3">Your {membership_title} trial ends on {trial_end_date}.</textarea>
+    </div>
+    </div>
+    </div>
+    <!-- Reminder Row 4 -->
+    <div class="p-6 border-b border-border-muted last:border-0 hover:bg-surface-subtle transition-colors group">
+    <div class="flex items-start justify-between mb-4">
+    <div>
+    <h4 class="font-label-md text-label-md text-on-surface">Saved Card Expiring</h4>
+    <p class="text-label-sm text-on-surface-variant">Alert user to update billing method.</p>
+    </div>
+    <div class="flex items-center gap-2">
+    <span class="text-label-sm text-on-surface-variant font-medium">Enabled</span>
+    <label class="relative inline-flex items-center cursor-pointer">
+    <input checked="" class="sr-only peer" type="checkbox">
+    <div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+    </label>
+    </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Title</label>
+    <input class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary" type="text" value="Update your payment card">
+    </div>
+    <div>
+    <label class="block font-label-md text-label-md text-on-surface-variant mb-1">Push Message</label>
+    <textarea class="w-full p-2.5 bg-white border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-primary resize-none" rows="3">The card on file for {membership_title} expires on {card_expiry_date}. Update it to avoid interruption.</textarea>
+    </div>
+    </div>
+    </div>
+    <div class="p-6 bg-surface-container-low flex justify-end">
+    <button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md text-label-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+                                Save Reminder Settings
+                            </button>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- Footer Help -->
+    <footer class="mt-12 text-center text-on-surface-variant">
+    <p class="font-body-md">Need help with reminders? <a class="text-primary hover:underline" href="#">Check our documentation</a> or contact support.</p>
+    </footer>
+    </main>
+    <script>
+            // Interactive Micro-interactions
+            document.querySelectorAll('input, textarea').forEach(el => {
+                el.addEventListener('focus', () => {
+                    el.parentElement.parentElement.classList.add('bg-white');
+                });
+                el.addEventListener('blur', () => {
+                    el.parentElement.parentElement.classList.remove('bg-white');
+                });
+            });
+    
+            // Add ripple effect logic here if desired, otherwise native tailwind transitions handle most
+        </script>
+    
+    
+    </body></html>

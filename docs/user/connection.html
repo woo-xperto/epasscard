@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Connection — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="connection">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Connection</nav>
+				<h1>Connection</h1>
+				<p class="doc-lead">Link your WordPress site to EpassCard from <strong>EpassCard → Connection</strong>.</p>
+
+				<h2>Connect with an API key</h2>
+				<ol>
+					<li>Log in to <a href="https://app.epasscard.com" target="_blank" rel="noopener">app.epasscard.com</a>.</li>
+					<li>Create or copy an API key.</li>
+					<li>Paste it on the Connection page and click <strong>Connect</strong>.</li>
+				</ol>
+
+				<h2>Connect with email &amp; password</h2>
+				<p>Enter your EpassCard credentials and click <strong>Generate &amp; connect</strong>. The key is stored encrypted in the database.</p>
+
+				<h2>Enable integrations</h2>
+				<p>Check the membership plugins you use in the <strong>Integrations</strong> table, then <strong>Save integrations</strong>. Enabled modules appear under the EpassCard admin menu.</p>
+
+				<h2>Pass link email settings</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Setting</th><th>Description</th></tr></thead>
+						<tbody>
+							<tr><td>Auto email on create</td><td>Sends the pass link when a <strong>new</strong> pass is created</td></tr>
+							<tr><td>WooCommerce order emails</td><td>Appends pass links to customer order emails</td></tr>
+							<tr><td>Subject / body</td><td>Plain-text templates with placeholders</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h3>Email placeholders</h3>
+				<p><code>{pass_link}</code> <code>{user_first_name}</code> <code>{user_last_name}</code> <code>{user_display_name}</code> <code>{user_email}</code> <code>{membership_title}</code> <code>{module_label}</code> <code>{site_name}</code></p>
+
+				<div class="callout callout--tip">
+					<strong>Developer access</strong>
+					<p>Expand <strong>Developer: X-Api-Key</strong> on the Connection page. Always use <code>epc_get_api_key()</code> — keys are encrypted in the database.</p>
+				</div>
+
+				<h2>Domain verification</h2>
+				<p>API keys are tied to your site origin (e.g. <code>https://example.com</code>). Every API request sends:</p>
+				<ul>
+					<li><code>X-Request-Origin</code> — site origin</li>
+					<li><code>Origin</code> — same value</li>
+					<li><code>Referer</code> — home URL</li>
+				</ul>
+				<p><strong>HTTP vs HTTPS must match</strong> what was stored in <code>allowed_domains</code> when the key was generated. Fix <strong>Settings → General → WordPress Address</strong> and reconnect if pushes fail with domain errors.</p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

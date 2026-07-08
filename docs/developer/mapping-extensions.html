@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mapping extensions — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="mapping-extensions">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Mapping extensions</nav>
+				<h1>Mapping extensions</h1>
+				<p class="doc-lead">Extend the field mapping UI and value resolution without forking core templates.</p>
+
+				<h2>Add source field options</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>add_filter( 'epc_mapping_source_fields', function ( $fields, $slug, $module ) {
+    if ( 'memberpress' !== $slug ) {
+        return $fields;
+    }
+    $fields['company'] = __( 'Company name', 'my-plugin' );
+    return $fields;
+}, 10, 3 );</pre>
+				</div>
+
+				<h2>Add mapping modes</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>add_filter( 'epc_mapping_modes', function ( $modes, $slug, $module ) {
+    $modes['meta'] = __( 'User meta key', 'my-plugin' );
+    return $modes;
+}, 10, 3 );</pre>
+				</div>
+				<p>Saved as <code>{ "type": "meta", "value": "billing_company" }</code>. Admin UI shows a text input for custom modes.</p>
+
+				<h2>Resolve custom mode values</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>add_filter( 'epc_resolve_mapped_value', function ( $value, $entry, $source_values, $slug ) {
+    if ( '' !== $value || 'meta' !== ( $entry['type'] ?? '' ) ) {
+        return $value;
+    }
+    $meta_key = $entry['value'] ?? '';
+    $user_id  = (int) ( $source_values['_user_id'] ?? 0 );
+    if ( $user_id && $meta_key ) {
+        return (string) get_user_meta( $user_id, $meta_key, true );
+    }
+    return '';
+}, 10, 4 );</pre>
+				</div>
+
+				<h2>Normalize entries before sync</h2>
+				<p>Filter <code>epc_normalize_mapping_entry</code> — return <code>null</code> to skip a field.</p>
+
+				<h2>JavaScript</h2>
+				<p>Modes and source fields are passed as <code>epcAdmin.mappingModes</code> and <code>epcAdmin.sourceFields</code> in the mapping modal.</p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

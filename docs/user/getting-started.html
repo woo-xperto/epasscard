@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Getting started — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="getting-started">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open docs menu">Docs</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar" aria-label="Documentation navigation"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Getting started</nav>
+				<h1>Getting started</h1>
+				<p class="doc-lead">Install EpassCard, connect to your account, and start issuing wallet passes for memberships and subscriptions.</p>
+
+				<h2>Requirements</h2>
+				<ul>
+					<li>WordPress 6.5+</li>
+					<li>PHP 8.1+</li>
+					<li>An <a href="https://app.epasscard.com" target="_blank" rel="noopener">EpassCard</a> account with at least one pass template</li>
+					<li>One supported plugin: <strong>MemberPress</strong>, <strong>WooCommerce Subscriptions</strong>, or <strong>Ultimate Membership Pro</strong></li>
+				</ul>
+
+				<h2>Installation</h2>
+				<ol class="steps">
+					<li>Upload the <code>epasscard</code> folder to <code>wp-content/plugins/</code>.</li>
+					<li>Activate <strong>EpassCard</strong> under <strong>Plugins</strong>.</li>
+					<li>Open <strong>EpassCard → Connection</strong> in the WordPress admin.</li>
+				</ol>
+
+				<h2>Basic setup</h2>
+				<ol class="steps">
+					<li><strong>Connect</strong> — Paste your API key or sign in with EpassCard credentials.</li>
+					<li><strong>Enable integrations</strong> — Check the plugins you use and save.</li>
+					<li><strong>Open an integration</strong> — e.g. <strong>EpassCard → MemberPress</strong>.</li>
+					<li><strong>Map templates</strong> — Choose a pass template and map fields per plan.</li>
+					<li><strong>Issue passes</strong> — Automatic on subscribe, or manual via <strong>Create pass</strong>.</li>
+				</ol>
+
+				<div class="callout">
+					<strong>Smartest card solution</strong>
+					<p>Like <a href="https://epasscard.com/" target="_blank" rel="noopener">EpassCard</a> itself, this plugin bridges your brand and customers with dynamic digital passes for Apple and Google Wallet — no plastic required.</p>
+				</div>
+
+				<h2>What happens after setup</h2>
+				<ul>
+					<li>Qualifying members get a wallet pass via the API; the link is stored locally.</li>
+					<li>Profile changes can update existing passes automatically.</li>
+					<li>Optional reminder pushes use your membership plugin’s native timing.</li>
+					<li>Pass links can be emailed, included in order emails, or viewed in My Account.</li>
+				</ul>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

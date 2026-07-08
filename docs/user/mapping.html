@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Template mapping — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="mapping">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Template mapping</nav>
+				<h1>Template mapping</h1>
+				<p class="doc-lead">Connect each plan or product to an EpassCard pass template and define how WordPress data fills each field.</p>
+
+				<h2>Open the mapping UI</h2>
+				<ol>
+					<li>Go to an integration page (e.g. <strong>EpassCard → MemberPress</strong>).</li>
+					<li>Click <strong>Set up mapping</strong> or <strong>Edit mapping</strong> for a plan.</li>
+				</ol>
+
+				<h2>Steps in the modal</h2>
+				<ol class="steps">
+					<li><strong>Select template</strong> — From your EpassCard account. Refresh if you added new templates.</li>
+					<li><strong>Map fields</strong> — <em>Source field</em> pulls live data; <em>Custom value</em> sets fixed text.</li>
+					<li><strong>Save mapping</strong> — Stored per entity id in WordPress options.</li>
+				</ol>
+
+				<h2>Source fields</h2>
+				<p>Typical options: member name, email, status, start/expiry dates, product title. Developers can add more via <code>epc_mapping_source_fields</code> — see <a href="../developer/mapping-extensions.html">Mapping extensions</a>.</p>
+
+				<div class="callout callout--tip">
+					<strong>Tips</strong>
+					<p>Map all required template fields. Use custom values for static labels (venue, brand). Re-open mapping after editing templates in EpassCard.</p>
+				</div>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is EpassCard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EpassCard is a platform and WordPress plugin for creating Apple Wallet and Google Wallet passes. Site owners design pass templates in EpassCard, connect the WordPress plugin, and passes are issued automatically when members subscribe or renew on MemberPress, WooCommerce Subscriptions, or Ultimate Membership Pro."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I add a membership card to Apple Wallet on WordPress?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Install the EpassCard WordPress plugin, connect your EpassCard account, enable your membership plugin module, and map membership fields to a pass template. When a member subscribes, they receive a link to add the pass to Apple Wallet or Google Wallet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is EpassCard a PassKit alternative for WordPress?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. EpassCard is a native WordPress plugin for Apple Wallet and Google Wallet passes. Unlike PassKit, it does not require Zapier, Make, or custom API development for MemberPress or WooCommerce Subscriptions integrations."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which WordPress plugins does EpassCard support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EpassCard supports MemberPress, WooCommerce Subscriptions, and Ultimate Membership Pro. Each integration can be enabled independently from the Connection settings page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do members need to download an app for wallet passes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Members add passes using the standard Add to Apple Wallet or Save to Google Wallet flow from a link. No separate app download is required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does EpassCard support both Apple Wallet and Google Wallet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. One pass template and mapping setup issues passes compatible with Apple Wallet on iOS and Google Wallet on Android."
+      }
+    }
+  ]
+}

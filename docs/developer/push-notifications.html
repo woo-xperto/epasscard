@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Push notifications — EpassCard Developer Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="push-notifications">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open docs menu">Docs</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Push notifications</nav>
+				<h1>Push notifications</h1>
+				<p class="doc-lead">Developer reference for wallet push delivery via <code>EPC_Pass_Notifications</code> and <code>EPC_Api_Client::send_pass_push()</code>.</p>
+
+				<h2>API endpoint</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">HTTP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>POST {api_base}/send-pass-notification/{passUuid}
+Content-Type: application/json
+X-Api-Key: {key}
+X-Request-Origin: {site origin}
+
+{ "message": "Title\n\nBody" }</pre>
+				</div>
+
+				<h2>PHP API</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>EPC_Api_Client::send_pass_push( $pass_uid, $title, $message );
+EPC_Pass_Notifications::send_for_pass( $pass_row, $title, $message );
+EPC_Pass_Notifications::maybe_send_for_event( $pass_row, $type, $rule, $event_ts, $replacements );</pre>
+				</div>
+
+				<h2>Integration patterns</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Module</th><th>Trigger</th></tr></thead>
+						<tbody>
+							<tr><td>MemberPress</td><td><code>mepr-reminder-*</code> hooks</td></tr>
+							<tr><td>WooCommerce Subscriptions</td><td><code>woocommerce_scheduled_subscription_customer_notification_*</code></td></tr>
+							<tr><td>Ultimate Membership Pro</td><td>Daily cron <code>epc_pass_notifications_event</code></td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Hooks</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_pass_push_title</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_push_message</code></td><td>filter</td></tr>
+							<tr><td><code>epc_send_push_notification_url</code></td><td>filter</td></tr>
+							<tr><td><code>epc_send_push_notification_body</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Storage</h2>
+				<p>Rules: <code>epc_{module}_notification_rules</code> option. Dedupe: <code>epc_passes.meta</code> JSON key <code>notifications_sent</code>.</p>
+
+				<p>User guide: <a href="../user/notifications.html">Push notifications (user)</a></p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

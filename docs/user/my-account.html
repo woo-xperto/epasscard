@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>My Account &amp; shortcode — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="my-account">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> My Account &amp; shortcode</nav>
+				<h1>My Account &amp; shortcode</h1>
+				<p class="doc-lead">Let members access wallet passes without opening email links.</p>
+
+				<h2>WooCommerce My Account</h2>
+				<p>Menu item <strong>Wallet passes</strong> at <code>/my-account/wallet-passes/</code>. Requires active passes for the logged-in customer.</p>
+				<div class="callout callout--tip">
+					<strong>404 fix</strong>
+					<p>After install, visit <strong>Settings → Permalinks</strong> and save once if the endpoint 404s.</p>
+				</div>
+
+				<h2>MemberPress account</h2>
+				<p><strong>Wallet Passes</strong> nav links to <code>?action=wallet_passes</code> on the account page.</p>
+
+				<h2>Shortcode</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">Shortcode</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>[epc_my_passes]</pre>
+				</div>
+				<p>Logged-out users see a login prompt. Logged-in users see buttons linking to active passes.</p>
+
+				<h2>Pass list behavior</h2>
+				<ul>
+					<li>Only <strong>active</strong> passes with a <code>pass_link</code></li>
+					<li>Labels include membership/product name when available</li>
+					<li>Links open in a new tab</li>
+				</ul>
+
+				<p>Developers: see <a href="../developer/hooks.html#frontend">Frontend hooks</a>.</p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

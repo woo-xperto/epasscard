@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hooks reference — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="hooks">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Hooks reference</nav>
+				<h1>Hooks reference</h1>
+				<p class="doc-lead">Actions and filters for extending EpassCard without modifying core plugin files.</p>
+
+				<h2>Module registration</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th><th>Description</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_module_files</code></td><td>filter</td><td><code>slug => filename</code></td></tr>
+							<tr><td><code>epc_module_classes</code></td><td>filter</td><td><code>slug => Class_Name</code></td></tr>
+							<tr><td><code>epc_module_path</code></td><td>filter</td><td>Absolute path <code>( $path, $slug, $file )</code></td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p>Helper: <code>epc_register_module( $slug, $file, $class )</code></p>
+
+				<h2>Mapping</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_mapping_source_fields</code></td><td>filter</td></tr>
+							<tr><td><code>epc_mapping_modes</code></td><td>filter</td></tr>
+							<tr><td><code>epc_mappable_entities</code></td><td>filter</td></tr>
+							<tr><td><code>epc_normalize_mapping_entry</code></td><td>filter</td></tr>
+							<tr><td><code>epc_resolve_mapped_value</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Pass sync lifecycle</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_before_sync_pass</code></td><td>action</td></tr>
+							<tr><td><code>epc_pass_synced</code></td><td>action</td></tr>
+							<tr><td><code>epc_pass_created</code></td><td>action</td></tr>
+							<tr><td><code>epc_pass_updated</code></td><td>action</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Pass email</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_pass_email_auto_send</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_email_subject</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_email_body</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_email_headers</code></td><td>filter</td></tr>
+							<tr><td><code>epc_before_pass_email_send</code></td><td>action</td></tr>
+							<tr><td><code>epc_pass_email_sent</code></td><td>action</td></tr>
+							<tr><td><code>epc_pass_email_include_on_wc_order</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_email_wc_order_block</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2 id="frontend">Frontend</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_frontend_user_passes</code></td><td>filter</td></tr>
+							<tr><td><code>epc_frontend_pass_label</code></td><td>filter</td></tr>
+							<tr><td><code>epc_enqueue_frontend_assets</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Push notifications</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_pass_push_title</code></td><td>filter</td></tr>
+							<tr><td><code>epc_pass_push_message</code></td><td>filter</td></tr>
+							<tr><td><code>epc_send_push_notification_url</code></td><td>filter</td></tr>
+							<tr><td><code>epc_send_push_notification_body</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p>See <a href="push-notifications.html">Push notifications</a>.</p>
+
+				<h2>API connection</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Hook</th><th>Type</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_api_base</code></td><td>filter</td></tr>
+							<tr><td><code>epc_api_allowed_domains</code></td><td>filter</td></tr>
+							<tr><td><code>epc_api_request_headers</code></td><td>filter</td></tr>
+							<tr><td><code>epc_api_timezone</code></td><td>filter</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>PHP helpers</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>epc_get_api_key();
+epc_is_memberpress_active();
+epc_is_woocommerce_subscriptions_active();
+epc_is_ultimate_membership_pro_active();
+epc_register_module( $slug, $file, $class );
+epc_plugin()->get_module( $slug );</pre>
+				</div>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

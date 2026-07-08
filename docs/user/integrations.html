@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Integrations — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="user" data-page="integrations">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="../developer/architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Integrations</nav>
+				<h1>Integrations</h1>
+				<p class="doc-lead">Three built-in modules share one workflow: <strong>map template → issue pass → sync on changes</strong>.</p>
+
+				<div class="integration-grid">
+					<div class="integration-card">
+						<h3>MemberPress</h3>
+						<div class="meta">EpassCard → MemberPress</div>
+						<ul>
+							<li>Maps membership products to templates</li>
+							<li>Members list pass actions</li>
+							<li>Account <strong>Wallet Passes</strong> tab</li>
+							<li>4 push reminder types</li>
+						</ul>
+					</div>
+					<div class="integration-card">
+						<h3>WooCommerce Subscriptions</h3>
+						<div class="meta">EpassCard → WooCommerce Subscriptions</div>
+						<ul>
+							<li>Per-subscription passes</li>
+							<li>My Account <strong>Wallet passes</strong></li>
+							<li>Order email pass links</li>
+							<li>Renewal, trial, end reminders</li>
+						</ul>
+					</div>
+					<div class="integration-card">
+						<h3>Ultimate Membership Pro</h3>
+						<div class="meta">EpassCard → Ultimate Membership Pro</div>
+						<ul>
+							<li>Maps membership levels</li>
+							<li>Per <code>ihc_user_levels</code> record</li>
+							<li>Users list pass actions</li>
+							<li>Push: before level expires (daily cron)</li>
+						</ul>
+					</div>
+				</div>
+
+				<h2>Enabling / disabling</h2>
+				<p>Toggle modules on the <a href="connection.html">Connection</a> page. Disabled modules do not load hooks or admin menus.</p>
+
+				<h2>Per-module features</h2>
+				<ul>
+					<li><strong>Template mapping</strong> — Required before issuing passes</li>
+					<li><strong>Issued passes</strong> — Search, filter, manual actions</li>
+					<li><strong>Push rules</strong> — Custom title/message per reminder</li>
+					<li><strong>Test notification</strong> — Verify pushes before go-live</li>
+				</ul>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

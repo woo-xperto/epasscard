@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Database — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="database">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Database</nav>
+				<h1>Database</h1>
+				<p class="doc-lead">Custom tables and WordPress options used by EpassCard. Schema version: <code>EPC_DB_VERSION</code> (1.1.0).</p>
+
+				<h2>Table: {prefix}epc_passes</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Column</th><th>Notes</th></tr></thead>
+						<tbody>
+							<tr><td><code>module</code></td><td>Module slug</td></tr>
+							<tr><td><code>source_id</code></td><td>Integration record id</td></tr>
+							<tr><td><code>entity_id</code></td><td>Product/level id</td></tr>
+							<tr><td><code>user_id</code></td><td>WordPress user</td></tr>
+							<tr><td><code>pass_uid</code></td><td>EpassCard pass UUID</td></tr>
+							<tr><td><code>pass_link</code></td><td>Public wallet URL</td></tr>
+							<tr><td><code>template_uid</code></td><td>Template UUID</td></tr>
+							<tr><td><code>status</code></td><td><code>active</code>, <code>revoked</code></td></tr>
+							<tr><td><code>meta</code></td><td>JSON — <code>notifications_sent</code> for push dedupe</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<p>Unique key: <code>(module, source_id)</code></p>
+
+				<h2>Common queries</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>EPC_DB::get_pass( $module, $source_id );
+EPC_DB::get_active_passes_for_user( $user_id );
+EPC_DB::query_passes( array(
+    'module'   => 'memberpress',
+    'status'   => 'active',
+    'page'     => 1,
+    'per_page' => 20,
+) );
+EPC_DB::upsert_pass( array( /* row */ ) );</pre>
+				</div>
+
+				<h2>Table: {prefix}epc_api_logs</h2>
+				<p>API request/response log. See <a href="../user/api-log.html">API log</a> user guide.</p>
+
+				<h2>Options</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Option</th><th>Purpose</th></tr></thead>
+						<tbody>
+							<tr><td><code>epc_connection_settings</code></td><td>Encrypted API key</td></tr>
+							<tr><td><code>epc_enabled_modules</code></td><td>Enabled module slugs</td></tr>
+							<tr><td><code>epc_pass_email_settings</code></td><td>Email templates</td></tr>
+							<tr><td><code>epc_mappings_{slug}</code></td><td>Per-module mappings</td></tr>
+							<tr><td><code>epc_{slug}_notification_rules</code></td><td>Per-module push notification rules</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="callout callout--tip">
+					<strong>API keys</strong>
+					<p>Always use <code>epc_get_api_key()</code> — never read encrypted options directly.</p>
+				</div>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

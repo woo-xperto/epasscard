@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Custom modules — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="custom-modules">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Custom modules</nav>
+				<h1>Custom modules</h1>
+				<p class="doc-lead">Add integrations for other membership or CRM plugins by extending <code>EPC_Module</code>.</p>
+
+				<h2>Quick registration</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>add_action( 'plugins_loaded', function () {
+    if ( ! function_exists( 'epc_register_module' ) ) {
+        return;
+    }
+
+    epc_register_module(
+        'my-crm',
+        dirname( __FILE__ ) . '/includes/class-epc-module-my-crm.php',
+        'EPC_Module_My_CRM'
+    );
+}, 10 );</pre>
+				</div>
+
+				<h2>Module class skeleton</h2>
+				<div class="code-block">
+					<div class="code-block__header"><span class="code-block__lang">PHP</span><button type="button" class="code-block__copy">Copy</button></div>
+					<pre>class EPC_Module_My_CRM extends EPC_Module {
+
+    public function get_slug() {
+        return 'my-crm';
+    }
+
+    public function get_label() {
+        return __( 'My CRM', 'my-plugin' );
+    }
+
+    public function is_available() {
+        return class_exists( 'My_CRM_Plugin' );
+    }
+
+    public function get_source_fields() {
+        return array(
+            'email'     => __( 'Email', 'my-plugin' ),
+            'full_name' => __( 'Full name', 'my-plugin' ),
+        );
+    }
+
+    public function get_mappable_entities() {
+        return array(
+            array( 'id' => 1, 'label' => __( 'Gold plan', 'my-plugin' ) ),
+        );
+    }
+
+    public function get_entity_label( $entity_id ) {
+        return 'Plan #' . (int) $entity_id;
+    }
+
+    public function sync_by_source_id( $source_id, $mode = 'sync' ) {
+        return EPC_Pass_Service::sync_pass(
+            $this->get_slug(),
+            $source_id,
+            $entity_id,
+            $user_id,
+            $mapping,
+            $source_values,
+            $mode
+        );
+    }
+
+    protected function register_event_hooks() {
+        add_action( 'my_crm_subscription_active', array( $this, 'on_active' ), 10, 1 );
+    }
+
+    public function on_active( $source_id ) {
+        $this->sync_by_source_id( (int) $source_id, 'sync' );
+    }
+}</pre>
+				</div>
+
+				<h2>Required methods</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Method</th><th>Purpose</th></tr></thead>
+						<tbody>
+							<tr><td><code>get_slug()</code></td><td>Unique key for DB and options</td></tr>
+							<tr><td><code>get_label()</code></td><td>Admin menu title</td></tr>
+							<tr><td><code>is_available()</code></td><td>Dependency check</td></tr>
+							<tr><td><code>get_source_fields()</code></td><td>Mapping dropdown values</td></tr>
+							<tr><td><code>get_mappable_entities()</code></td><td>Mapping table rows</td></tr>
+							<tr><td><code>get_entity_label()</code></td><td>Display name for entity id</td></tr>
+							<tr><td><code>sync_by_source_id()</code></td><td>Manual/AJAX pass actions</td></tr>
+							<tr><td><code>register_event_hooks()</code></td><td>Subscribe to plugin events</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<p>Reference implementation: <code>modules/module-memberpress.php</code></p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>

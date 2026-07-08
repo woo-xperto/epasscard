@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Architecture — EpassCard Docs</title>
+	<link rel="stylesheet" href="../assets/css/docs.css">
+</head>
+<body class="doc-page" data-section="developer" data-page="architecture">
+	<header class="site-header">
+		<div class="site-header__inner">
+			<a href="../index.html" class="site-logo"><img src="https://epasscard.com/wp-content/uploads/2026/06/Epasscard-logo.webp" alt="EpassCard" class="site-logo__img" width="160" height="32"> <span class="site-logo__badge">Docs</span></a>
+			<button type="button" class="menu-toggle" aria-label="Open menu">☰</button>
+			<nav class="site-nav">
+				<a href="../index.html" class="site-nav__link">Home</a>
+				<a href="../user/getting-started.html" class="site-nav__link" data-nav="user">User Guide</a>
+				<a href="architecture.html" class="site-nav__link" data-nav="developer">Developer</a>
+				<a href="https://epasscard.com/" class="site-nav__link site-nav__cta" target="_blank" rel="noopener">epasscard.com</a>
+			</nav>
+			<button type="button" class="menu-toggle sidebar-toggle" aria-label="Open sidebar">☰</button>
+		</div>
+	</header>
+	<div class="sidebar-backdrop"></div>
+	<div class="doc-layout">
+		<aside class="doc-sidebar"></aside>
+		<main class="doc-main">
+			<article class="doc-content">
+				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Architecture</nav>
+				<h1>Architecture</h1>
+				<p class="doc-lead">How the EpassCard WordPress plugin connects membership data to the EpassCard API.</p>
+
+				<h2>Data flow</h2>
+				<div class="flow-diagram">WordPress (membership plugin)
+        │
+        ▼
+  EPC_Module (integration)
+        │  hooks: subscribe, renew, profile, reminders
+        ▼
+  EPC_Pass_Service::sync_pass()
+        │  mapping + source values → API payload
+        ▼
+  EPC_Api_Client → EpassCard REST API
+        │
+        ▼
+  EPC_DB (epc_passes, epc_api_logs)</div>
+
+				<h2>Key components</h2>
+				<div class="doc-table-wrap">
+					<table class="doc-table">
+						<thead><tr><th>Class</th><th>Role</th></tr></thead>
+						<tbody>
+							<tr><td><code>EPC_Plugin</code></td><td>Bootstrap, module registry</td></tr>
+							<tr><td><code>EPC_Module_Loader</code></td><td>Load module files and classes</td></tr>
+							<tr><td><code>EPC_Module</code></td><td>Abstract integration (mapping UI, hooks)</td></tr>
+							<tr><td><code>EPC_Pass_Service</code></td><td>Create/update passes from mappings</td></tr>
+							<tr><td><code>EPC_Api_Client</code></td><td>HTTP client, templates, pass CRUD</td></tr>
+							<tr><td><code>EPC_DB</code></td><td><code>epc_passes</code> table</td></tr>
+							<tr><td><code>EPC_Api_Log</code></td><td>Request/response logging</td></tr>
+							<tr><td><code>EPC_Pass_Email</code></td><td><code>wp_mail</code> delivery</td></tr>
+							<tr><td><code>EPC_Pass_Notifications</code></td><td>Push cron, dedupe, send helpers</td></tr>
+							<tr><td><code>EPC_Frontend</code></td><td>My Account, shortcode</td></tr>
+							<tr><td><code>EPC_Connection</code></td><td>Encrypted API key storage</td></tr>
+						</tbody>
+					</table>
+				</div>
+
+				<h2>Pass identity</h2>
+				<ul>
+					<li><code>module</code> — slug (e.g. <code>memberpress</code>)</li>
+					<li><code>source_id</code> — integration record id</li>
+					<li><code>entity_id</code> — product/level id</li>
+					<li><code>user_id</code> — WordPress user</li>
+				</ul>
+
+				<h2>Prefixes</h2>
+				<p>Functions <code>epc_*</code> · Classes <code>EPC_*</code> · Options/tables <code>epc_*</code></p>
+
+				<h2>Boot order</h2>
+				<p><code>plugins_loaded</code> (20) → <code>EPC_Plugin::boot()</code>: DB upgrade, API log, email, frontend, crons, admin menu, enabled modules.</p>
+				<p>Register custom modules on <code>plugins_loaded</code> priority <strong>10</strong> or earlier.</p>
+
+				<h2>Push notification flow</h2>
+				<div class="flow-diagram">MemberPress / WCS reminder hook     UMP daily cron
+        │                                  │
+        ▼                                  ▼
+  build_push_notification_copy()
+        │
+        ▼
+  EPC_Pass_Notifications::send_for_pass()
+        │
+        ▼
+  POST /send-pass-notification/{passUuid}</div>
+				<p><a href="push-notifications.html">Push notifications (developer)</a></p>
+
+				<div class="doc-pager"></div>
+			</article>
+		</main>
+	</div>
+	<footer class="site-footer"><div class="site-footer__inner"><span class="site-footer__brand">EpassCard WordPress Plugin</span><span>© 2026 · <a href="https://epasscard.com/" target="_blank" rel="noopener">epasscard.com</a></span></div></footer>
+	<script src="../assets/js/docs.js"></script>
+</body>
+</html>
