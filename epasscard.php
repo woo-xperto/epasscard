@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       EpassCard (Google Wallet, Apple Wallet, and more)
  * Plugin URI:        https://webcartisan.com/plugins/epasscard
- * Description:       Connect EpassCard wallet passes to MemberPress, Ultimate Membership Pro, and WooCommerce Subscriptions. Map membership data to pass templates and issue digital passes automatically.
+ * Description:       WordPress wallet pass plugin for Apple Wallet and Google Wallet. Auto-issue digital membership cards, pkpass passes, and subscription wallet passes.
  * Version:           1.0.1
  * Requires at least: 6.5
  * Requires PHP:      8.1
