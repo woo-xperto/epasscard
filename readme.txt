@@ -1,6 +1,6 @@
 === EpassCard (Google Wallet, Apple Wallet, and more) ===
 Contributors: wooxperto
-Tags: apple-wallet, google-wallet, wallet-pass, pkpass, woocommerce
+Tags: Apple Wallet, Google Wallet, PKPass, Wallet Pass, WooCommerce, Membership, Loyalty, Event Tickets, Digital Wallet
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
@@ -8,13 +8,13 @@ Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-WordPress wallet pass plugin for Apple Wallet and Google Wallet. Auto-issue digital membership cards, pkpass passes, and subscription wallet passes.
+Unlock the power of digital wallet passes for your WordPress site with EpassCard. The ultimate plugin for Apple Wallet and Google Wallet integration. Automatically issue membership cards, event tickets, and loyalty cards to enhance user engagement and loyalty.
 
 == Description ==
 
 **EpassCard** is a **WordPress wallet pass plugin** that connects your site to [EpassCard](https://epasscard.com/) and automatically issues **Apple Wallet** and **Google Wallet** passes when members subscribe, renew, or when their data changes.
 
-Create **digital wallet passes** — membership cards, loyalty cards, event badges, employee IDs, coupons, gift cards, and more — using pass templates in your EpassCard account. Map WordPress membership fields to pass fields in the admin. No Zapier, no custom API code, no separate pass management dashboard outside WordPress.
+Design and create customized digital wallet passes, including membership cards, loyalty cards, event tickets, and more, using EpassCard's intuitive pass template system, and seamlessly integrate them with your WordPress site.
 
 = Wallet pass generator and management for WordPress =
 
@@ -95,7 +95,7 @@ Learn more about how [Appsero collects and uses this data](https://appsero.com/p
 
 == Installation ==
 
-1. Upload the plugin folder to `/wp-content/plugins/epasscard/` or install from WordPress.org.
+1. Easily install the EpassCard plugin by uploading the plugin folder to /wp-content/plugins/epasscard/ or by installing it directly from the WordPress.org repository, and follow the simple activation and setup process.
 2. Activate through the **Plugins** screen.
 3. Go to **EpassCard → Connection** and connect your account.
 4. Open **Connection → Integrations** and enable the modules you need.
