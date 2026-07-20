@@ -30,6 +30,7 @@ Supported pass platforms:
 Turn memberships into **digital membership cards** members save to their phone wallet.
 
 * **MemberPress Apple Wallet and Google Wallet** — issue a **membership wallet pass** on signup, renewal, and profile updates
+* **Paid Memberships Pro** — issue wallet passes when a member level is assigned, renewed, cancelled, or expires
 * **WooCommerce Subscriptions wallet pass** — create a **subscription wallet pass** when a subscription activates or renews
 * **Ultimate Membership Pro** — issue wallet passes for UMP members with the same template-mapping workflow
 
@@ -62,7 +63,7 @@ EpassCard is a **wallet pass platform** connector — not a middleware automatio
 * **Pass updates** — keep wallet passes in sync when membership data changes
 * **Template mapping** — map membership fields to pass template fields (including QR and barcode fields)
 * **Push notifications** — wallet pass reminders aligned with membership timing
-* **Modular integrations** — MemberPress, Ultimate Membership Pro, WooCommerce Subscriptions
+* **Modular integrations** — MemberPress, Paid Memberships Pro, Ultimate Membership Pro, WooCommerce Subscriptions
 * **Admin pass list** — searchable table of issued passes and delivery links
 * **Member account access** — members open passes from their account area
 * **API connection** — API key or email/password sign-in to the EpassCard pass API
@@ -77,7 +78,7 @@ EpassCard is a **wallet pass platform** connector — not a middleware automatio
 = Requirements =
 
 * An [EpassCard](https://epasscard.com/) account (sign up at [app.epasscard.com](https://app.epasscard.com))
-* MemberPress, Ultimate Membership Pro, and/or WooCommerce Subscriptions (per enabled module)
+* MemberPress, Paid Memberships Pro, Ultimate Membership Pro, and/or WooCommerce Subscriptions (per enabled module)
 
 = External services =
 
@@ -109,13 +110,13 @@ Yes. Create a free account at [app.epasscard.com](https://app.epasscard.com), th
 
 = Which membership plugins are supported? =
 
-MemberPress, Ultimate Membership Pro, and WooCommerce Subscriptions in v1.0.1. Enable only the modules you use.
+MemberPress, Paid Memberships Pro, Ultimate Membership Pro, and WooCommerce Subscriptions. Enable only the modules you use.
 
 = How do I create an Apple Wallet pass on WordPress? =
 
 1. Create a pass template in your EpassCard account (membership card, loyalty card, event ticket, or other pass type).
 2. Install and activate the EpassCard WordPress plugin, then connect your API key.
-3. Enable the MemberPress, Ultimate Membership Pro, or WooCommerce Subscriptions module.
+3. Enable the MemberPress, Paid Memberships Pro, Ultimate Membership Pro, or WooCommerce Subscriptions module.
 4. Map membership fields to pass template fields.
 5. When a member subscribes or a subscription activates, they receive a link to add the pass to **Apple Wallet** or **Google Wallet**.
 
@@ -141,7 +142,7 @@ Yes. If your EpassCard pass template includes QR code or barcode fields, map mem
 
 = Is EpassCard a PassKit alternative for WordPress? =
 
-Yes. EpassCard is a native **WordPress wallet pass plugin** for issuing Apple Wallet and Google Wallet passes — without Zapier, Make, or custom API development. It is built for membership and subscription sites using MemberPress, Ultimate Membership Pro, or WooCommerce Subscriptions.
+Yes. EpassCard is a native **WordPress wallet pass plugin** for issuing Apple Wallet and Google Wallet passes — without Zapier, Make, or custom API development. It is built for membership and subscription sites using MemberPress, Paid Memberships Pro, Ultimate Membership Pro, or WooCommerce Subscriptions.
 
 = How does wallet pass automation work? =
 
@@ -171,6 +172,9 @@ Yes. From the admin **Issued passes** table or member screens, you can create a 
 
 == Changelog ==
 
+= 1.0.2 =
+* New integration: Paid Memberships Pro (level mapping, status-based pass behavior, expire push).
+
 = 1.0.1 =
 * Rebrand display name to EpassCard.
 * Premium SaaS admin UI, AJAX settings saves, and related improvements.
@@ -184,12 +188,3 @@ Yes. From the admin **Issued passes** table or member screens, you can create a 
 = 1.0.1 =
 Rebrand and admin UI improvements. Safe update for existing connections.
 
-== Privacy Policy ==
-
-EpassCard uses [Appsero](https://appsero.com) SDK to collect some telemetry data upon user's confirmation. This helps us to troubleshoot problems faster & make product improvements.
-
-Appsero SDK **does not gather any data by default.** The SDK only starts gathering basic telemetry data **when a user allows it via the admin notice**. We collect the data to ensure a great user experience for all our users.
-
-Integrating Appsero SDK **DOES NOT IMMEDIATELY** start gathering data, **without confirmation from users in any case.**
-
-Learn more about how [Appsero collects and uses this data](https://appsero.com/privacy-policy/).

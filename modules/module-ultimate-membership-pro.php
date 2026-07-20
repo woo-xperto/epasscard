@@ -61,6 +61,7 @@ class EPC_Module_Ultimate_Membership_Pro extends EPC_Module {
 			'user_email'          => __( 'Email', 'epasscard' ),
 			'user_first_name'     => __( 'First name', 'epasscard' ),
 			'user_last_name'      => __( 'Last name', 'epasscard' ),
+			'user_full_name'      => __( 'Full name', 'epasscard' ),
 			'membership_id'       => __( 'User level record ID', 'epasscard' ),
 			'level_id'            => __( 'Level ID', 'epasscard' ),
 			'level_name'          => __( 'Level name', 'epasscard' ),
@@ -729,12 +730,15 @@ class EPC_Module_Ultimate_Membership_Pro extends EPC_Module {
 
 		$level_name = $this->get_entity_label( $level_id );
 		$status     = $this->get_user_level_status( $user_id, $level_id, $row );
+		$first      = (string) get_user_meta( $user_id, 'first_name', true );
+		$last       = (string) get_user_meta( $user_id, 'last_name', true );
 
 		$values = array(
 			'user_display_name' => $user->display_name,
 			'user_email'        => $user->user_email,
-			'user_first_name'   => get_user_meta( $user_id, 'first_name', true ),
-			'user_last_name'    => get_user_meta( $user_id, 'last_name', true ),
+			'user_first_name'   => $first,
+			'user_last_name'    => $last,
+			'user_full_name'    => epc_format_user_full_name( $first, $last, $user->display_name ),
 			'membership_id'     => (string) $row_id,
 			'level_id'          => (string) $level_id,
 			'level_name'        => $level_name,

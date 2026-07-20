@@ -75,6 +75,33 @@ function epc_is_woocommerce_subscriptions_active() {
 }
 
 /**
+ * Whether Paid Memberships Pro is installed and active.
+ *
+ * @return bool
+ */
+function epc_is_paid_memberships_pro_active() {
+	if ( defined( 'PMPRO_VERSION' ) || defined( 'PMPRO_DIR' ) ) {
+		return true;
+	}
+
+	if ( function_exists( 'pmpro_getAllLevels' ) || function_exists( 'pmpro_changeMembershipLevel' ) ) {
+		return true;
+	}
+
+	$plugin_files = array(
+		'paid-memberships-pro/paid-memberships-pro.php',
+	);
+
+	foreach ( $plugin_files as $plugin_file ) {
+		if ( epc_is_plugin_active( $plugin_file ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Whether Ultimate Membership Pro (Indeed) is installed and active.
  *
  * @return bool
@@ -100,6 +127,24 @@ function epc_is_ultimate_membership_pro_active() {
 	}
 
 	return false;
+}
+
+/**
+ * Build a full name from first + last, with optional fallback.
+ *
+ * @param string $first_name First name.
+ * @param string $last_name  Last name.
+ * @param string $fallback   Used when both names are empty (e.g. display name).
+ * @return string
+ */
+function epc_format_user_full_name( $first_name, $last_name, $fallback = '' ) {
+	$full = trim( trim( (string) $first_name ) . ' ' . trim( (string) $last_name ) );
+
+	if ( '' !== $full ) {
+		return $full;
+	}
+
+	return trim( (string) $fallback );
 }
 
 /**

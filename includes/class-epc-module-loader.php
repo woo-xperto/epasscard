@@ -33,6 +33,7 @@ class EPC_Module_Loader {
 				'memberpress'               => 'module-memberpress.php',
 				'woocommerce-subscriptions' => 'module-woocommerce-subscriptions.php',
 				'ultimate-membership-pro'   => 'module-ultimate-membership-pro.php',
+				'paid-memberships-pro'      => 'module-paid-memberships-pro.php',
 			)
 		);
 	}
@@ -103,6 +104,7 @@ class EPC_Module_Loader {
 				'memberpress'               => 'EPC_Module_MemberPress',
 				'woocommerce-subscriptions' => 'EPC_Module_WooCommerce_Subscriptions',
 				'ultimate-membership-pro'   => 'EPC_Module_Ultimate_Membership_Pro',
+				'paid-memberships-pro'      => 'EPC_Module_Paid_Memberships_Pro',
 			)
 		);
 

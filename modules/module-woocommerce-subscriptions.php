@@ -910,12 +910,6 @@ class EPC_Module_WooCommerce_Subscriptions extends EPC_Module {
 	 * @return string
 	 */
 	private function get_user_full_name( $first_name, $last_name, $fallback = '' ) {
-		$full = trim( trim( (string) $first_name ) . ' ' . trim( (string) $last_name ) );
-
-		if ( '' !== $full ) {
-			return $full;
-		}
-
-		return trim( (string) $fallback );
+		return epc_format_user_full_name( $first_name, $last_name, $fallback );
 	}
 }

@@ -1,6 +1,6 @@
 # Integrations
 
-EpassCard ships with three integration modules. Each extends the same workflow: **map template → issue pass → sync on changes**.
+EpassCard ships with built-in integration modules. Each extends the same workflow: **map template → issue pass → sync on changes**.
 
 ## MemberPress
 
@@ -11,6 +11,14 @@ EpassCard ships with three integration modules. Each extends the same workflow: 
 - **Members list:** Create/Update pass column actions.
 - **MemberPress account:** **Wallet Passes** tab for members.
 - **Push reminders:** Subscription expire, renewal, trial, card expire (uses MemberPress reminder timing).
+
+## Paid Memberships Pro
+
+**Menu:** EpassCard → Paid Memberships Pro
+
+- Maps **membership levels** to pass templates.
+- Syncs on level assign / checkout; revoke on cancel or expire (configurable per status).
+- **Push reminders:** Before level expires (EpassCard daily cron + **Days before** setting).
 
 ## WooCommerce Subscriptions
 

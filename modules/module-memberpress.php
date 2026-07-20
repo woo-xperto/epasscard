@@ -54,6 +54,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 			'user_email'        => __( 'Email', 'epasscard' ),
 			'user_first_name'   => __( 'First name', 'epasscard' ),
 			'user_last_name'    => __( 'Last name', 'epasscard' ),
+			'user_full_name'    => __( 'Full name', 'epasscard' ),
 			'membership_id'     => __( 'Membership ID', 'epasscard' ),
 			'membership_title'  => __( 'Membership product', 'epasscard' ),
 			'membership_status' => __( 'Status', 'epasscard' ),
@@ -152,6 +153,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 			'user_display_name',
 			'user_first_name',
 			'user_last_name',
+			'user_full_name',
 			'user_email',
 		);
 	}
@@ -313,6 +315,9 @@ class EPC_Module_MemberPress extends EPC_Module {
 			}
 		}
 
+		$first = (string) get_user_meta( (int) $usr->ID, 'first_name', true );
+		$last  = (string) get_user_meta( (int) $usr->ID, 'last_name', true );
+
 		return array(
 			'membership_title'   => $product_id > 0 ? $this->get_entity_label( $product_id ) : '',
 			'membership_expires' => $membership_ts > 0 ? wp_date( get_option( 'date_format' ), $membership_ts ) : '',
@@ -320,8 +325,9 @@ class EPC_Module_MemberPress extends EPC_Module {
 			'trial_end_date'     => $trial_ts > 0 ? wp_date( get_option( 'date_format' ), $trial_ts ) : '',
 			'card_expiry_date'   => $card_ts > 0 ? wp_date( get_option( 'date_format' ), $card_ts ) : '',
 			'user_display_name'  => (string) $usr->display_name,
-			'user_first_name'    => (string) get_user_meta( (int) $usr->ID, 'first_name', true ),
-			'user_last_name'     => (string) get_user_meta( (int) $usr->ID, 'last_name', true ),
+			'user_first_name'    => $first,
+			'user_last_name'     => $last,
+			'user_full_name'     => epc_format_user_full_name( $first, $last, (string) $usr->display_name ),
 			'user_email'         => (string) $usr->user_email,
 		);
 	}
@@ -812,11 +818,15 @@ class EPC_Module_MemberPress extends EPC_Module {
 			$expires = mysql2date( get_option( 'date_format' ), $txn->expires_at );
 		}
 
+		$first = (string) get_user_meta( $user_id, 'first_name', true );
+		$last  = (string) get_user_meta( $user_id, 'last_name', true );
+
 		$values = array(
 			'user_display_name' => $user->display_name,
 			'user_email'        => $user->user_email,
-			'user_first_name'   => get_user_meta( $user_id, 'first_name', true ),
-			'user_last_name'    => get_user_meta( $user_id, 'last_name', true ),
+			'user_first_name'   => $first,
+			'user_last_name'    => $last,
+			'user_full_name'    => epc_format_user_full_name( $first, $last, $user->display_name ),
 			'membership_id'     => (string) $membership_id,
 			'membership_title'  => (string) $product->post_title,
 			'membership_status' => (string) $txn->status,
