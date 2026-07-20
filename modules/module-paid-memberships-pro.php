@@ -304,7 +304,7 @@ class EPC_Module_Paid_Memberships_Pro extends EPC_Module {
 
 		return array(
 			'level_name'        => $this->get_entity_label( (int) $row->membership_id ),
-			'expire_date'       => $expiry_ts > 0 ? wp_date( get_option( 'date_format' ), $expiry_ts ) : '',
+			'expire_date'       => epc_format_pass_expiry_timestamp( $expiry_ts ),
 			'user_display_name' => $user ? (string) $user->display_name : '',
 			'user_email'        => $user ? (string) $user->user_email : '',
 		);
@@ -615,7 +615,7 @@ class EPC_Module_Paid_Memberships_Pro extends EPC_Module {
 			'level_name'        => $this->get_entity_label( $level_id ),
 			'membership_status' => $this->normalize_status( isset( $row->status ) ? (string) $row->status : '' ),
 			'start_date'        => $this->format_db_date( isset( $row->startdate ) ? (string) $row->startdate : '' ),
-			'expire_date'       => $this->format_db_date( isset( $row->enddate ) ? (string) $row->enddate : '' ),
+			'expire_date'       => epc_format_pass_expiry_datetime( isset( $row->enddate ) ? (string) $row->enddate : '' ),
 			'order_id'          => $order ? (string) $order['id'] : '',
 			'order_code'        => $order ? (string) $order['code'] : '',
 		);

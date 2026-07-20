@@ -20,6 +20,46 @@ EpassCard ships with built-in integration modules. Each extends the same workflo
 - Syncs on level assign / checkout; revoke on cancel or expire (configurable per status).
 - **Push reminders:** Before level expires (EpassCard daily cron + **Days before** setting).
 
+## Simple Membership
+
+**Menu:** EpassCard → Simple Membership
+
+- Maps **membership levels** to pass templates.
+- Syncs on registration, level change, payment upgrade/renewal, and account-state updates.
+- **Push reminders:** Before membership expires (EpassCard daily cron + **Days before** setting).
+
+## Event Tickets
+
+**Menu:** EpassCard → Event Tickets
+
+- Maps **tickets** (RSVP, Tickets Commerce, Woo tickets) to pass templates.
+- Syncs when attendees are created or updated; revoke on delete (configurable per status).
+- **Push reminders:** Before event starts (EpassCard daily cron + **Days before** setting).
+
+## Events Manager
+
+**Menu:** EpassCard → Events Manager
+
+- Maps **events** to pass templates.
+- Syncs on booking add / status change; revoke on cancel, reject, or delete (configurable).
+- **Push reminders:** Before event starts (EpassCard daily cron + **Days before** setting).
+
+## PW Gift Cards
+
+**Menu:** EpassCard → PW Gift Cards
+
+- Maps **PW gift card products** to pass templates.
+- Syncs when cards are created, balance changes, or cards are reactivated; revoke on deactivate / expire (configurable).
+- **Push reminders:** Before gift card expires (EpassCard daily cron + **Days before** setting).
+
+## YITH Gift Cards
+
+**Menu:** EpassCard → YITH Gift Cards
+
+- Maps **YITH gift card products** to pass templates.
+- Syncs on card generation / save and balance updates; revoke on disable, dismiss, trash, or expire (configurable).
+- **Push reminders:** Before gift card expires (EpassCard daily cron + **Days before** setting).
+
 ## WooCommerce Subscriptions
 
 **Menu:** EpassCard → WooCommerce Subscriptions

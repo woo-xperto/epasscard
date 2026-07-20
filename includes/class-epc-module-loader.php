@@ -34,6 +34,11 @@ class EPC_Module_Loader {
 				'woocommerce-subscriptions' => 'module-woocommerce-subscriptions.php',
 				'ultimate-membership-pro'   => 'module-ultimate-membership-pro.php',
 				'paid-memberships-pro'      => 'module-paid-memberships-pro.php',
+				'simple-membership'         => 'module-simple-membership.php',
+				'event-tickets'             => 'module-event-tickets.php',
+				'events-manager'            => 'module-events-manager.php',
+				'pw-gift-cards'             => 'module-pw-gift-cards.php',
+				'yith-gift-cards'           => 'module-yith-gift-cards.php',
 			)
 		);
 	}
@@ -105,6 +110,11 @@ class EPC_Module_Loader {
 				'woocommerce-subscriptions' => 'EPC_Module_WooCommerce_Subscriptions',
 				'ultimate-membership-pro'   => 'EPC_Module_Ultimate_Membership_Pro',
 				'paid-memberships-pro'      => 'EPC_Module_Paid_Memberships_Pro',
+				'simple-membership'         => 'EPC_Module_Simple_Membership',
+				'event-tickets'             => 'EPC_Module_Event_Tickets',
+				'events-manager'            => 'EPC_Module_Events_Manager',
+				'pw-gift-cards'             => 'EPC_Module_PW_Gift_Cards',
+				'yith-gift-cards'           => 'EPC_Module_YITH_Gift_Cards',
 			)
 		);
 

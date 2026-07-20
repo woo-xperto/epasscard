@@ -388,7 +388,7 @@ class EPC_Module_WooCommerce_Subscriptions extends EPC_Module {
 			'subscription_id'     => (string) $subscription->get_id(),
 			'next_payment_date'   => $next ? mysql2date( get_option( 'date_format' ), $next ) : '',
 			'trial_end_date'      => $trial_end ? mysql2date( get_option( 'date_format' ), $trial_end ) : '',
-			'end_date'            => $end ? mysql2date( get_option( 'date_format' ), $end ) : '',
+			'end_date'            => epc_format_pass_expiry_datetime( $end ? (string) $end : '' ),
 			'user_full_name'      => $user ? $this->get_user_full_name( $first_name, $last_name, $user->display_name ) : '',
 			'user_first_name'     => $first_name,
 			'user_last_name'      => $last_name,
@@ -860,7 +860,7 @@ class EPC_Module_WooCommerce_Subscriptions extends EPC_Module {
 			'product_name'        => $product_name,
 			'start_date'          => $start ? mysql2date( get_option( 'date_format' ), $start ) : '',
 			'next_payment_date'   => $next ? mysql2date( get_option( 'date_format' ), $next ) : '',
-			'end_date'            => $end ? mysql2date( get_option( 'date_format' ), $end ) : '',
+			'end_date'            => epc_format_pass_expiry_datetime( $end ? (string) $end : '' ),
 			'order_id'            => (string) $subscription->get_parent_id(),
 		);
 

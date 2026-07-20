@@ -320,7 +320,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 
 		return array(
 			'membership_title'   => $product_id > 0 ? $this->get_entity_label( $product_id ) : '',
-			'membership_expires' => $membership_ts > 0 ? wp_date( get_option( 'date_format' ), $membership_ts ) : '',
+			'membership_expires' => epc_format_pass_expiry_timestamp( $membership_ts ),
 			'next_payment_date'  => $renew_ts > 0 ? wp_date( get_option( 'date_format' ), $renew_ts ) : '',
 			'trial_end_date'     => $trial_ts > 0 ? wp_date( get_option( 'date_format' ), $trial_ts ) : '',
 			'card_expiry_date'   => $card_ts > 0 ? wp_date( get_option( 'date_format' ), $card_ts ) : '',
@@ -813,10 +813,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 		}
 
 		$product = new MeprProduct( $product_id );
-		$expires = '';
-		if ( ! empty( $txn->expires_at ) && '0000-00-00 00:00:00' !== $txn->expires_at ) {
-			$expires = mysql2date( get_option( 'date_format' ), $txn->expires_at );
-		}
+		$expires = epc_format_pass_expiry_datetime( ! empty( $txn->expires_at ) ? (string) $txn->expires_at : '' );
 
 		$first = (string) get_user_meta( $user_id, 'first_name', true );
 		$last  = (string) get_user_meta( $user_id, 'last_name', true );

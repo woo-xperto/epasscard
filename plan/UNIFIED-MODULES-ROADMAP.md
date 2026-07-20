@@ -13,12 +13,12 @@
 
 | # | Category | Plugin | .org / signal | Module slug (proposed) | Why this pair |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Membership | **Paid Memberships Pro** | ~100,000+ (free core) | `paid-memberships-pro` | **Shipped (in progress QA)** — module file + loader |
-| 2 | Membership | **Simple Membership** | **40,000+** | `simple-membership` | High installs, simple member lifecycle → membership card |
-| 3 | Events | **Event Tickets** (The Events Calendar) | **90,000+** | `event-tickets` | Dominant free tickets plugin; QR ticket = best demo |
-| 4 | Events | **Events Manager** | **70,000+** | `events-manager` | Large registration/booking base; complementary to TEC |
-| 5 | Gift cards | **PW WooCommerce Gift Cards** | **20,000+** | `pw-gift-cards` | Most popular WC gift-card free plugin |
-| 6 | Gift cards | **YITH WooCommerce Gift Cards** | **10,000+** | `yith-gift-cards` | Strong free→pro brand; second major WC gift-card stack |
+| 1 | Membership | **Paid Memberships Pro** | ~100,000+ (free core) | `paid-memberships-pro` | **Shipped** — module + loader |
+| 2 | Membership | **Simple Membership** | **40,000+** | `simple-membership` | **Shipped** — module + loader (QA pending) |
+| 3 | Events | **Event Tickets** (The Events Calendar) | **90,000+** | `event-tickets` | **Shipped** — ticket mapping; RSVP / Tickets Commerce / Woo hooks |
+| 4 | Events | **Events Manager** | **70,000+** | `events-manager` | **Shipped** — event mapping; booking status hooks |
+| 5 | Gift cards | **PW WooCommerce Gift Cards** | **20,000+** | `pw-gift-cards` | **Shipped** — product mapping; create/balance/deactivate hooks |
+| 6 | Gift cards | **YITH WooCommerce Gift Cards** | **10,000+** | `yith-gift-cards` | **Shipped** — product mapping; generation + status/balance hooks |
 
 **Already shipping (unchanged):** `memberpress`, `ultimate-membership-pro`, `woocommerce-subscriptions`.
 
@@ -31,6 +31,10 @@
 - Prefer **same `EPC_Module` pattern** as today (no full Pass Studio rewrite required to ship these six).
 - Optionally add a thin `epc_issue_pass()` facade while building (low risk, helps later Phase 0).
 - Full Pass Studio + Woo Product → Pass remains Phase 0 on the long-term plan; do not block these six modules on it.
+
+**Global pass-field rule — lifetime expiry**
+
+When an **expiry / end date** source field is mapped but the source has no real end (lifetime membership, until cancelled, empty event end, `0000-00-00`, SWPM `noexpire`, MemberPress lifetime sentinel), always send **now + 99 years** via `epc_format_pass_expiry_timestamp()` / `epc_format_pass_expiry_datetime()` in `epc-dependencies.php`. Never send blank or “No expiry” text to the pass API for mapped expiry fields.
 
 **Suggested build order inside the next version**
 
@@ -450,8 +454,8 @@ Recommendation: keep **Pass Studio + Woo bridge + PHP/REST in core**; ship **pop
 
 | Status | Plugins |
 | --- | --- |
-| Shipped | MemberPress, Ultimate Membership Pro, WooCommerce Subscriptions |
-| **Next version (locked)** | **Paid Memberships Pro, Simple Membership, Event Tickets, Events Manager, PW Gift Cards, YITH Gift Cards** |
+| Shipped | MemberPress, Ultimate Membership Pro, WooCommerce Subscriptions, Paid Memberships Pro, Simple Membership, Event Tickets, Events Manager, PW Gift Cards, YITH Gift Cards |
+| **Next version remaining** | *(none — locked six complete)* |
 | Phase 0 (foundation, parallel/later) | Pass Intent API, REST, Pass Studio, Woo Product → Pass |
 | Phase 1 remainder | Paid Member Subscriptions, Ultimate Member, Restrict Content Pro |
 | Phase 2 remainder | Amelia, Tickera, Bookly |

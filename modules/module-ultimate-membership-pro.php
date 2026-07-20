@@ -309,7 +309,7 @@ class EPC_Module_Ultimate_Membership_Pro extends EPC_Module {
 
 		return array(
 			'level_name'        => $this->get_entity_label( (int) $row->level_id ),
-			'expire_date'       => $expiry_ts > 0 ? wp_date( get_option( 'date_format' ), $expiry_ts ) : '',
+			'expire_date'       => epc_format_pass_expiry_timestamp( $expiry_ts ),
 			'user_display_name' => $user ? (string) $user->display_name : '',
 			'user_email'        => $user ? (string) $user->user_email : '',
 		);
@@ -744,7 +744,7 @@ class EPC_Module_Ultimate_Membership_Pro extends EPC_Module {
 			'level_name'        => $level_name,
 			'membership_status' => $status,
 			'start_date'        => $this->format_db_date( isset( $row->start_time ) ? (string) $row->start_time : '' ),
-			'expire_date'       => $this->format_db_date( isset( $row->expire_time ) ? (string) $row->expire_time : '' ),
+			'expire_date'       => epc_format_pass_expiry_datetime( isset( $row->expire_time ) ? (string) $row->expire_time : '' ),
 			'transaction_id'    => $this->get_latest_transaction_id( $user_id, $level_id ),
 		);
 
