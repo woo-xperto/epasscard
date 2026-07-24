@@ -27,14 +27,21 @@
 			<article class="doc-content">
 				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Getting started</nav>
 				<h1>Getting started</h1>
-				<p class="doc-lead">Install EpassCard, connect to your account, and start issuing wallet passes for memberships and subscriptions.</p>
+				<p class="doc-lead">Install EpassCard, connect to your account, and start issuing wallet passes for memberships, events, and gift cards.</p>
 
 				<h2>Requirements</h2>
 				<ul>
 					<li>WordPress 6.5+</li>
 					<li>PHP 8.1+</li>
 					<li>An <a href="https://app.epasscard.com" target="_blank" rel="noopener">EpassCard</a> account with at least one pass template</li>
-					<li>One supported plugin: <strong>MemberPress</strong>, <strong>WooCommerce Subscriptions</strong>, or <strong>Ultimate Membership Pro</strong></li>
+					<li>At least one supported plugin:
+						<ul>
+							<li><strong>Membership:</strong> MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro</li>
+							<li><strong>Subscriptions:</strong> WooCommerce Subscriptions</li>
+							<li><strong>Events:</strong> Event Tickets, Events Manager</li>
+							<li><strong>Gift cards:</strong> PW WooCommerce Gift Cards, YITH WooCommerce Gift Cards</li>
+						</ul>
+					</li>
 				</ul>
 
 				<h2>Installation</h2>
@@ -48,9 +55,9 @@
 				<ol class="steps">
 					<li><strong>Connect</strong> — Paste your API key or sign in with EpassCard credentials.</li>
 					<li><strong>Enable integrations</strong> — Check the plugins you use and save.</li>
-					<li><strong>Open an integration</strong> — e.g. <strong>EpassCard → MemberPress</strong>.</li>
-					<li><strong>Map templates</strong> — Choose a pass template and map fields per plan.</li>
-					<li><strong>Issue passes</strong> — Automatic on subscribe, or manual via <strong>Create pass</strong>.</li>
+					<li><strong>Open an integration</strong> — e.g. <strong>EpassCard → MemberPress</strong> or <strong>EpassCard → Event Tickets</strong>.</li>
+					<li><strong>Map templates</strong> — Choose a pass template and map fields per product, level, ticket, event, or gift card.</li>
+					<li><strong>Issue passes</strong> — Automatic on subscribe / booking / gift card issue, or manual via <strong>Create pass</strong>.</li>
 				</ol>
 
 				<div class="callout">
@@ -60,10 +67,10 @@
 
 				<h2>What happens after setup</h2>
 				<ul>
-					<li>Qualifying members get a wallet pass via the API; the link is stored locally.</li>
-					<li>Profile changes can update existing passes automatically.</li>
-					<li>Optional reminder pushes use your membership plugin’s native timing.</li>
-					<li>Pass links can be emailed, included in order emails, or viewed in My Account.</li>
+					<li>Qualifying records get a wallet pass via the API; the link is stored locally.</li>
+					<li>Status changes can update or revoke existing passes (per integration).</li>
+					<li>Optional reminder pushes use native timing (MemberPress, WCS) or EpassCard’s daily cron (other modules).</li>
+					<li>Pass links can be emailed, included in order emails, or viewed in My Account where supported.</li>
 				</ul>
 
 				<div class="doc-pager"></div>

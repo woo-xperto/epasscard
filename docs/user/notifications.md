@@ -4,18 +4,18 @@ EpassCard sends **wallet push notifications** to members who have an active pass
 
 ## Where to configure
 
-On each integration page (**EpassCard → MemberPress**, **WooCommerce Subscriptions**, or **Ultimate Membership Pro**), scroll to **Push notification copy**.
+On each integration page (**EpassCard → [module]**), scroll to **Push notification copy**.
 
 | Column | Purpose |
 |--------|---------|
 | **Push enabled** | Turn a reminder type on or off |
-| **Days before** *(UMP only)* | How many days before expiry to send (1–90) |
+| **Days before** *(cron modules)* | How many days before the event/expiry to send (1–90) |
 | **Push title** | Short title (plain text) |
 | **Push message** | Body text (plain text) |
 
 Click **Save push notification settings**, then use **Send test notification** to verify.
 
-Placeholders like `{membership_title}` or `{product_name}` are replaced with live member data. HTML from email templates is **not** used — wallet pushes are plain text only.
+Placeholders like `{membership_title}` or `{product_name}` are replaced with live data. HTML from email templates is **not** used — wallet pushes are plain text only.
 
 ## How timing works (by integration)
 
@@ -46,9 +46,19 @@ Use the **Reminder timing** link on the MemberPress integration page to open Mem
 
 A push is only sent if WCS would also send the customer email for that notification.
 
-### Ultimate Membership Pro — EpassCard daily cron
+### Cron-based modules — EpassCard daily cron
 
-UMP has no built-in reminder emails for passes. EpassCard runs a **daily cron** (`epc_pass_notifications_event`) that checks active UMP passes and sends **Before membership level expires** when the expiry date falls within the configured **Days before** window.
+These integrations have no native wallet reminder schedule. EpassCard runs a **daily cron** (`epc_pass_notifications_event`) that checks active passes and sends within the configured **Days before** window.
+
+| Integration | Reminder type | Trigger date |
+|-------------|---------------|--------------|
+| Ultimate Membership Pro | Before membership level expires | Level expiry |
+| Paid Memberships Pro | Before membership level expires | Level end date |
+| Simple Membership | Before membership expires | Member expiry |
+| Event Tickets | Before event starts | Event start |
+| Events Manager | Before event starts | Event start |
+| PW Gift Cards | Before gift card expires | Card expiration |
+| YITH Gift Cards | Before gift card expires | Card expiration |
 
 Each pass receives at most **one** push per reminder type and lead window (tracked in pass meta).
 
@@ -83,9 +93,25 @@ Title and message from your settings are combined into a single `message` field 
 
 `{product_name}`, `{subscription_id}`, `{next_payment_date}`, `{trial_end_date}`, `{end_date}`, `{user_full_name}`, `{user_first_name}`, `{user_last_name}`, `{user_email}`
 
-### Ultimate Membership Pro
+### Ultimate Membership Pro / Paid Memberships Pro
 
 `{level_name}`, `{expire_date}`, `{user_display_name}`, `{user_email}`
+
+### Simple Membership
+
+`{level_name}`, `{expire_date}`, `{user_display_name}`, `{user_full_name}`, `{user_email}`
+
+### Event Tickets
+
+`{event_title}`, `{event_start}`, `{ticket_name}`, `{user_full_name}`, `{user_email}`
+
+### Events Manager
+
+`{event_name}`, `{event_start}`, `{booking_id}`, `{user_full_name}`, `{user_email}`
+
+### PW Gift Cards / YITH Gift Cards
+
+`{product_name}`, `{card_number}`, `{expire_date}`, `{balance_formatted}`, `{user_full_name}`, `{user_email}`
 
 ## Send test notification
 
@@ -105,6 +131,6 @@ Check **EpassCard → API Log** if the push fails. Common issues: API key not co
 
 ## Duplicate prevention
 
-Scheduled UMP notifications store a `notifications_sent` record in each pass row’s `meta` JSON so the same reminder is not sent twice.
+Scheduled cron notifications store a `notifications_sent` record in each pass row’s `meta` JSON so the same reminder is not sent twice.
 
 MemberPress and WCS rely on their own reminder/notification scheduling; EpassCard sends one push per fired reminder event.

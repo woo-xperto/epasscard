@@ -3,11 +3,11 @@
 ## Overview
 
 ```
-WordPress (membership plugin)
+WordPress (membership / events / gift cards plugin)
         │
         ▼
   EPC_Module (integration)
-        │  hooks: subscribe, renew, profile update, reminders
+    │  hooks: create, renew, status change, reminders
         ▼
   EPC_Pass_Service::sync_pass()
         │  mapping + source values → API payload
@@ -44,10 +44,10 @@ WordPress (membership plugin)
 
 A pass row is keyed by:
 
-- `module` — slug (e.g. `memberpress`)
-- `source_id` — integration-specific record id (subscription id, `ihc_user_levels.id`, etc.)
-- `entity_id` — product/level id
-- `user_id` — WordPress user
+- `module` — slug (e.g. `memberpress`, `event_tickets`, `pw_gift_cards`)
+- `source_id` — integration-specific record id (subscription id, attendee id, booking id, gift card id, etc.)
+- `entity_id` — product/level/ticket/event id
+- `user_id` — WordPress user (when available)
 
 ## Prefixes
 
@@ -67,8 +67,14 @@ epasscard/
 │   └── epc-dependencies.php
 ├── modules/
 │   ├── module-memberpress.php
+│   ├── module-paid-memberships-pro.php
+│   ├── module-simple-membership.php
+│   ├── module-ultimate-membership-pro.php
 │   ├── module-woocommerce-subscriptions.php
-│   └── module-ultimate-membership-pro.php
+│   ├── module-event-tickets.php
+│   ├── module-events-manager.php
+│   ├── module-pw-gift-cards.php
+│   └── module-yith-gift-cards.php
 ├── admin/
 │   ├── js/
 │   ├── css/
@@ -92,7 +98,8 @@ Register custom modules on `plugins_loaded` priority **10** or earlier.
 ## Push notification flow
 
 ```
-MemberPress / WCS reminder hook          UMP daily cron
+MemberPress / WCS reminder hook     Daily cron (UMP, PMPro, Simple Membership,
+        │                           Event Tickets, Events Manager, PW, YITH)
         │                                        │
         ▼                                        ▼
   EPC_Module::build_push_notification_copy()

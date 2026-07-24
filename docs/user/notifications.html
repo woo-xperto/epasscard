@@ -27,7 +27,7 @@
 			<article class="doc-content">
 				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="getting-started.html">User Guide</a><span>/</span> Push notifications</nav>
 				<h1>Push notifications</h1>
-				<p class="doc-lead">Send wallet push reminders to members with active passes. You configure <strong>what</strong> the push says; <strong>when</strong> it fires depends on the integration.</p>
+				<p class="doc-lead">Send wallet push reminders to holders with active passes. You configure <strong>what</strong> the push says; <strong>when</strong> it fires depends on the integration.</p>
 
 				<h2>Admin settings</h2>
 				<p>On each integration page, open <strong>Push notification copy</strong>:</p>
@@ -36,7 +36,7 @@
 						<thead><tr><th>Field</th><th>Purpose</th></tr></thead>
 						<tbody>
 							<tr><td>Push enabled</td><td>Enable/disable each reminder type</td></tr>
-							<tr><td>Days before</td><td>UMP only — lead time before expiry (1–90 days)</td></tr>
+							<tr><td>Days before</td><td>Cron modules — lead time before expiry/event (1–90 days)</td></tr>
 							<tr><td>Push title / message</td><td>Plain-text copy with placeholders</td></tr>
 						</tbody>
 					</table>
@@ -66,9 +66,19 @@
 						</ul>
 					</div>
 					<div class="integration-card">
-						<h3>Ultimate Membership Pro</h3>
+						<h3>UMP / PMPro / Simple Membership</h3>
 						<div class="meta">EpassCard daily cron</div>
-						<p>Checks active passes once per day. Sends <strong>Before membership level expires</strong> within the <strong>Days before</strong> window.</p>
+						<p>Checks active passes once per day. Sends <strong>Before membership expires</strong> within the <strong>Days before</strong> window.</p>
+					</div>
+					<div class="integration-card">
+						<h3>Event Tickets / Events Manager</h3>
+						<div class="meta">EpassCard daily cron</div>
+						<p>Sends <strong>Before event starts</strong> when the event start date falls within the configured lead window.</p>
+					</div>
+					<div class="integration-card">
+						<h3>PW / YITH Gift Cards</h3>
+						<div class="meta">EpassCard daily cron</div>
+						<p>Sends <strong>Before gift card expires</strong> when the card expiration falls within the <strong>Days before</strong> window.</p>
 					</div>
 				</div>
 
@@ -85,7 +95,11 @@ X-Request-Origin: https://yoursite.com
 				<h2>Placeholders</h2>
 				<p><strong>MemberPress:</strong> <code>{membership_title}</code> <code>{membership_expires}</code> <code>{next_payment_date}</code> <code>{trial_end_date}</code> <code>{card_expiry_date}</code> <code>{user_*}</code></p>
 				<p><strong>WCS:</strong> <code>{product_name}</code> <code>{subscription_id}</code> <code>{next_payment_date}</code> <code>{trial_end_date}</code> <code>{end_date}</code> <code>{user_*}</code></p>
-				<p><strong>UMP:</strong> <code>{level_name}</code> <code>{expire_date}</code> <code>{user_display_name}</code> <code>{user_email}</code></p>
+				<p><strong>UMP / PMPro:</strong> <code>{level_name}</code> <code>{expire_date}</code> <code>{user_display_name}</code> <code>{user_email}</code></p>
+				<p><strong>Simple Membership:</strong> <code>{level_name}</code> <code>{expire_date}</code> <code>{user_display_name}</code> <code>{user_full_name}</code> <code>{user_email}</code></p>
+				<p><strong>Event Tickets:</strong> <code>{event_title}</code> <code>{event_start}</code> <code>{ticket_name}</code> <code>{user_full_name}</code> <code>{user_email}</code></p>
+				<p><strong>Events Manager:</strong> <code>{event_name}</code> <code>{event_start}</code> <code>{booking_id}</code> <code>{user_full_name}</code> <code>{user_email}</code></p>
+				<p><strong>PW / YITH Gift Cards:</strong> <code>{product_name}</code> <code>{card_number}</code> <code>{expire_date}</code> <code>{balance_formatted}</code> <code>{user_*}</code></p>
 
 				<h2>Send test notification</h2>
 				<ol class="steps">

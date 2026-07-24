@@ -18,7 +18,7 @@ Markdown sources remain in this folder for editing and version control.
 |-------|-------------|
 | [Getting started](user/getting-started.md) | Install, connect, enable integrations |
 | [Connection](user/connection.md) | API key, integrations, pass email settings |
-| [Integrations](user/integrations.md) | MemberPress, WooCommerce Subscriptions, UMP |
+| [Integrations](user/integrations.md) | All modules: membership, WCS, events, gift cards |
 | [Template mapping](user/mapping.md) | Map membership data to pass fields |
 | [Passes & email](user/passes-and-email.md) | Issue passes, send links, member access |
 | [Push notifications](user/notifications.md) | Wallet push reminders, timing, test tool |

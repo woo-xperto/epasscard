@@ -1,10 +1,10 @@
 === EpassCard (Google Wallet, Apple Wallet, and more) ===
-Contributors: wooxperto
+Contributors: wooxperto, hasan350
 Tags: Apple Wallet, Google Wallet, PKPass, Wallet Pass, WooCommerce, Membership, Loyalty, Event Tickets, Digital Wallet
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@ Unlock the power of digital wallet passes for your WordPress site with EpassCard
 **EpassCard** is a **WordPress wallet pass plugin** that connects your site to [EpassCard](https://epasscard.com/) and automatically issues **Apple Wallet** and **Google Wallet** passes when members subscribe, renew, or when their data changes.
 
 Design and create customized digital wallet passes, including membership cards, loyalty cards, event tickets, and more, using EpassCard's intuitive pass template system, and seamlessly integrate them with your WordPress site.
+
+[**Documentation**](https://epasscard.com/wp-plugin/docs/) | [**USER GUIDE**](https://epasscard.com/wp-plugin/docs/user/getting-started) | [**DEVELOPER GUIDE**](https://epasscard.com/wp-plugin/docs/developer/architecture)
 
 = Wallet pass generator and management for WordPress =
 

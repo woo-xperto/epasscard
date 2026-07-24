@@ -55,10 +55,17 @@ EPC_Pass_Notifications::maybe_send_for_event( $pass_row, $type, $rule, $event_ts
 						<tbody>
 							<tr><td>MemberPress</td><td><code>mepr-reminder-*</code> hooks</td></tr>
 							<tr><td>WooCommerce Subscriptions</td><td><code>woocommerce_scheduled_subscription_customer_notification_*</code></td></tr>
-							<tr><td>Ultimate Membership Pro</td><td>Daily cron <code>epc_pass_notifications_event</code></td></tr>
+							<tr><td>Ultimate Membership Pro</td><td>Daily cron — <code>before_level_expire</code></td></tr>
+							<tr><td>Paid Memberships Pro</td><td>Daily cron — <code>before_level_expire</code></td></tr>
+							<tr><td>Simple Membership</td><td>Daily cron — <code>before_level_expire</code></td></tr>
+							<tr><td>Event Tickets</td><td>Daily cron — <code>before_event_start</code></td></tr>
+							<tr><td>Events Manager</td><td>Daily cron — <code>before_event_start</code></td></tr>
+							<tr><td>PW Gift Cards</td><td>Daily cron — <code>before_card_expire</code></td></tr>
+							<tr><td>YITH Gift Cards</td><td>Daily cron — <code>before_card_expire</code></td></tr>
 						</tbody>
 					</table>
 				</div>
+				<p>Cron modules implement <code>process_scheduled_notifications()</code> and run via <code>epc_pass_notifications_event</code>.</p>
 
 				<h2>Hooks</h2>
 				<div class="doc-table-wrap">

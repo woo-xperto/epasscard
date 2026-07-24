@@ -55,11 +55,21 @@ MemberPress: `mepr-reminder-*` via `maybe_send_reminder_push()`.
 
 WCS: `woocommerce_scheduled_subscription_customer_notification_*` via `on_wcs_customer_notification()`.
 
-### Scheduled cron (UMP)
+### Scheduled cron (lead-days modules)
 
-Implement `process_scheduled_notifications()` on the module. Registered via `EPC_Pass_Notifications::run()` daily cron.
+Implement `process_scheduled_notifications()` on the module. Registered via `EPC_Pass_Notifications::run()` daily cron (`epc_pass_notifications_event`).
 
 Uses `maybe_send_for_event()` with a lead-days window and `notifications_sent` meta dedupe.
+
+| Module | Notification type | Event timestamp |
+|--------|-------------------|-----------------|
+| Ultimate Membership Pro | `before_level_expire` | Level expiry |
+| Paid Memberships Pro | `before_level_expire` | Level end date |
+| Simple Membership | `before_level_expire` | Member expiry |
+| Event Tickets | `before_event_start` | Event start |
+| Events Manager | `before_event_start` | Event start |
+| PW Gift Cards | `before_card_expire` | Card expiration |
+| YITH Gift Cards | `before_card_expire` | Card expiration |
 
 ## Stored options
 
@@ -71,7 +81,7 @@ array(
         'enabled' => true,
         'title'   => '...',
         'message' => '...',
-        // 'days' => 7  (UMP / cron modules only)
+        // 'days' => 7  (cron / lead-days modules only)
     ),
 )
 ```

@@ -27,14 +27,14 @@
 			<article class="doc-content">
 				<nav class="doc-breadcrumb"><a href="../index.html">Docs</a><span>/</span><a href="architecture.html">Developer</a><span>/</span> Architecture</nav>
 				<h1>Architecture</h1>
-				<p class="doc-lead">How the EpassCard WordPress plugin connects membership data to the EpassCard API.</p>
+				<p class="doc-lead">How the EpassCard WordPress plugin connects membership, event, and gift card data to the EpassCard API.</p>
 
 				<h2>Data flow</h2>
-				<div class="flow-diagram">WordPress (membership plugin)
+				<div class="flow-diagram">WordPress (membership / events / gift cards)
         │
         ▼
   EPC_Module (integration)
-        │  hooks: subscribe, renew, profile, reminders
+        │  hooks: create, renew, status, reminders
         ▼
   EPC_Pass_Service::sync_pass()
         │  mapping + source values → API payload
@@ -66,10 +66,23 @@
 
 				<h2>Pass identity</h2>
 				<ul>
-					<li><code>module</code> — slug (e.g. <code>memberpress</code>)</li>
-					<li><code>source_id</code> — integration record id</li>
-					<li><code>entity_id</code> — product/level id</li>
-					<li><code>user_id</code> — WordPress user</li>
+					<li><code>module</code> — slug (e.g. <code>memberpress</code>, <code>event_tickets</code>, <code>pw_gift_cards</code>)</li>
+					<li><code>source_id</code> — integration record id (subscription, attendee, booking, gift card, etc.)</li>
+					<li><code>entity_id</code> — product / level / ticket / event id</li>
+					<li><code>user_id</code> — WordPress user (when available)</li>
+				</ul>
+
+				<h2>Built-in modules</h2>
+				<ul>
+					<li><code>modules/module-memberpress.php</code></li>
+					<li><code>modules/module-paid-memberships-pro.php</code></li>
+					<li><code>modules/module-simple-membership.php</code></li>
+					<li><code>modules/module-ultimate-membership-pro.php</code></li>
+					<li><code>modules/module-woocommerce-subscriptions.php</code></li>
+					<li><code>modules/module-event-tickets.php</code></li>
+					<li><code>modules/module-events-manager.php</code></li>
+					<li><code>modules/module-pw-gift-cards.php</code></li>
+					<li><code>modules/module-yith-gift-cards.php</code></li>
 				</ul>
 
 				<h2>Prefixes</h2>
@@ -80,7 +93,8 @@
 				<p>Register custom modules on <code>plugins_loaded</code> priority <strong>10</strong> or earlier.</p>
 
 				<h2>Push notification flow</h2>
-				<div class="flow-diagram">MemberPress / WCS reminder hook     UMP daily cron
+				<div class="flow-diagram">MemberPress / WCS reminder hook     Daily cron (UMP, PMPro, Simple Membership,
+        │                           Event Tickets, Events Manager, PW, YITH)
         │                                  │
         ▼                                  ▼
   build_push_notification_copy()
