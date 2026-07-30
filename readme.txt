@@ -4,7 +4,7 @@ Tags: Apple Wallet, Google Wallet, PKPass, Wallet Pass, WooCommerce, Membership,
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,6 +179,9 @@ Yes. From the admin **Issued passes** table or member screens, you can create a 
 3. Issued passes — searchable list of wallet passes and delivery links.
 
 == Changelog ==
+= 1.0.3 =
+* Pass link email setup fixed
+* Woocommerce Fetal error fixed
 
 = 1.0.2 =
 * New integration: Paid Memberships Pro (level mapping, status-based pass behavior, expire push).
