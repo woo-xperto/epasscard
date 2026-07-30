@@ -58,9 +58,9 @@ class EPC_Frontend {
 
 		$should_load = false;
 
-		if ( is_account_page() ) {
-			$should_load = true;
-		}
+		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+            $should_load = true;
+        }
 
 		if ( is_singular() ) {
 			$post = get_post();
