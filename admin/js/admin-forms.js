@@ -14,6 +14,40 @@
 		return null;
 	}
 
+	/**
+	 * Convert a form (or serializeArray result) into a plain object for $.ajax.
+	 * Do not pass $form.serialize() into $.extend — a query string is treated as
+	 * character indices and field names are lost.
+	 *
+	 * @param {JQuery|Array|{}} source Form jQuery object, serializeArray(), or object.
+	 * @return {Object}
+	 */
+	function formData( source ) {
+		if ( ! source ) {
+			return {};
+		}
+
+		if ( source.jquery || Array.isArray( source ) ) {
+			var pairs = source.jquery ? source.serializeArray() : source;
+			var data = {};
+
+			$.each( pairs, function ( _, pair ) {
+				if ( Object.prototype.hasOwnProperty.call( data, pair.name ) ) {
+					if ( ! Array.isArray( data[ pair.name ] ) ) {
+						data[ pair.name ] = [ data[ pair.name ] ];
+					}
+					data[ pair.name ].push( pair.value );
+				} else {
+					data[ pair.name ] = pair.value;
+				}
+			} );
+
+			return data;
+		}
+
+		return typeof source === 'object' ? source : {};
+	}
+
 	function post( action, data ) {
 		var cfg = getConfig();
 		if ( ! cfg ) {
@@ -24,7 +58,7 @@
 			url: cfg.ajaxUrl,
 			method: 'POST',
 			dataType: 'json',
-			data: $.extend( { action: action, nonce: cfg.nonce }, data || {} ),
+			data: $.extend( { action: action, nonce: cfg.nonce }, formData( data ) ),
 		} );
 	}
 
@@ -79,7 +113,7 @@
 
 		setFormLoading( $form, true );
 
-		post( action, $form.serialize() )
+		post( action, $form )
 			.done( function ( resp ) {
 				if ( resp.success ) {
 					var message = ( resp.data && resp.data.message ) || i18n( 'saved', 'Settings saved.' );
@@ -129,7 +163,7 @@
 			}
 
 			var $form = $btn.closest( 'form' );
-			var data = $form.length ? $form.serialize() : {};
+			var data = $form.length ? $form : {};
 
 			$btn.prop( 'disabled', true );
 

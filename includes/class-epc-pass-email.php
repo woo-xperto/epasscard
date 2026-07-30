@@ -52,7 +52,36 @@ class EPC_Pass_Email {
 			$saved = array();
 		}
 
-		return wp_parse_args( $saved, self::get_default_settings() );
+		$defaults = self::get_default_settings();
+		$settings = wp_parse_args( $saved, $defaults );
+
+		// Normalize toggles (supports bool / 1 / "1" from older saves).
+		$settings['auto_on_create']      = self::is_truthy( $settings['auto_on_create'] ?? false );
+		$settings['include_on_wc_order'] = self::is_truthy( $settings['include_on_wc_order'] ?? false );
+
+		// Empty templates fall back to defaults so auto-send never goes out blank.
+		if ( '' === trim( (string) $settings['subject'] ) ) {
+			$settings['subject'] = (string) $defaults['subject'];
+		}
+		if ( '' === trim( (string) $settings['body'] ) ) {
+			$settings['body'] = (string) $defaults['body'];
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Whether a stored setting value is enabled.
+	 *
+	 * @param mixed $value Raw option value.
+	 * @return bool
+	 */
+	private static function is_truthy( $value ) {
+		if ( is_bool( $value ) ) {
+			return $value;
+		}
+
+		return in_array( $value, array( 1, '1', 'true', 'yes', 'on' ), true );
 	}
 
 	/**
@@ -65,16 +94,21 @@ class EPC_Pass_Email {
 			return new WP_Error( 'epc_forbidden', __( 'Permission denied.', 'epasscard' ) );
 		}
 
-		$settings = array(
-			// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified in ajax_save_settings().
-			'auto_on_create'      => ! empty( $_POST['epc_email_auto_on_create'] ),
-			'include_on_wc_order' => ! empty( $_POST['epc_email_include_on_wc_order'] ),
-			'subject'             => isset( $_POST['epc_email_subject'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['epc_email_subject'] ) ) : '',
-			'body'                => isset( $_POST['epc_email_body'] ) ? sanitize_textarea_field( wp_unslash( (string) $_POST['epc_email_body'] ) ) : '',
-			// phpcs:enable WordPress.Security.NonceVerification.Missing
-		);
+		$defaults = self::get_default_settings();
 
-		update_option( self::OPTION, $settings );
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified in ajax_save_settings().
+		$subject = isset( $_POST['epc_email_subject'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['epc_email_subject'] ) ) : '';
+		$body    = isset( $_POST['epc_email_body'] ) ? sanitize_textarea_field( wp_unslash( (string) $_POST['epc_email_body'] ) ) : '';
+
+		$settings = array(
+			'auto_on_create'      => ! empty( $_POST['epc_email_auto_on_create'] ) ? 1 : 0,
+			'include_on_wc_order' => ! empty( $_POST['epc_email_include_on_wc_order'] ) ? 1 : 0,
+			'subject'             => '' !== trim( $subject ) ? $subject : (string) $defaults['subject'],
+			'body'                => '' !== trim( $body ) ? $body : (string) $defaults['body'],
+		);
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		update_option( self::OPTION, $settings, false );
 
 		return true;
 	}
@@ -102,10 +136,11 @@ class EPC_Pass_Email {
 	/**
 	 * Whether to email automatically after pass creation.
 	 *
-	 * @param string $mode sync|create|update.
+	 * @param string      $mode     sync|create|update.
+	 * @param object|null $pass_row Pass row when available.
 	 * @return bool
 	 */
-	public static function should_auto_send( $mode ) {
+	public static function should_auto_send( $mode, $pass_row = null ) {
 		$settings = self::get_settings();
 		if ( empty( $settings['auto_on_create'] ) ) {
 			return false;
@@ -113,14 +148,17 @@ class EPC_Pass_Email {
 
 		$mode = sanitize_key( (string) $mode );
 
+		// Auto-email only applies to newly created passes (create or sync-that-creates).
+		$should = in_array( $mode, array( 'create', 'sync' ), true );
+
 		/**
 		 * Filter whether a pass link email should be sent automatically.
 		 *
-		 * @param bool   $send     Default send flag.
-		 * @param string $mode     Pass sync mode.
-		 * @param object $pass_row Pass row (may be partial before insert).
+		 * @param bool        $send     Default send flag.
+		 * @param string      $mode     Pass sync mode.
+		 * @param object|null $pass_row Pass row (null when unavailable).
 		 */
-		return (bool) apply_filters( 'epc_pass_email_auto_send', 'create' === $mode || 'sync' === $mode, $mode, null );
+		return (bool) apply_filters( 'epc_pass_email_auto_send', $should, $mode, $pass_row );
 	}
 
 	/**
@@ -237,6 +275,9 @@ class EPC_Pass_Email {
 	/**
 	 * Maybe send after pass sync when enabled.
 	 *
+	 * Honours Connection → “Automatically email pass link when a new pass is created”.
+	 * Never sends on updates.
+	 *
 	 * @param string $module    Module slug.
 	 * @param int    $source_id Source id.
 	 * @param string $mode      Sync mode.
@@ -244,16 +285,16 @@ class EPC_Pass_Email {
 	 * @return void
 	 */
 	public static function maybe_send_after_sync( $module, $source_id, $mode, $created ) {
-		if ( ! $created && 'create' !== $mode ) {
-			return;
-		}
-
-		if ( ! self::should_auto_send( $created ? 'create' : $mode ) ) {
+		if ( ! $created ) {
 			return;
 		}
 
 		$pass = EPC_DB::get_pass( sanitize_key( (string) $module ), absint( $source_id ) );
-		if ( ! $pass ) {
+		if ( ! $pass || empty( $pass->pass_link ) ) {
+			return;
+		}
+
+		if ( ! self::should_auto_send( $mode, $pass ) ) {
 			return;
 		}
 
@@ -275,18 +316,18 @@ class EPC_Pass_Email {
 		}
 
 		$settings = self::get_settings();
-		if ( empty( $settings['include_on_wc_order'] ) ) {
-			return;
-		}
+		$include  = ! empty( $settings['include_on_wc_order'] );
 
 		/**
 		 * Filter whether to include pass links in a WooCommerce order email.
 		 *
-		 * @param bool     $include  Include flag.
+		 * Default follows Connection → “Include pass links in WooCommerce order emails”.
+		 *
+		 * @param bool     $include  Include flag from settings.
 		 * @param WC_Order $order    Order.
 		 * @param WC_Email $email    Email instance.
 		 */
-		if ( ! apply_filters( 'epc_pass_email_include_on_wc_order', true, $order, $email ) ) {
+		if ( ! apply_filters( 'epc_pass_email_include_on_wc_order', $include, $order, $email ) ) {
 			return;
 		}
 
@@ -379,10 +420,14 @@ class EPC_Pass_Email {
 			}
 		}
 
+		$first_name = $user ? (string) get_user_meta( $user->ID, 'first_name', true ) : '';
+		$last_name  = $user ? (string) get_user_meta( $user->ID, 'last_name', true ) : '';
+		$display    = $user ? (string) $user->display_name : '';
+
 		return array(
-			'user_first_name'   => $user ? (string) get_user_meta( $user->ID, 'first_name', true ) : '',
-			'user_last_name'    => $user ? (string) get_user_meta( $user->ID, 'last_name', true ) : '',
-			'user_display_name' => $user ? (string) $user->display_name : '',
+			'user_first_name'   => '' !== $first_name ? $first_name : $display,
+			'user_last_name'    => $last_name,
+			'user_display_name' => $display,
 			'user_email'        => $user ? (string) $user->user_email : '',
 			'pass_link'         => (string) $pass_row->pass_link,
 			'pass_uid'          => (string) $pass_row->pass_uid,
