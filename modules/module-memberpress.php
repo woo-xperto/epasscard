@@ -15,6 +15,74 @@ if ( ! defined( 'ABSPATH' ) ) {
 class EPC_Module_MemberPress extends EPC_Module {
 
 	/**
+	 * Source key prefix for subscriptions.
+	 */
+	public const SOURCE_SUB = 'sub';
+
+	/**
+	 * Source key prefix for one-off / lifetime transactions.
+	 */
+	public const SOURCE_TXN = 'txn';
+
+	/**
+	 * Build a namespaced MemberPress source key.
+	 *
+	 * @param string $type sub|txn.
+	 * @param int    $id   Record id.
+	 * @return string Empty when invalid.
+	 */
+	public static function encode_source_key( $type, $id ) {
+		$type = sanitize_key( (string) $type );
+		$id   = absint( $id );
+		if ( ! in_array( $type, array( self::SOURCE_SUB, self::SOURCE_TXN ), true ) || $id <= 0 ) {
+			return '';
+		}
+
+		return $type . '_' . $id;
+	}
+
+	/**
+	 * Parse a MemberPress source key.
+	 *
+	 * @param mixed $source_id Source key.
+	 * @return array{type: string, id: int}|null
+	 */
+	public static function parse_source_key( $source_id ) {
+		$source_id = EPC_DB::sanitize_source_id( $source_id );
+		if ( '' === $source_id ) {
+			return null;
+		}
+
+		if ( preg_match( '/^(sub|txn)_(\d+)$/', $source_id, $matches ) ) {
+			return array(
+				'type' => $matches[1],
+				'id'   => absint( $matches[2] ),
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Source key for a MemberPress transaction (subscription id preferred).
+	 *
+	 * @param MeprTransaction $txn Transaction.
+	 * @return string
+	 */
+	public static function source_key_from_transaction( $txn ) {
+		if ( ! $txn instanceof MeprTransaction || empty( $txn->id ) ) {
+			return '';
+		}
+
+		$subscription_id = (int) $txn->subscription_id;
+		if ( $subscription_id > 0 ) {
+			return self::encode_source_key( self::SOURCE_SUB, $subscription_id );
+		}
+
+		return self::encode_source_key( self::SOURCE_TXN, (int) $txn->id );
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	public function get_slug() {
@@ -345,23 +413,37 @@ class EPC_Module_MemberPress extends EPC_Module {
 		$sub = null;
 		$txn = null;
 
-		if ( class_exists( 'MeprSubscription' ) ) {
-			$candidate = new MeprSubscription( (int) $pass_row->source_id );
+		$parsed = self::parse_source_key( $pass_row->source_id ?? '' );
+		if ( $parsed ) {
+			if ( self::SOURCE_SUB === $parsed['type'] && class_exists( 'MeprSubscription' ) ) {
+				$candidate = new MeprSubscription( $parsed['id'] );
+				if ( ! empty( $candidate->id ) ) {
+					$sub = $candidate;
+				}
+			} elseif ( self::SOURCE_TXN === $parsed['type'] && class_exists( 'MeprTransaction' ) ) {
+				$candidate = new MeprTransaction( $parsed['id'] );
+				if ( ! empty( $candidate->id ) ) {
+					$txn = $candidate;
+				}
+			}
+		} elseif ( class_exists( 'MeprSubscription' ) ) {
+			// Legacy bare numeric source_id.
+			$legacy_id = absint( $pass_row->source_id );
+			$candidate = new MeprSubscription( $legacy_id );
 			if ( ! empty( $candidate->id ) ) {
 				$sub = $candidate;
+			} elseif ( class_exists( 'MeprTransaction' ) ) {
+				$candidate = new MeprTransaction( $legacy_id );
+				if ( ! empty( $candidate->id ) ) {
+					$txn = $candidate;
+				}
 			}
 		}
 
-		if ( ! $sub && class_exists( 'MeprTransaction' ) ) {
-			$candidate = new MeprTransaction( (int) $pass_row->source_id );
-			if ( ! empty( $candidate->id ) ) {
-				$txn = $candidate;
-				if ( ! empty( $candidate->subscription_id ) && class_exists( 'MeprSubscription' ) ) {
-					$linked = new MeprSubscription( (int) $candidate->subscription_id );
-					if ( ! empty( $linked->id ) ) {
-						$sub = $linked;
-					}
-				}
+		if ( $txn && ! empty( $txn->subscription_id ) && class_exists( 'MeprSubscription' ) ) {
+			$linked = new MeprSubscription( (int) $txn->subscription_id );
+			if ( ! empty( $linked->id ) ) {
+				$sub = $linked;
 			}
 		} elseif ( $sub && method_exists( $sub, 'latest_txn' ) ) {
 			$latest = $sub->latest_txn();
@@ -460,15 +542,21 @@ class EPC_Module_MemberPress extends EPC_Module {
 		if ( 'transactions' === (string) $event->evt_id_type && class_exists( 'MeprTransaction' ) ) {
 			$txn = new MeprTransaction( (int) $event->evt_id );
 			if ( ! empty( $txn->id ) ) {
-				$candidate_source_ids[] = (int) $txn->id;
+				$key = self::source_key_from_transaction( $txn );
+				if ( '' !== $key ) {
+					$candidate_source_ids[] = $key;
+				}
+				// Legacy bare ids (pre-1.2.0).
+				$candidate_source_ids[] = (string) (int) $txn->id;
 				if ( ! empty( $txn->subscription_id ) ) {
-					$candidate_source_ids[] = (int) $txn->subscription_id;
+					$candidate_source_ids[] = (string) (int) $txn->subscription_id;
 				}
 			}
 		} elseif ( 'subscriptions' === (string) $event->evt_id_type && class_exists( 'MeprSubscription' ) ) {
 			$sub = new MeprSubscription( (int) $event->evt_id );
 			if ( ! empty( $sub->id ) ) {
-				$candidate_source_ids[] = (int) $sub->id;
+				$candidate_source_ids[] = self::encode_source_key( self::SOURCE_SUB, (int) $sub->id );
+				$candidate_source_ids[] = (string) (int) $sub->id;
 			}
 		}
 
@@ -586,20 +674,41 @@ class EPC_Module_MemberPress extends EPC_Module {
 	 * @inheritDoc
 	 */
 	public function sync_by_source_id( $source_id, $mode = 'sync' ) {
-		$source_id = absint( $source_id );
+		$parsed = self::parse_source_key( $source_id );
 
-		if ( class_exists( 'MeprTransaction' ) ) {
-			$txn = new MeprTransaction( $source_id );
+		if ( $parsed && self::SOURCE_TXN === $parsed['type'] && class_exists( 'MeprTransaction' ) ) {
+			$txn = new MeprTransaction( $parsed['id'] );
 			if ( ! empty( $txn->id ) ) {
 				return $this->sync_from_transaction( $txn, $mode );
 			}
 		}
 
-		if ( class_exists( 'MeprSubscription' ) ) {
-			$sub = new MeprSubscription( $source_id );
+		if ( $parsed && self::SOURCE_SUB === $parsed['type'] && class_exists( 'MeprSubscription' ) ) {
+			$sub = new MeprSubscription( $parsed['id'] );
 			if ( ! empty( $sub->id ) && method_exists( $sub, 'latest_txn' ) ) {
 				$txn = $sub->latest_txn();
 				if ( $txn instanceof MeprTransaction ) {
+					return $this->sync_from_transaction( $txn, $mode );
+				}
+			}
+		}
+
+		// Legacy bare numeric keys (pre-namespaced). Prefer subscription, then one-off txn.
+		$legacy_id = absint( EPC_DB::sanitize_source_id( $source_id ) );
+		if ( $legacy_id > 0 && ! $parsed ) {
+			if ( class_exists( 'MeprSubscription' ) ) {
+				$sub = new MeprSubscription( $legacy_id );
+				if ( ! empty( $sub->id ) && method_exists( $sub, 'latest_txn' ) ) {
+					$txn = $sub->latest_txn();
+					if ( $txn instanceof MeprTransaction ) {
+						return $this->sync_from_transaction( $txn, $mode );
+					}
+				}
+			}
+
+			if ( class_exists( 'MeprTransaction' ) ) {
+				$txn = new MeprTransaction( $legacy_id );
+				if ( ! empty( $txn->id ) && empty( $txn->subscription_id ) ) {
 					return $this->sync_from_transaction( $txn, $mode );
 				}
 			}
@@ -692,7 +801,10 @@ class EPC_Module_MemberPress extends EPC_Module {
 
 		if ( is_array( $rows ) ) {
 			foreach ( $rows as $row ) {
-				$source_ids[] = (int) $row->source_id;
+				$key = EPC_DB::sanitize_source_id( $row->source_id ?? '' );
+				if ( '' !== $key ) {
+					$source_ids[] = $key;
+				}
 			}
 		}
 
@@ -709,13 +821,9 @@ class EPC_Module_MemberPress extends EPC_Module {
 					continue;
 				}
 
-				$source_id = (int) $txn->subscription_id;
-				if ( $source_id <= 0 ) {
-					$source_id = (int) $txn->id;
-				}
-
-				if ( $source_id > 0 ) {
-					$source_ids[] = $source_id;
+				$key = self::source_key_from_transaction( $txn );
+				if ( '' !== $key ) {
+					$source_ids[] = $key;
 				}
 			}
 		}
@@ -769,7 +877,9 @@ class EPC_Module_MemberPress extends EPC_Module {
 			return;
 		}
 
-		EPC_Pass_Service::revoke_pass( $this->get_slug(), (int) $sub->id );
+		EPC_Pass_Service::revoke_pass( $this->get_slug(), self::encode_source_key( self::SOURCE_SUB, (int) $sub->id ) );
+		// Legacy bare numeric key (pre-1.2.0).
+		EPC_Pass_Service::revoke_pass( $this->get_slug(), (string) (int) $sub->id );
 	}
 
 	/**
@@ -780,6 +890,42 @@ class EPC_Module_MemberPress extends EPC_Module {
 	 */
 	public function maybe_sync_existing( $unused ) {
 		// Reserved for manual re-sync UI.
+	}
+
+	/**
+	 * Rename a pre-1.2.0 bare-numeric pass row to a namespaced key when ownership matches.
+	 *
+	 * @param string $source_key Namespaced source key.
+	 * @param int    $user_id    Expected WP user id.
+	 * @return void
+	 */
+	private function claim_legacy_source_row( $source_key, $user_id ) {
+		global $wpdb;
+
+		$parsed = self::parse_source_key( $source_key );
+		$user_id = absint( $user_id );
+		if ( ! $parsed || $user_id <= 0 ) {
+			return;
+		}
+
+		if ( EPC_DB::get_pass( $this->get_slug(), $source_key ) ) {
+			return;
+		}
+
+		$legacy = EPC_DB::get_pass( $this->get_slug(), (string) $parsed['id'] );
+		if ( ! $legacy || (int) $legacy->user_id !== $user_id ) {
+			return;
+		}
+
+		$table = EPC_DB::table_name();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time legacy reclaim.
+		$wpdb->update(
+			$table,
+			array( 'source_id' => $source_key ),
+			array( 'id' => (int) $legacy->id ),
+			array( '%s' ),
+			array( '%d' )
+		);
 	}
 
 	/**
@@ -807,10 +953,15 @@ class EPC_Module_MemberPress extends EPC_Module {
 			return new WP_Error( 'epc_no_user', __( 'Member user not found.', 'epasscard' ) );
 		}
 
-		$membership_id = (int) $txn->subscription_id;
-		if ( $membership_id <= 0 ) {
-			$membership_id = (int) $txn->id;
+		$subscription_id = (int) $txn->subscription_id;
+		$source_id       = self::source_key_from_transaction( $txn );
+		if ( '' === $source_id ) {
+			return new WP_Error( 'epc_invalid_source', __( 'Membership record not found.', 'epasscard' ) );
 		}
+
+		$this->claim_legacy_source_row( $source_id, $user_id );
+
+		$membership_ref = $subscription_id > 0 ? $subscription_id : (int) $txn->id;
 
 		$product = new MeprProduct( $product_id );
 		$expires = epc_format_pass_expiry_datetime( ! empty( $txn->expires_at ) ? (string) $txn->expires_at : '' );
@@ -824,7 +975,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 			'user_first_name'   => $first,
 			'user_last_name'    => $last,
 			'user_full_name'    => epc_format_user_full_name( $first, $last, $user->display_name ),
-			'membership_id'     => (string) $membership_id,
+			'membership_id'     => (string) $membership_ref,
 			'membership_title'  => (string) $product->post_title,
 			'membership_status' => (string) $txn->status,
 			'membership_start'  => mysql2date( get_option( 'date_format' ), $txn->created_at ),
@@ -834,7 +985,7 @@ class EPC_Module_MemberPress extends EPC_Module {
 
 		return EPC_Pass_Service::sync_pass(
 			$this->get_slug(),
-			$membership_id,
+			$source_id,
 			$product_id,
 			$user_id,
 			$mapping,

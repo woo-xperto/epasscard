@@ -284,9 +284,9 @@
 			return;
 		}
 
-		var sourceId = parseInt($btn.data('source-id'), 10);
+		var sourceId = String($btn.attr('data-source-id') || '');
 		var passAction = String($btn.data('pass-action') || '');
-		var passNonce = String($btn.data('pass-nonce') || '');
+		var passNonce = String($btn.attr('data-pass-nonce') || $btn.data('pass-nonce') || '');
 
 		if (!sourceId || !passAction || !passNonce) {
 			return;
@@ -316,6 +316,7 @@
 					$btn.text(data.action_label);
 				}
 				if (data.pass_nonce) {
+					$btn.attr('data-pass-nonce', data.pass_nonce);
 					$btn.data('pass-nonce', data.pass_nonce);
 				}
 
@@ -349,8 +350,8 @@
 			return;
 		}
 
-		var sourceId = parseInt($btn.data('source-id'), 10);
-		var emailNonce = String($btn.data('email-nonce') || '');
+		var sourceId = String($btn.attr('data-source-id') || '');
+		var emailNonce = String($btn.attr('data-email-nonce') || $btn.data('email-nonce') || '');
 
 		if (!sourceId || !emailNonce) {
 			return;

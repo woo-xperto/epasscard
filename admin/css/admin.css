@@ -318,6 +318,14 @@
 	width: 220px;
 }
 
+/* MemberPress members list (+ WCS list) — keep action buttons readable */
+#col_epasscard_pass,
+.column-col_epasscard_pass,
+.column-epasscard_pass {
+	width: 220px;
+	min-width: 220px;
+}
+
 .epasscard-pass-actions a {
 	white-space: nowrap;
 }

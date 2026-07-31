@@ -264,7 +264,7 @@ class EPC_Pass_Email {
 	 * @return true|\WP_Error
 	 */
 	public static function send_for_source( $module, $source_id, array $args = array() ) {
-		$pass = EPC_DB::get_pass( sanitize_key( (string) $module ), absint( $source_id ) );
+		$pass = EPC_DB::get_pass( sanitize_key( (string) $module ), EPC_DB::sanitize_source_id( $source_id ) );
 		if ( ! $pass ) {
 			return new WP_Error( 'epc_pass_not_found', __( 'Pass not found.', 'epasscard' ) );
 		}
@@ -289,7 +289,7 @@ class EPC_Pass_Email {
 			return;
 		}
 
-		$pass = EPC_DB::get_pass( sanitize_key( (string) $module ), absint( $source_id ) );
+		$pass = EPC_DB::get_pass( sanitize_key( (string) $module ), EPC_DB::sanitize_source_id( $source_id ) );
 		if ( ! $pass || empty( $pass->pass_link ) ) {
 			return;
 		}

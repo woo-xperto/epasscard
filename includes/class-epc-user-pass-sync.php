@@ -113,7 +113,7 @@ class EPC_User_Pass_Sync {
 				continue;
 			}
 
-			$module->sync_by_source_id( (int) $pass->source_id, 'update' );
+			$module->sync_by_source_id( (string) $pass->source_id, 'update' );
 		}
 	}
 }

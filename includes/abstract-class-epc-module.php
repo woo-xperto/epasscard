@@ -117,7 +117,7 @@ abstract class EPC_Module {
 	/**
 	 * Manually create, update, or sync a pass for a source record.
 	 *
-	 * @param int    $source_id Subscription/membership record id.
+	 * @param int|string $source_id Subscription/membership record id.
 	 * @param string $mode      sync|create|update.
 	 * @return true|\WP_Error
 	 */
@@ -340,14 +340,18 @@ abstract class EPC_Module {
 	 * Build admin URL for a manual pass action.
 	 *
 	 * @deprecated 1.0.0 Pass actions use AJAX; kept for backward compatibility.
-	 * @param int    $source_id Source record id.
-	 * @param string $action    sync|create|update.
-	 * @param string $redirect  Optional redirect URL after action.
+	 * @param int|string $source_id Source record id.
+	 * @param string     $action    sync|create|update.
+	 * @param string     $redirect  Optional redirect URL after action.
 	 * @return string
 	 */
 	public function get_pass_action_url( $source_id, $action, $redirect = '' ) {
-		$source_id = absint( $source_id );
+		$source_id = EPC_DB::sanitize_source_id( $source_id );
 		$action    = sanitize_key( (string) $action );
+
+		if ( '' === $source_id ) {
+			return '';
+		}
 
 		$args = array(
 			'epc_module'      => $this->get_slug(),
@@ -369,15 +373,15 @@ abstract class EPC_Module {
 	/**
 	 * Render pass action control for a source record.
 	 *
-	 * @param int    $source_id Source record id.
-	 * @param string $redirect  Unused; kept for call-site compatibility.
+	 * @param int|string $source_id Source record id.
+	 * @param string     $redirect  Unused; kept for call-site compatibility.
 	 * @return string
 	 */
 	public function render_pass_action_links( $source_id, $redirect = '' ) {
 		unset( $redirect );
 
-		$source_id = absint( $source_id );
-		if ( $source_id <= 0 || ! $this->current_user_can_manage_passes() ) {
+		$source_id = EPC_DB::sanitize_source_id( $source_id );
+		if ( '' === $source_id || ! $this->current_user_can_manage_passes() ) {
 			return '';
 		}
 
@@ -398,18 +402,18 @@ abstract class EPC_Module {
 	/**
 	 * Render a button to email the pass link to the member.
 	 *
-	 * @param int $source_id Source record id.
+	 * @param int|string $source_id Source record id.
 	 * @return string
 	 */
 	protected function render_pass_email_button( $source_id ) {
-		$source_id = absint( $source_id );
-		if ( $source_id <= 0 || ! $this->current_user_can_manage_passes() ) {
+		$source_id = EPC_DB::sanitize_source_id( $source_id );
+		if ( '' === $source_id || ! $this->current_user_can_manage_passes() ) {
 			return '';
 		}
 
 		return sprintf(
-			'<button type="button" class="button button-small epc-send-pass-email" data-source-id="%1$d" data-email-nonce="%2$s">%3$s</button>',
-			$source_id,
+			'<button type="button" class="button button-small epc-send-pass-email" data-source-id="%1$s" data-email-nonce="%2$s">%3$s</button>',
+			esc_attr( $source_id ),
 			esc_attr( wp_create_nonce( 'epc_send_pass_email_' . $source_id ) ),
 			esc_html__( 'Email pass link', 'epasscard' )
 		);
@@ -427,10 +431,10 @@ abstract class EPC_Module {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'epasscard' ) ), 403 );
 		}
 
-		$source_id = isset( $_POST['source_id'] ) ? absint( wp_unslash( $_POST['source_id'] ) ) : 0;
+		$source_id = isset( $_POST['source_id'] ) ? EPC_DB::sanitize_source_id( wp_unslash( (string) $_POST['source_id'] ) ) : '';
 		$nonce     = isset( $_POST['email_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['email_nonce'] ) ) : '';
 
-		if ( $source_id <= 0 || ! wp_verify_nonce( $nonce, 'epc_send_pass_email_' . $source_id ) ) {
+		if ( '' === $source_id || ! wp_verify_nonce( $nonce, 'epc_send_pass_email_' . $source_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request.', 'epasscard' ) ), 400 );
 		}
 
@@ -493,7 +497,7 @@ abstract class EPC_Module {
 	 * Source record ids that can receive a pass action for a user.
 	 *
 	 * @param int $user_id User id.
-	 * @return array<int, int>
+	 * @return array<int, int|string>
 	 */
 	protected function get_pass_action_source_ids_for_user( $user_id ) {
 		return array();
@@ -502,18 +506,22 @@ abstract class EPC_Module {
 	/**
 	 * Render a single AJAX pass action button.
 	 *
-	 * @param int    $source_id Source record id.
-	 * @param string $action    create|update|sync.
-	 * @param string $label     Button label.
+	 * @param int|string $source_id Source record id.
+	 * @param string     $action    create|update|sync.
+	 * @param string     $label     Button label.
 	 * @return string
 	 */
 	protected function render_pass_action_button( $source_id, $action, $label ) {
-		$source_id = absint( $source_id );
+		$source_id = EPC_DB::sanitize_source_id( $source_id );
 		$action    = sanitize_key( (string) $action );
 
+		if ( '' === $source_id ) {
+			return '';
+		}
+
 		return sprintf(
-			'<button type="button" class="button button-small epc-pass-action" data-source-id="%1$d" data-pass-action="%2$s" data-pass-nonce="%3$s">%4$s</button>',
-			$source_id,
+			'<button type="button" class="button button-small epc-pass-action" data-source-id="%1$s" data-pass-action="%2$s" data-pass-nonce="%3$s">%4$s</button>',
+			esc_attr( $source_id ),
 			esc_attr( $action ),
 			esc_attr( wp_create_nonce( 'epc_pass_action_' . $source_id ) ),
 			esc_html( $label )
@@ -532,11 +540,11 @@ abstract class EPC_Module {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'epasscard' ) ), 403 );
 		}
 
-		$source_id = isset( $_POST['source_id'] ) ? absint( wp_unslash( $_POST['source_id'] ) ) : 0;
+		$source_id = isset( $_POST['source_id'] ) ? EPC_DB::sanitize_source_id( wp_unslash( (string) $_POST['source_id'] ) ) : '';
 		$action    = isset( $_POST['pass_action'] ) ? sanitize_key( wp_unslash( (string) $_POST['pass_action'] ) ) : '';
 		$nonce     = isset( $_POST['pass_nonce'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['pass_nonce'] ) ) : '';
 
-		if ( $source_id <= 0 ) {
+		if ( '' === $source_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid record.', 'epasscard' ) ), 400 );
 		}
 
@@ -1904,7 +1912,7 @@ class EPC_Module_List_Table extends WP_List_Table {
 			case 'updated_at':
 				return esc_html( (string) $item->updated_at );
 			case 'actions':
-				return $this->module->render_pass_action_links( (int) $item->source_id, $this->redirect_url );
+				return $this->module->render_pass_action_links( (string) $item->source_id, $this->redirect_url );
 			default:
 				return '';
 		}

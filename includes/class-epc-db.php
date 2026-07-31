@@ -33,7 +33,7 @@ class EPC_DB {
 		$sql = "CREATE TABLE {$table} (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			module varchar(32) NOT NULL DEFAULT '',
-			source_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			source_id varchar(64) NOT NULL DEFAULT '',
 			entity_id bigint(20) unsigned NOT NULL DEFAULT 0,
 			user_id bigint(20) unsigned NOT NULL DEFAULT 0,
 			pass_uid varchar(36) NOT NULL DEFAULT '',
@@ -67,6 +67,144 @@ class EPC_DB {
 		$installed = (string) get_option( 'epc_db_version', '0' );
 		if ( version_compare( $installed, EPC_DB_VERSION, '<' ) ) {
 			self::install();
+			if ( version_compare( $installed, '1.2.0', '<' ) ) {
+				self::ensure_source_id_varchar();
+				self::migrate_memberpress_source_ids();
+			}
+		}
+	}
+
+	/**
+	 * Ensure source_id is varchar (dbDelta often skips type changes).
+	 *
+	 * @return void
+	 */
+	private static function ensure_source_id_varchar() {
+		global $wpdb;
+
+		$table = self::table_name();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Schema introspection.
+		$col = $wpdb->get_row( $wpdb->prepare( 'SHOW COLUMNS FROM %i LIKE %s', $table, 'source_id' ), ARRAY_A );
+		if ( ! is_array( $col ) || empty( $col['Type'] ) ) {
+			return;
+		}
+
+		if ( false !== stripos( (string) $col['Type'], 'varchar' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.NoCaching -- Required column type migration.
+		$wpdb->query( "ALTER TABLE {$table} MODIFY source_id varchar(64) NOT NULL DEFAULT ''" );
+	}
+
+	/**
+	 * Sanitize a pass source key (numeric or namespaced, e.g. sub_12 / txn_34).
+	 *
+	 * @param mixed $source_id Raw source id.
+	 * @return string Empty string when invalid.
+	 */
+	public static function sanitize_source_id( $source_id ) {
+		$source_id = trim( (string) $source_id );
+		if ( '' === $source_id ) {
+			return '';
+		}
+
+		if ( preg_match( '/^\d+$/', $source_id ) ) {
+			return $source_id;
+		}
+
+		if ( preg_match( '/^[a-z][a-z0-9]*_\d+$/', $source_id ) ) {
+			return $source_id;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Re-key MemberPress passes so subscription and transaction IDs cannot collide.
+	 *
+	 * Legacy rows stored bare numeric IDs from either wp_mepr_subscriptions or
+	 * wp_mepr_transactions in the same source_id namespace.
+	 *
+	 * @return void
+	 */
+	private static function migrate_memberpress_source_ids() {
+		global $wpdb;
+
+		$table = self::table_name();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time migration.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id, source_id, user_id FROM %i WHERE module = %s AND source_id REGEXP '^[0-9]+$'",
+				$table,
+				'memberpress'
+			)
+		);
+
+		if ( ! is_array( $rows ) || empty( $rows ) ) {
+			return;
+		}
+
+		$has_mepr = class_exists( 'MeprSubscription' ) && class_exists( 'MeprTransaction' );
+
+		foreach ( $rows as $row ) {
+			$legacy_id = absint( $row->source_id );
+			$user_id   = absint( $row->user_id );
+			if ( $legacy_id <= 0 ) {
+				continue;
+			}
+
+			$new_key = '';
+
+			if ( $has_mepr ) {
+				$txn        = new MeprTransaction( $legacy_id );
+				$txn_ok     = ! empty( $txn->id ) && (int) $txn->user_id === $user_id;
+				$txn_oneoff = $txn_ok && empty( $txn->subscription_id );
+
+				$sub    = new MeprSubscription( $legacy_id );
+				$sub_ok = ! empty( $sub->id ) && (int) $sub->user_id === $user_id;
+
+				if ( $txn_oneoff ) {
+					$new_key = 'txn_' . $legacy_id;
+				} elseif ( $sub_ok ) {
+					$new_key = 'sub_' . $legacy_id;
+				} elseif ( $txn_ok ) {
+					$new_key = 'txn_' . $legacy_id;
+				} elseif ( ! empty( $sub->id ) ) {
+					$new_key = 'sub_' . $legacy_id;
+				} elseif ( ! empty( $txn->id ) ) {
+					$new_key = 'txn_' . $legacy_id;
+				}
+			}
+
+			if ( '' === $new_key ) {
+				// Prefer subscription namespace when MemberPress is unavailable.
+				$new_key = 'sub_' . $legacy_id;
+			}
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time migration write.
+			$conflict = $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT id FROM %i WHERE module = %s AND source_id = %s AND id <> %d LIMIT 1',
+					$table,
+					'memberpress',
+					$new_key,
+					(int) $row->id
+				)
+			);
+
+			if ( $conflict ) {
+				continue;
+			}
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time migration write.
+			$wpdb->update(
+				$table,
+				array( 'source_id' => $new_key ),
+				array( 'id' => (int) $row->id ),
+				array( '%s' ),
+				array( '%d' )
+			);
 		}
 	}
 
@@ -91,16 +229,16 @@ class EPC_DB {
 
 		$table  = self::table_name();
 		$module = sanitize_key( (string) ( $data['module'] ?? '' ) );
-		$source = absint( $data['source_id'] ?? 0 );
+		$source = self::sanitize_source_id( $data['source_id'] ?? '' );
 
-		if ( '' === $module || $source <= 0 ) {
+		if ( '' === $module || '' === $source ) {
 			return false;
 		}
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table upsert lookup.
 		$existing = $wpdb->get_var(
 			$wpdb->prepare(
-				'SELECT id FROM %i WHERE module = %s AND source_id = %d LIMIT 1',
+				'SELECT id FROM %i WHERE module = %s AND source_id = %s LIMIT 1',
 				$table,
 				$module,
 				$source
@@ -119,13 +257,15 @@ class EPC_DB {
 			'meta'          => isset( $data['meta'] ) ? wp_json_encode( $data['meta'] ) : null,
 		);
 
+		$formats = array( '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s' );
+
 		if ( $existing ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table write.
 			$wpdb->update(
 				$table,
 				$row,
 				array( 'id' => (int) $existing ),
-				array( '%s', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s' ),
+				$formats,
 				array( '%d' )
 			);
 			return (int) $existing;
@@ -135,7 +275,7 @@ class EPC_DB {
 		$wpdb->insert(
 			$table,
 			$row,
-			array( '%s', '%d', '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
+			$formats
 		);
 
 		return $wpdb->insert_id ? (int) $wpdb->insert_id : false;
@@ -144,21 +284,27 @@ class EPC_DB {
 	/**
 	 * Get pass by module + source id.
 	 *
-	 * @param string $module    Module slug.
-	 * @param int    $source_id Source record id.
+	 * @param string     $module    Module slug.
+	 * @param int|string $source_id Source record id (numeric or namespaced).
 	 * @return object|null
 	 */
 	public static function get_pass( $module, $source_id ) {
 		global $wpdb;
 
+		$module    = sanitize_key( (string) $module );
+		$source_id = self::sanitize_source_id( $source_id );
+		if ( '' === $module || '' === $source_id ) {
+			return null;
+		}
+
 		$table = self::table_name();
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table read.
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT * FROM %i WHERE module = %s AND source_id = %d LIMIT 1',
+				'SELECT * FROM %i WHERE module = %s AND source_id = %s LIMIT 1',
 				$table,
-				sanitize_key( $module ),
-				absint( $source_id )
+				$module,
+				$source_id
 			)
 		);
 
@@ -200,7 +346,8 @@ class EPC_DB {
 		}
 
 		if ( ! ctype_digit( $identifier ) ) {
-			return null;
+			$source_key = self::sanitize_source_id( $identifier );
+			return '' !== $source_key ? self::get_pass( $module, $source_key ) : null;
 		}
 
 		$numeric_id = absint( $identifier );
@@ -221,7 +368,7 @@ class EPC_DB {
 			return $row;
 		}
 
-		return self::get_pass( $module, $numeric_id );
+		return self::get_pass( $module, (string) $numeric_id );
 	}
 
 	/**

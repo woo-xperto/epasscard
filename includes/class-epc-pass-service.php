@@ -189,7 +189,7 @@ class EPC_Pass_Service {
 	 * Issue or refresh a pass for a source record.
 	 *
 	 * @param string               $module        Module slug.
-	 * @param int                  $source_id     Membership/subscription id.
+	 * @param int|string           $source_id     Membership/subscription id.
 	 * @param int                  $entity_id     Product/level id.
 	 * @param int                  $user_id       WP user id.
 	 * @param array<string, mixed> $mapping       Mapping config.

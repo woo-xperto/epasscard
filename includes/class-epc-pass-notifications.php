@@ -84,7 +84,7 @@ class EPC_Pass_Notifications {
 	 * @return bool
 	 */
 	public static function send_for_module_source( $module_slug, $source_id, $title, $message ) {
-		$pass = EPC_DB::get_pass( sanitize_key( (string) $module_slug ), absint( $source_id ) );
+		$pass = EPC_DB::get_pass( sanitize_key( (string) $module_slug ), EPC_DB::sanitize_source_id( $source_id ) );
 		if ( ! $pass ) {
 			return false;
 		}
