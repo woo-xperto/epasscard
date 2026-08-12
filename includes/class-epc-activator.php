@@ -33,6 +33,8 @@ class EPC_Activator {
 		flush_rewrite_rules();
 
 		require_once EPC_PLUGIN_DIR . 'includes/class-epc-welcome.php';
+		require_once EPC_PLUGIN_DIR . 'includes/class-epc-setup-help.php';
+		EPC_Setup_Help::maybe_set_first_activated_time();
 		EPC_Welcome::flag_activation_redirect();
 	}
 

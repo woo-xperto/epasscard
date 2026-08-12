@@ -208,6 +208,8 @@ class EPC_Welcome {
 					</div>
 				</form>
 
+				<?php EPC_Setup_Help::render_welcome_card(); ?>
+
 				<div class="epc-welcome-other-products">
 					<h2 class="epc-welcome-section-title"><?php esc_html_e( 'Our Other Products', 'epasscard' ); ?></h2>
 					<div class="epc-welcome-features">

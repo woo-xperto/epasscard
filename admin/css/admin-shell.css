@@ -186,7 +186,11 @@ body.epc-admin-ui .epc-app-root {
 }
 
 .epc-app__sidebar-footer {
+	margin-top: auto;
 	padding-top: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .epc-app__support-btn {
@@ -202,11 +206,95 @@ body.epc-admin-ui .epc-app-root {
 	text-align: center;
 	text-decoration: none;
 	transition: background 0.2s ease;
+	box-sizing: border-box;
 }
 
 .epc-app__support-btn:hover {
 	background: var(--epc-surface-low);
 	color: var(--epc-primary-hover);
+}
+
+/* Sidebar sticky free setup card */
+.epc-sidebar-setup-card {
+	display: block;
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 14px 16px;
+	text-decoration: none !important;
+	box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+}
+
+.epc-sidebar-setup-card:hover {
+	border-color: #cbd5e1;
+	box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+	transform: translateY(-2px);
+}
+
+.epc-sidebar-setup-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.epc-sidebar-avatar-wrap {
+	position: relative;
+	width: 38px;
+	height: 38px;
+	flex-shrink: 0;
+}
+
+.epc-sidebar-avatar-img {
+	border-radius: 50%;
+	display: block;
+}
+
+.epc-sidebar-status-dot {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 10px;
+	background: #22c55e;
+	border: 2px solid #ffffff;
+	border-radius: 50%;
+}
+
+.epc-sidebar-badge {
+	background: #f3e8ff;
+	color: #6d28d9;
+	font-size: 11.5px;
+	font-weight: 600;
+	padding: 4px 10px;
+	border-radius: 20px;
+	white-space: nowrap;
+}
+
+.epc-sidebar-setup-content {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.epc-sidebar-setup-title {
+	font-size: 14px;
+	font-weight: 700;
+	color: #0f172a !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 1.3;
+}
+
+.epc-sidebar-setup-desc {
+	font-size: 12px;
+	color: #64748b !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 1.45;
 }
 
 /* Main area */

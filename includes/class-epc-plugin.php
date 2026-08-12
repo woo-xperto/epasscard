@@ -20,6 +20,8 @@ require_once EPC_PLUGIN_DIR . 'includes/class-epc-module-loader.php';
 require_once EPC_PLUGIN_DIR . 'includes/class-epc-admin-menu.php';
 require_once EPC_PLUGIN_DIR . 'includes/class-epc-admin-shell.php';
 require_once EPC_PLUGIN_DIR . 'includes/class-epc-welcome.php';
+require_once EPC_PLUGIN_DIR . 'includes/class-epc-setup-help.php';
+require_once EPC_PLUGIN_DIR . 'includes/class-epc-setup-help-notice.php';
 require_once EPC_PLUGIN_DIR . 'includes/abstract-class-epc-module.php';
 require_once EPC_PLUGIN_DIR . 'includes/class-epc-pass-service.php';
 require_once EPC_PLUGIN_DIR . 'includes/class-epc-pass-email.php';
@@ -95,6 +97,7 @@ final class EPC_Plugin {
 		EPC_Admin_Menu::init();
 		EPC_Admin_Shell::init();
 		EPC_Welcome::init();
+		EPC_Setup_Help_Notice::init();
 
 		$this->all_modules = EPC_Module_Loader::get_registry();
 		$this->modules     = EPC_Module_Loader::load_modules();

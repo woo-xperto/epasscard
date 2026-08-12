@@ -185,6 +185,7 @@ class EPC_Admin_Shell {
 				<?php endif; ?>
 
 				<div class="epc-app__sidebar-footer">
+					<?php EPC_Setup_Help::render_sidebar_card(); ?>
 					<a class="epc-app__support-btn" href="https://epasscard.com/" target="_blank" rel="noopener noreferrer">
 						<?php esc_html_e( 'Support', 'epasscard' ); ?>
 					</a>
