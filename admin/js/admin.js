@@ -287,14 +287,15 @@
 		var sourceId = String($btn.attr('data-source-id') || '');
 		var passAction = String($btn.data('pass-action') || '');
 		var passNonce = String($btn.attr('data-pass-nonce') || $btn.data('pass-nonce') || '');
+		var moduleSlug = String($btn.attr('data-module') || epcAdmin.module || '');
 
-		if (!sourceId || !passAction || !passNonce) {
+		if (!sourceId || !passAction || !passNonce || !moduleSlug) {
 			return;
 		}
 
 		setPassActionLoading($btn, true);
 
-		ajaxPost('epc_pass_action_' + epcAdmin.module, {
+		ajaxPost('epc_pass_action_' + moduleSlug, {
 			source_id: sourceId,
 			pass_action: passAction,
 			pass_nonce: passNonce,
@@ -310,14 +311,49 @@
 				showPassActionNotice(data.message || epcAdmin.i18n.passUpdated, 'success');
 
 				if (data.action) {
+					$btn.attr('data-pass-action', data.action);
 					$btn.data('pass-action', data.action);
 				}
 				if (data.action_label) {
 					$btn.text(data.action_label);
+					$btn.data('epc-original-label', data.action_label);
 				}
 				if (data.pass_nonce) {
 					$btn.attr('data-pass-nonce', data.pass_nonce);
 					$btn.data('pass-nonce', data.pass_nonce);
+				}
+
+				if (data.pass_link) {
+					var $wrap = $btn.parent();
+					if ($wrap.length && !$wrap.find('.epc-view-pass').length) {
+						var viewLabel = data.view_label || 'View pass';
+						$wrap.append(
+							' <a class="button button-small epc-view-pass" href="' +
+								String(data.pass_link).replace(/"/g, '&quot;') +
+								'" target="_blank" rel="noopener noreferrer">' +
+								$('<div>').text(viewLabel).html() +
+								'</a>'
+						);
+					}
+					if (
+						$wrap.length &&
+						data.email_nonce &&
+						!$wrap.find('.epc-send-pass-email').length
+					) {
+						var emailLabel = data.email_label || 'Email pass link';
+						var module = data.module || moduleSlug;
+						$wrap.append(
+							' <button type="button" class="button button-small epc-send-pass-email" data-module="' +
+								$('<div>').text(module).html() +
+								'" data-source-id="' +
+								$('<div>').text(sourceId).html() +
+								'" data-email-nonce="' +
+								$('<div>').text(data.email_nonce).html() +
+								'">' +
+								$('<div>').text(emailLabel).html() +
+								'</button>'
+						);
+					}
 				}
 
 				$btn.prop('disabled', false).removeClass('is-loading');
@@ -352,14 +388,15 @@
 
 		var sourceId = String($btn.attr('data-source-id') || '');
 		var emailNonce = String($btn.attr('data-email-nonce') || $btn.data('email-nonce') || '');
+		var moduleSlug = String($btn.attr('data-module') || epcAdmin.module || '');
 
-		if (!sourceId || !emailNonce) {
+		if (!sourceId || !emailNonce || !moduleSlug) {
 			return;
 		}
 
 		setPassEmailLoading($btn, true);
 
-		ajaxPost('epc_send_pass_email_' + epcAdmin.module, {
+		ajaxPost('epc_send_pass_email_' + moduleSlug, {
 			source_id: sourceId,
 			email_nonce: emailNonce,
 		})

@@ -71,7 +71,7 @@ epasscard/
 │   ├── module-simple-membership.php
 │   ├── module-ultimate-membership-pro.php
 │   ├── module-woocommerce-subscriptions.php
-│   ├── module-event-tickets.php
+│   ├── module-the-events-calendar.php
 │   ├── module-events-manager.php
 │   ├── module-pw-gift-cards.php
 │   └── module-yith-gift-cards.php
@@ -99,7 +99,7 @@ Register custom modules on `plugins_loaded` priority **10** or earlier.
 
 ```
 MemberPress / WCS reminder hook     Daily cron (UMP, PMPro, Simple Membership,
-        │                           Event Tickets, Events Manager, PW, YITH)
+        │                           TEC, Events Manager, PW, YITH)
         │                                        │
         ▼                                        ▼
   EPC_Module::build_push_notification_copy()

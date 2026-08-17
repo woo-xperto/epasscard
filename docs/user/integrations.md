@@ -28,13 +28,17 @@ EpassCard ships with built-in integration modules. Each extends the same workflo
 - Syncs on registration, level change, payment upgrade/renewal, and account-state updates.
 - **Push reminders:** Before membership expires (EpassCard daily cron + **Days before** setting).
 
-## Event Tickets
+## The Events Calendar
 
-**Menu:** EpassCard → Event Tickets
+**Menu:** EpassCard → The Events Calendar
 
-- Maps **tickets** (RSVP, Tickets Commerce, Woo tickets) to pass templates.
-- Syncs when attendees are created or updated; revoke on delete (configurable per status).
+- Maps **events** (`tribe_events`) to pass templates.
+- Issues passes when **Event Tickets** (TEC add-on) attendees register for a mapped event (RSVP / Tickets Commerce / Woo).
+- Includes venue, organizer, cost, and event URL source fields.
+- Syncs on attendee create / update; revoke on delete (configurable per status).
+- **Attendees list** (`Tickets → Attendees` / `tec-tickets-attendees`): **EpassCard** column with Create / Update / View pass and Email pass link; also under ticket row actions.
 - **Push reminders:** Before event starts (EpassCard daily cron + **Days before** setting).
+- Requires **Event Tickets** active for automatic issuance (calendar alone has no attendees). There is no separate EpassCard “Event Tickets” module — one path only, so each attendee gets a single pass.
 
 ## Events Manager
 
@@ -42,6 +46,7 @@ EpassCard ships with built-in integration modules. Each extends the same workflo
 
 - Maps **events** to pass templates.
 - Syncs on booking add / status change; revoke on cancel, reject, or delete (configurable).
+- **Bookings list** (`Events → Bookings`): **EpassCard** column with Create / Update / View pass (and Email pass link when issued); also under the row Actions menu.
 - **Push reminders:** Before event starts (EpassCard daily cron + **Days before** setting).
 
 ## PW Gift Cards

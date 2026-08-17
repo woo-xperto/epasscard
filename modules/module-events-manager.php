@@ -430,6 +430,329 @@ class EPC_Module_Events_Manager extends EPC_Module {
 		add_action( 'em_bookings_added', array( $this, 'on_booking' ), 20, 1 );
 		add_action( 'em_booking_status_changed', array( $this, 'on_booking_status_changed' ), 20, 1 );
 		add_action( 'em_booking_deleted', array( $this, 'on_booking_deleted' ), 20, 1 );
+
+		add_filter( 'em_bookings_table_cols_template', array( $this, 'bookings_table_cols_template' ), 10, 2 );
+		add_filter( 'em_bookings_table_cols_bookings_template', array( $this, 'bookings_table_bookings_cols_template' ), 10, 2 );
+		add_filter( 'em_bookings_table_views', array( $this, 'bookings_table_views' ) );
+		add_action( 'em_bookings_table', array( $this, 'on_bookings_table' ) );
+		add_filter( 'em_bookings_table_get_headers', array( $this, 'bookings_table_get_headers' ), 10, 2 );
+		add_filter( 'em_list_table_rows_col_epasscard_pass', array( $this, 'bookings_table_epasscard_col' ), 10, 3 );
+		add_filter( 'em_bookings_table_rows_col_epasscard_pass', array( $this, 'bookings_table_epasscard_col' ), 10, 3 );
+		add_filter( 'em_bookings_table_cols_col_action', array( $this, 'bookings_table_action_links' ), 20, 2 );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function current_user_can_manage_passes() {
+		return parent::current_user_can_manage_passes() || current_user_can( 'manage_bookings' );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function should_enqueue_pass_action_assets( $hook ) {
+		if ( parent::should_enqueue_pass_action_assets( $hook ) ) {
+			return true;
+		}
+
+		if ( false !== strpos( (string) $hook, 'events-manager-bookings' ) ) {
+			return true;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin screen detection only.
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( (string) $_GET['page'] ) ) : '';
+
+		return 'events-manager-bookings' === $page;
+	}
+
+	/**
+	 * Keep EpassCard in the bookings-field group (settings modal).
+	 *
+	 * @param array<string, mixed> $template Booking cols template.
+	 * @param mixed                $table    Table instance.
+	 * @return array<string, mixed>
+	 */
+	public function bookings_table_bookings_cols_template( $template, $table = null ) {
+		unset( $table );
+
+		if ( ! is_array( $template ) ) {
+			$template = array();
+		}
+
+		if ( ! $this->current_user_can_manage_passes() ) {
+			return $template;
+		}
+
+		$template['epasscard_pass'] = __( 'EpassCard', 'epasscard' );
+
+		return $template;
+	}
+
+	/**
+	 * Ensure EpassCard header survives AJAX table rebuilds (`action=em_bookings_table`).
+	 *
+	 * @param array<string, string> $headers Column headers.
+	 * @param mixed                 $table   Table instance.
+	 * @return array<string, string>
+	 */
+	public function bookings_table_get_headers( $headers, $table = null ) {
+		if ( ! is_array( $headers ) || ! $this->current_user_can_manage_passes() ) {
+			return $headers;
+		}
+
+		if ( isset( $headers['epasscard_pass'] ) ) {
+			return $headers;
+		}
+
+		$label = __( 'EpassCard', 'epasscard' );
+		$out   = array();
+		foreach ( $headers as $key => $header ) {
+			if ( 'actions' === $key ) {
+				$out['epasscard_pass'] = $label;
+			}
+			$out[ $key ] = $header;
+		}
+
+		if ( ! isset( $out['epasscard_pass'] ) ) {
+			$out['epasscard_pass'] = $label;
+		}
+
+		if ( is_object( $table ) && property_exists( $table, 'cols' ) && is_array( $table->cols ) ) {
+			$table->cols = $this->ensure_epasscard_col_assoc( $table->cols );
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Register EpassCard column in the bookings table column picker.
+	 *
+	 * @param array<string, mixed> $template Columns template.
+	 * @param mixed                $table    Bookings table instance.
+	 * @return array<string, mixed>
+	 */
+	public function bookings_table_cols_template( $template, $table = null ) {
+		unset( $table );
+
+		if ( ! is_array( $template ) ) {
+			$template = array();
+		}
+
+		if ( ! $this->current_user_can_manage_passes() ) {
+			return $template;
+		}
+
+		$template['epasscard_pass'] = __( 'EpassCard', 'epasscard' );
+
+		return $template;
+	}
+
+	/**
+	 * Include EpassCard in default bookings / attendees / tickets view columns.
+	 *
+	 * @param array<string, mixed> $views View definitions.
+	 * @return array<string, mixed>
+	 */
+	public function bookings_table_views( $views ) {
+		if ( ! is_array( $views ) || ! $this->current_user_can_manage_passes() ) {
+			return $views;
+		}
+
+		foreach ( $views as $view_key => $view ) {
+			if ( empty( $view['cols'] ) || ! is_array( $view['cols'] ) ) {
+				continue;
+			}
+
+			$views[ $view_key ]['cols'] = $this->ensure_epasscard_col( $view['cols'] );
+
+			if ( empty( $view['contexts'] ) || ! is_array( $view['contexts'] ) ) {
+				continue;
+			}
+
+			foreach ( $view['contexts'] as $context_key => $context ) {
+				if ( empty( $context['cols'] ) || ! is_array( $context['cols'] ) ) {
+					continue;
+				}
+				$views[ $view_key ]['contexts'][ $context_key ]['cols'] = $this->ensure_epasscard_col( $context['cols'] );
+			}
+		}
+
+		return $views;
+	}
+
+	/**
+	 * Force EpassCard column onto the live bookings table (saved views included).
+	 *
+	 * @param mixed $table Bookings table instance.
+	 * @return void
+	 */
+	public function on_bookings_table( $table ) {
+		if ( ! is_object( $table ) || ! $this->current_user_can_manage_passes() ) {
+			return;
+		}
+
+		if ( property_exists( $table, 'cols_template' ) && is_array( $table->cols_template ) ) {
+			$table->cols_template['epasscard_pass'] = __( 'EpassCard', 'epasscard' );
+		}
+
+		if ( property_exists( $table, 'cols' ) && is_array( $table->cols ) ) {
+			$table->cols = $this->ensure_epasscard_col_assoc( $table->cols );
+		}
+
+		if ( class_exists( 'EM_Bookings_Table' ) ) {
+			EM_Bookings_Table::$cols_allowed_html['epasscard_pass'] = true;
+		}
+	}
+
+	/**
+	 * Append EpassCard pass actions under the native Actions menu.
+	 *
+	 * @param array<string, mixed> $actions Booking action links.
+	 * @param mixed                $booking Booking or table item.
+	 * @return array<string, mixed>
+	 */
+	public function bookings_table_action_links( $actions, $booking ) {
+		if ( ! is_array( $actions ) || ! $this->current_user_can_manage_passes() ) {
+			return $actions;
+		}
+
+		// EM fires this filter twice (get_action_links + get_booking_actions).
+		if ( isset( $actions['epasscard'] ) ) {
+			return $actions;
+		}
+
+		$booking_id = $this->resolve_booking_id_from_table_item( $booking );
+		if ( $booking_id <= 0 ) {
+			return $actions;
+		}
+
+		$html = $this->render_pass_action_links( $booking_id );
+		if ( '' === $html ) {
+			return $actions;
+		}
+
+		$actions['epasscard'] = array(
+			'actions' => array(
+				'epasscard_pass' => '<span class="epc-em-pass-actions">' . $html . '</span>',
+			),
+		);
+
+		return $actions;
+	}
+
+	/**
+	 * Render Create / Update pass controls in the EpassCard column.
+	 *
+	 * @param string $val   Current cell value.
+	 * @param mixed  $item  Booking / ticket booking object.
+	 * @param mixed  $table Bookings table instance.
+	 * @return string
+	 */
+	public function bookings_table_epasscard_col( $val, $item, $table = null ) {
+		$booking_id = $this->resolve_booking_id_from_table_item( $item, $table );
+		if ( $booking_id <= 0 ) {
+			return is_string( $val ) && '' !== $val ? $val : '—';
+		}
+
+		$format = ( is_object( $table ) && isset( $table->format ) ) ? (string) $table->format : 'html';
+		if ( in_array( $format, array( 'csv', 'xls', 'xlsx' ), true ) ) {
+			$existing = EPC_DB::get_pass( $this->get_slug(), (string) $booking_id );
+			return ( $existing && ! empty( $existing->pass_uid ) ) ? (string) $existing->pass_uid : '';
+		}
+
+		$html = $this->render_pass_action_links( $booking_id );
+		if ( '' === $html ) {
+			return '—';
+		}
+
+		if ( class_exists( 'EM_Bookings_Table' ) ) {
+			EM_Bookings_Table::$cols_allowed_html['epasscard_pass'] = true;
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Resolve EM booking ID from a bookings-table row item.
+	 *
+	 * @param mixed $item  Row object.
+	 * @param mixed $table Optional table instance.
+	 * @return int
+	 */
+	private function resolve_booking_id_from_table_item( $item, $table = null ) {
+		if ( $item instanceof EM_Booking && ! empty( $item->booking_id ) ) {
+			return absint( $item->booking_id );
+		}
+
+		if ( is_object( $table ) && method_exists( $table, 'get_item_objects' ) ) {
+			$objects = $table->get_item_objects( $item );
+			if ( ! empty( $objects['EM_Booking'] ) && $objects['EM_Booking'] instanceof EM_Booking ) {
+				return absint( $objects['EM_Booking']->booking_id );
+			}
+		}
+
+		if ( is_object( $item ) && method_exists( $item, 'get_booking' ) ) {
+			$booking = $item->get_booking();
+			if ( $booking instanceof EM_Booking && ! empty( $booking->booking_id ) ) {
+				return absint( $booking->booking_id );
+			}
+		}
+
+		if ( is_object( $item ) && ! empty( $item->booking_id ) ) {
+			return absint( $item->booking_id );
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Insert epasscard_pass before actions in a flat cols list.
+	 *
+	 * @param array<int, string> $cols Column keys.
+	 * @return array<int, string>
+	 */
+	private function ensure_epasscard_col( array $cols ) {
+		if ( in_array( 'epasscard_pass', $cols, true ) ) {
+			return $cols;
+		}
+
+		$out       = array();
+		$inserted  = false;
+		foreach ( $cols as $col ) {
+			if ( 'actions' === $col ) {
+				$out[]     = 'epasscard_pass';
+				$inserted  = true;
+			}
+			$out[] = $col;
+		}
+
+		if ( ! $inserted ) {
+			$out[] = 'epasscard_pass';
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Insert epasscard_pass into an associative cols map (key === value).
+	 *
+	 * @param array<string|int, string> $cols Columns.
+	 * @return array<string, string>
+	 */
+	private function ensure_epasscard_col_assoc( array $cols ) {
+		$flat = array_values( $cols );
+		$flat = $this->ensure_epasscard_col( $flat );
+		$out  = array();
+		foreach ( $flat as $col ) {
+			$col = (string) $col;
+			if ( '' === $col ) {
+				continue;
+			}
+			$out[ $col ] = $col;
+		}
+
+		return $out;
 	}
 
 	/**

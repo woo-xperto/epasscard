@@ -4,7 +4,7 @@ Tags: Apple Wallet, Google Wallet, PKPass, Wallet Pass, WooCommerce, Membership,
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 1.0.5
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,7 +36,7 @@ Turn memberships into **digital membership cards** members save to their phone w
 * **Simple Membership** — issue wallet passes when members register, change level, or account state updates
 * **WooCommerce Subscriptions wallet pass** — create a **subscription wallet pass** when a subscription activates or renews
 * **Ultimate Membership Pro** — issue wallet passes for UMP members with the same template-mapping workflow
-* **Event Tickets** — issue wallet passes for RSVP / Tickets Commerce / Woo attendees
+* **The Events Calendar** — map events to pass templates; issue wallet passes for Event Tickets (add-on) attendees on those events
 * **Events Manager** — issue wallet passes when bookings are approved or status changes
 * **PW Gift Cards** — issue wallet passes when PW gift cards are created or balance changes
 * **YITH Gift Cards** — issue wallet passes when YITH gift cards are generated or updated
@@ -70,7 +70,7 @@ EpassCard is a **wallet pass platform** connector — not a middleware automatio
 * **Pass updates** — keep wallet passes in sync when membership data changes
 * **Template mapping** — map membership fields to pass template fields (including QR and barcode fields)
 * **Push notifications** — wallet pass reminders aligned with membership timing
-* **Modular integrations** — MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, Event Tickets, Events Manager, PW Gift Cards, YITH Gift Cards
+* **Modular integrations** — MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, The Events Calendar, Events Manager, PW Gift Cards, YITH Gift Cards
 * **Admin pass list** — searchable table of issued passes and delivery links
 * **Member account access** — members open passes from their account area
 * **API connection** — API key or email/password sign-in to the EpassCard pass API
@@ -79,14 +79,14 @@ EpassCard is a **wallet pass platform** connector — not a middleware automatio
 
 * **Membership sites** — associations, clubs, gyms, and online courses using MemberPress or UMP
 * **Subscription businesses** — WooCommerce Subscriptions stores that want a **digital card** on the customer's phone
-* **Event and conference organizers** — attendee / booking wallet passes via Event Tickets or Events Manager
+* **Event and conference organizers** — attendee / booking wallet passes via The Events Calendar (with Event Tickets) or Events Manager
 * **Gift card stores** — PW or YITH WooCommerce gift cards as Apple/Google Wallet passes
 * **Agencies** — WordPress developers who need a reliable **wallet pass integration** without building a custom pkpass server
 
 = Requirements =
 
 * An [EpassCard](https://epasscard.com/) account (sign up at [app.epasscard.com](https://app.epasscard.com))
-* A supported integration plugin (MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, Event Tickets, Events Manager, PW Gift Cards, and/or YITH Gift Cards)
+* A supported integration plugin (MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, The Events Calendar + Event Tickets, Events Manager, PW Gift Cards, and/or YITH Gift Cards)
 
 = External services =
 
@@ -118,7 +118,7 @@ Yes. Create a free account at [app.epasscard.com](https://app.epasscard.com), th
 
 = Which plugins are supported? =
 
-MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, Event Tickets, Events Manager, PW Gift Cards, and YITH Gift Cards. Enable only the modules you use.
+MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro, WooCommerce Subscriptions, The Events Calendar (with Event Tickets), Events Manager, PW Gift Cards, and YITH Gift Cards. Enable only the modules you use.
 
 = How do I create an Apple Wallet pass on WordPress? =
 
@@ -150,7 +150,7 @@ Yes. If your EpassCard pass template includes QR code or barcode fields, map mem
 
 = Is EpassCard a PassKit alternative for WordPress? =
 
-Yes. EpassCard is a native **WordPress wallet pass plugin** for issuing Apple Wallet and Google Wallet passes — without Zapier, Make, or custom API development. It is built for membership, subscription, event, and gift card sites using plugins such as MemberPress, Paid Memberships Pro, Ultimate Membership Pro, WooCommerce Subscriptions, Event Tickets, Events Manager, PW Gift Cards, or YITH Gift Cards.
+Yes. EpassCard is a native **WordPress wallet pass plugin** for issuing Apple Wallet and Google Wallet passes — without Zapier, Make, or custom API development. It is built for membership, subscription, event, and gift card sites using plugins such as MemberPress, Paid Memberships Pro, Ultimate Membership Pro, WooCommerce Subscriptions, The Events Calendar (with Event Tickets), Events Manager, PW Gift Cards, or YITH Gift Cards.
 
 = How does wallet pass automation work? =
 
@@ -179,6 +179,12 @@ Yes. From the admin **Issued passes** table or member screens, you can create a 
 3. Issued passes — searchable list of wallet passes and delivery links.
 
 == Changelog ==
+
+= 1.0.7 =
+* Removed standalone Event Tickets module — use The Events Calendar only (avoids duplicate passes for the same attendee). Map events under EpassCard → The Events Calendar; Event Tickets remains required as the TEC add-on for attendees.
+
+= 1.0.6 =
+* New integration: The Events Calendar (event mapping; Event Tickets attendees; venue/organizer fields; before-event push).
 
 = 1.0.5 =
 * Free setup help notice updated

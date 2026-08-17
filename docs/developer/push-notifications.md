@@ -66,7 +66,7 @@ Uses `maybe_send_for_event()` with a lead-days window and `notifications_sent` m
 | Ultimate Membership Pro | `before_level_expire` | Level expiry |
 | Paid Memberships Pro | `before_level_expire` | Level end date |
 | Simple Membership | `before_level_expire` | Member expiry |
-| Event Tickets | `before_event_start` | Event start |
+| The Events Calendar | `before_event_start` | Event start |
 | Events Manager | `before_event_start` | Event start |
 | PW Gift Cards | `before_card_expire` | Card expiration |
 | YITH Gift Cards | `before_card_expire` | Card expiration |

@@ -8,7 +8,7 @@
 - At least one supported plugin:
   - **Membership:** MemberPress, Paid Memberships Pro, Simple Membership, Ultimate Membership Pro
   - **Subscriptions:** WooCommerce Subscriptions
-  - **Events:** Event Tickets, Events Manager
+  - **Events:** The Events Calendar (with Event Tickets add-on), Events Manager
   - **Gift cards:** PW WooCommerce Gift Cards, YITH WooCommerce Gift Cards
 
 ## Installation
@@ -21,7 +21,7 @@
 
 1. **Connect** — Paste your API key or sign in with EpassCard credentials to generate one.
 2. **Enable integrations** — On the Connection page, check the plugins you use and click **Save integrations**.
-3. **Open an integration** — e.g. **EpassCard → MemberPress** or **EpassCard → Event Tickets**.
+3. **Open an integration** — e.g. **EpassCard → MemberPress** or **EpassCard → The Events Calendar**.
 4. **Map templates** — For each product, level, ticket, event, or gift card product, choose a pass template and map fields.
 5. **Issue passes** — Passes are created automatically when members subscribe, attendees register, or gift cards are issued (per module rules), or manually via **Create pass**.
 

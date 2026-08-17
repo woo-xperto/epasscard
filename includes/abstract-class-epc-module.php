@@ -315,13 +315,21 @@ abstract class EPC_Module {
 			'span'   => array(
 				'class' => true,
 			),
+			'a'      => array(
+				'href'   => true,
+				'class'  => true,
+				'target' => true,
+				'rel'    => true,
+			),
 			'button' => array(
-				'type'             => true,
-				'class'            => true,
-				'data-source-id'   => true,
-				'data-pass-action' => true,
-				'data-pass-nonce'  => true,
-				'disabled'         => true,
+				'type'              => true,
+				'class'             => true,
+				'data-module'       => true,
+				'data-source-id'    => true,
+				'data-pass-action'  => true,
+				'data-pass-nonce'   => true,
+				'data-email-nonce'  => true,
+				'disabled'          => true,
 			),
 		);
 	}
@@ -391,12 +399,32 @@ abstract class EPC_Module {
 		if ( $has_pass ) {
 			$html = $this->render_pass_action_button( $source_id, 'update', __( 'Update pass', 'epasscard' ) );
 			if ( ! empty( $existing->pass_link ) ) {
+				$html .= ' ' . $this->render_view_pass_link( (string) $existing->pass_link );
 				$html .= ' ' . $this->render_pass_email_button( $source_id );
 			}
 			return $html;
 		}
 
 		return $this->render_pass_action_button( $source_id, 'create', __( 'Create pass', 'epasscard' ) );
+	}
+
+	/**
+	 * Render a link that opens the wallet pass URL.
+	 *
+	 * @param string $pass_link Pass URL.
+	 * @return string
+	 */
+	protected function render_view_pass_link( $pass_link ) {
+		$pass_link = esc_url( (string) $pass_link );
+		if ( '' === $pass_link ) {
+			return '';
+		}
+
+		return sprintf(
+			'<a class="button button-small epc-view-pass" href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			$pass_link,
+			esc_html__( 'View pass', 'epasscard' )
+		);
 	}
 
 	/**
@@ -412,9 +440,10 @@ abstract class EPC_Module {
 		}
 
 		return sprintf(
-			'<button type="button" class="button button-small epc-send-pass-email" data-source-id="%1$s" data-email-nonce="%2$s">%3$s</button>',
+			'<button type="button" class="button button-small epc-send-pass-email" data-module="%3$s" data-source-id="%1$s" data-email-nonce="%2$s">%4$s</button>',
 			esc_attr( $source_id ),
 			esc_attr( wp_create_nonce( 'epc_send_pass_email_' . $source_id ) ),
+			esc_attr( $this->get_slug() ),
 			esc_html__( 'Email pass link', 'epasscard' )
 		);
 	}
@@ -520,11 +549,12 @@ abstract class EPC_Module {
 		}
 
 		return sprintf(
-			'<button type="button" class="button button-small epc-pass-action" data-source-id="%1$s" data-pass-action="%2$s" data-pass-nonce="%3$s">%4$s</button>',
+			'<button type="button" class="button button-small epc-pass-action" data-module="%5$s" data-source-id="%1$s" data-pass-action="%2$s" data-pass-nonce="%3$s">%4$s</button>',
 			esc_attr( $source_id ),
 			esc_attr( $action ),
 			esc_attr( wp_create_nonce( 'epc_pass_action_' . $source_id ) ),
-			esc_html( $label )
+			esc_html( $label ),
+			esc_attr( $this->get_slug() )
 		);
 	}
 
@@ -564,6 +594,7 @@ abstract class EPC_Module {
 
 		$existing = EPC_DB::get_pass( $this->get_slug(), $source_id );
 		$has_pass = $existing && ! empty( $existing->pass_uid );
+		$pass_link = ( $has_pass && ! empty( $existing->pass_link ) ) ? (string) $existing->pass_link : '';
 
 		wp_send_json_success(
 			array(
@@ -574,6 +605,11 @@ abstract class EPC_Module {
 				'action'       => $has_pass ? 'update' : $action,
 				'action_label' => $has_pass ? __( 'Update pass', 'epasscard' ) : __( 'Create pass', 'epasscard' ),
 				'pass_nonce'   => wp_create_nonce( 'epc_pass_action_' . $source_id ),
+				'pass_link'    => $pass_link,
+				'view_label'   => __( 'View pass', 'epasscard' ),
+				'email_nonce'  => $pass_link ? wp_create_nonce( 'epc_send_pass_email_' . $source_id ) : '',
+				'email_label'  => __( 'Email pass link', 'epasscard' ),
+				'module'       => $this->get_slug(),
 			)
 		);
 	}

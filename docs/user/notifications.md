@@ -55,7 +55,7 @@ These integrations have no native wallet reminder schedule. EpassCard runs a **d
 | Ultimate Membership Pro | Before membership level expires | Level expiry |
 | Paid Memberships Pro | Before membership level expires | Level end date |
 | Simple Membership | Before membership expires | Member expiry |
-| Event Tickets | Before event starts | Event start |
+| The Events Calendar | Before event starts | Event start |
 | Events Manager | Before event starts | Event start |
 | PW Gift Cards | Before gift card expires | Card expiration |
 | YITH Gift Cards | Before gift card expires | Card expiration |
@@ -101,9 +101,9 @@ Title and message from your settings are combined into a single `message` field 
 
 `{level_name}`, `{expire_date}`, `{user_display_name}`, `{user_full_name}`, `{user_email}`
 
-### Event Tickets
+### The Events Calendar
 
-`{event_title}`, `{event_start}`, `{ticket_name}`, `{user_full_name}`, `{user_email}`
+`{event_title}`, `{event_start}`, `{venue_name}`, `{ticket_name}`, `{user_full_name}`, `{user_email}`
 
 ### Events Manager
 

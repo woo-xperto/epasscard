@@ -1,6 +1,6 @@
 <?php
 /**
- * Event Tickets integration module.
+ * The Events Calendar integration module.
  *
  * @package EpassCard
  */
@@ -10,36 +10,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Issues EpassCard passes for Event Tickets attendees (RSVP, Tickets Commerce, Woo/PayPal when present).
+ * Issues EpassCard passes for The Events Calendar events (attendees via Event Tickets).
  */
-class EPC_Module_Event_Tickets extends EPC_Module {
+class EPC_Module_The_Events_Calendar extends EPC_Module {
 
 	/**
 	 * @inheritDoc
 	 */
 	public function get_slug() {
-		return 'event-tickets';
+		return 'the-events-calendar';
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function get_label() {
-		return __( 'Event Tickets', 'epasscard' );
+		return __( 'The Events Calendar', 'epasscard' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function get_dependency_label() {
-		return __( 'Event Tickets', 'epasscard' );
+		return __( 'The Events Calendar (+ Event Tickets)', 'epasscard' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function is_available() {
-		return epc_is_event_tickets_active();
+		return epc_is_the_events_calendar_active();
 	}
 
 	/**
@@ -47,7 +47,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 */
 	public function get_unavailable_message() {
 		return __(
-			'Event Tickets is not installed or activated. Install Event Tickets, activate it, then return here to map pass templates.',
+			'The Events Calendar is not installed or activated. Install The Events Calendar, activate it, then return here to map pass templates.',
 			'epasscard'
 		);
 	}
@@ -65,11 +65,17 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			'attendee_id'       => __( 'Attendee ID', 'epasscard' ),
 			'ticket_id'         => __( 'Ticket ID', 'epasscard' ),
 			'ticket_name'       => __( 'Ticket name', 'epasscard' ),
-			'event_id'          => __( 'Event / post ID', 'epasscard' ),
+			'event_id'          => __( 'Event ID', 'epasscard' ),
 			'event_title'       => __( 'Event title', 'epasscard' ),
 			'event_start'       => __( 'Event start', 'epasscard' ),
 			'event_end'         => __( 'Event end', 'epasscard' ),
 			'expire_date'       => __( 'Pass expiry (event end)', 'epasscard' ),
+			'venue_name'        => __( 'Venue name', 'epasscard' ),
+			'venue_address'     => __( 'Venue address', 'epasscard' ),
+			'organizer_name'    => __( 'Organizer name', 'epasscard' ),
+			'event_cost'        => __( 'Event cost', 'epasscard' ),
+			'event_url'         => __( 'Event URL', 'epasscard' ),
+			'event_website'     => __( 'Event website', 'epasscard' ),
 			'order_id'          => __( 'Order ID', 'epasscard' ),
 			'security_code'     => __( 'Security / QR code', 'epasscard' ),
 			'attendee_status'   => __( 'Attendee status', 'epasscard' ),
@@ -81,7 +87,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @inheritDoc
 	 */
 	public function get_status_rules_option_key() {
-		return 'epc_event_tickets_status_rules';
+		return 'epc_the_events_calendar_status_rules';
 	}
 
 	/**
@@ -175,6 +181,21 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			return;
 		}
 
+		if ( ! epc_is_event_tickets_active() ) {
+			?>
+			<div class="notice notice-info inline">
+				<p>
+					<?php
+					esc_html_e(
+						'The Events Calendar is active. Install and activate the Event Tickets add-on (RSVP / Tickets Commerce) so EpassCard can issue wallet passes when attendees register. Map events below once tickets are available.',
+						'epasscard'
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+
 		$statuses = $this->get_configurable_attendee_statuses();
 		$actions  = $this->get_status_action_options();
 		$rules    = $this->get_status_rules();
@@ -182,7 +203,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		<div id="epc-section-pass-behavior" class="epc-section epc-section--status-rules">
 			<h2><?php esc_html_e( 'Pass behavior by attendee status', 'epasscard' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Choose what happens when an attendee is created or their RSVP/ticket status changes.', 'epasscard' ); ?>
+				<?php esc_html_e( 'Choose what happens when an Event Tickets attendee is created or their RSVP/ticket status changes for a mapped event.', 'epasscard' ); ?>
 			</p>
 			<form class="epc-ajax-form" data-epc-action="<?php echo esc_attr( 'epc_save_status_rules_' . $this->get_slug() ); ?>" method="post" action="">
 				<input type="hidden" name="epc_module_slug" value="<?php echo esc_attr( $this->get_slug() ); ?>" />
@@ -247,6 +268,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		return array(
 			'event_title',
 			'event_start',
+			'venue_name',
 			'ticket_name',
 			'user_full_name',
 			'user_email',
@@ -266,8 +288,8 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 				continue;
 			}
 
-			$event_id  = isset( $data['event_id'] ) ? absint( $data['event_id'] ) : 0;
-			$start_ts  = $this->get_event_start_timestamp( $event_id );
+			$event_id = isset( $data['event_id'] ) ? absint( $data['event_id'] ) : 0;
+			$start_ts = $this->get_event_start_timestamp( $event_id );
 			if ( $start_ts <= 0 ) {
 				continue;
 			}
@@ -301,6 +323,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		return array(
 			'event_title'    => $event_id ? get_the_title( $event_id ) : '',
 			'event_start'    => $this->format_event_datetime( $event_id, 'start' ),
+			'venue_name'     => $this->get_venue_name( $event_id ),
 			'ticket_name'    => isset( $data['ticket'] ) ? (string) $data['ticket'] : ( isset( $data['ticket_name'] ) ? (string) $data['ticket_name'] : '' ),
 			'user_full_name' => $name,
 			'user_email'     => isset( $data['holder_email'] ) ? (string) $data['holder_email'] : '',
@@ -311,44 +334,37 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @inheritDoc
 	 */
 	public function get_mappable_entities() {
-		$ticket_ids = get_posts(
+		$event_ids = get_posts(
 			array(
-				'post_type'      => array( 'tribe_rsvp_tickets', 'tribe_tpp_tickets', 'tec_tc_ticket', 'product' ),
-				'post_status'    => array( 'publish', 'private' ),
+				'post_type'      => $this->get_event_post_type(),
+				'post_status'    => array( 'publish', 'private', 'draft' ),
 				'posts_per_page' => 200,
 				'fields'         => 'ids',
-				'orderby'        => 'title',
-				'order'          => 'ASC',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
 			)
 		);
 
-		if ( ! is_array( $ticket_ids ) ) {
+		if ( ! is_array( $event_ids ) ) {
 			return array();
 		}
 
 		$out = array();
-		foreach ( $ticket_ids as $ticket_id ) {
-			$ticket_id = absint( $ticket_id );
-			if ( $ticket_id <= 0 ) {
+		foreach ( $event_ids as $event_id ) {
+			$event_id = absint( $event_id );
+			if ( $event_id <= 0 ) {
 				continue;
 			}
 
-			// Only Woo products that are Event Tickets tickets.
-			if ( 'product' === get_post_type( $ticket_id ) ) {
-				if ( ! absint( get_post_meta( $ticket_id, '_tribe_wooticket_for_event', true ) ) ) {
-					continue;
-				}
-			}
-
-			$label = get_the_title( $ticket_id );
-			$event_id = $this->get_ticket_event_id( $ticket_id );
-			if ( $event_id ) {
-				$label .= ' — ' . get_the_title( $event_id );
+			$label = get_the_title( $event_id );
+			$start = $this->format_event_datetime( $event_id, 'start' );
+			if ( $start ) {
+				$label .= ' (' . $start . ')';
 			}
 
 			$out[] = array(
-				'id'    => $ticket_id,
-				'label' => $label ? $label : ( '#' . $ticket_id ),
+				'id'    => $event_id,
+				'label' => $label ? $label : ( '#' . $event_id ),
 			);
 		}
 
@@ -359,7 +375,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @inheritDoc
 	 */
 	public function get_entity_column_label() {
-		return __( 'Ticket', 'epasscard' );
+		return __( 'Event', 'epasscard' );
 	}
 
 	/**
@@ -367,7 +383,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 */
 	public function get_empty_entities_message() {
 		return __(
-			'Create a ticket or RSVP on an event in Event Tickets, then return here to map a pass template.',
+			'Create an event in The Events Calendar, then return here to map a pass template.',
 			'epasscard'
 		);
 	}
@@ -376,7 +392,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @inheritDoc
 	 */
 	public function get_create_entity_url() {
-		return admin_url( 'edit.php?post_type=tribe_events' );
+		return admin_url( 'edit.php?post_type=' . $this->get_event_post_type() );
 	}
 
 	/**
@@ -400,6 +416,10 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @inheritDoc
 	 */
 	protected function register_event_hooks() {
+		if ( ! epc_is_event_tickets_active() ) {
+			return;
+		}
+
 		add_action( 'event_tickets_rsvp_attendee_created', array( $this, 'on_rsvp_attendee_created' ), 20, 4 );
 		add_action( 'event_tickets_tpp_attendee_created', array( $this, 'on_tpp_attendee_created' ), 20, 5 );
 		add_action( 'tec_tickets_commerce_attendee_after_create', array( $this, 'on_commerce_attendee_created' ), 20, 4 );
@@ -408,6 +428,141 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		add_action( 'event_tickets_attendee_update', array( $this, 'on_attendee_update' ), 20, 3 );
 		add_action( 'event_tickets_attendee_ticket_deleted', array( $this, 'on_attendee_deleted' ), 20, 2 );
 		add_action( 'tec_tickets_commerce_attendee_after_delete', array( $this, 'on_commerce_attendee_deleted' ), 20, 1 );
+
+		add_filter( 'tribe_tickets_attendee_table_columns', array( $this, 'attendees_table_columns' ), 20, 2 );
+		add_filter( 'tribe_events_tickets_attendees_table_column', array( $this, 'attendees_table_column' ), 20, 3 );
+		add_filter( 'event_tickets_attendees_table_row_actions', array( $this, 'attendees_table_row_actions' ), 20, 2 );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function should_enqueue_pass_action_assets( $hook ) {
+		if ( parent::should_enqueue_pass_action_assets( $hook ) ) {
+			return true;
+		}
+
+		$hook = (string) $hook;
+		if (
+			false !== strpos( $hook, 'tec-tickets-attendees' )
+			|| false !== strpos( $hook, 'tickets-attendees' )
+		) {
+			return true;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin screen detection only.
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( (string) $_GET['page'] ) ) : '';
+
+		return in_array( $page, array( 'tec-tickets-attendees', 'tickets-attendees' ), true );
+	}
+
+	/**
+	 * Add EpassCard column to Event Tickets attendees list.
+	 *
+	 * @param array<string, string> $columns  Columns.
+	 * @param int                   $event_id Event ID.
+	 * @return array<string, string>
+	 */
+	public function attendees_table_columns( $columns, $event_id = 0 ) {
+		unset( $event_id );
+
+		if ( ! is_array( $columns ) || ! $this->current_user_can_manage_passes() ) {
+			return $columns;
+		}
+
+		if ( isset( $columns['epasscard_pass'] ) ) {
+			return $columns;
+		}
+
+		$label = __( 'EpassCard', 'epasscard' );
+		$out   = array();
+		foreach ( $columns as $key => $header ) {
+			if ( 'check_in' === $key ) {
+				$out['epasscard_pass'] = $label;
+			}
+			$out[ $key ] = $header;
+		}
+
+		if ( ! isset( $out['epasscard_pass'] ) ) {
+			$out['epasscard_pass'] = $label;
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Render EpassCard pass actions in the attendees table column.
+	 *
+	 * @param string               $value  Cell value.
+	 * @param array<string, mixed> $item   Attendee row.
+	 * @param string               $column Column key.
+	 * @return string
+	 */
+	public function attendees_table_column( $value, $item, $column ) {
+		if ( 'epasscard_pass' !== $column ) {
+			return $value;
+		}
+
+		$attendee_id = $this->resolve_attendee_id_from_row( $item );
+		if ( $attendee_id <= 0 ) {
+			return '—';
+		}
+
+		$html = $this->render_pass_action_links( $attendee_id );
+		if ( '' === $html ) {
+			return '—';
+		}
+
+		return self::kses_pass_action_html( $html );
+	}
+
+	/**
+	 * Append pass action controls under ticket row actions.
+	 *
+	 * @param array<int|string, string> $row_actions Existing row actions HTML.
+	 * @param array<string, mixed>      $item        Attendee row.
+	 * @return array<int|string, string>
+	 */
+	public function attendees_table_row_actions( $row_actions, $item ) {
+		if ( ! is_array( $row_actions ) || ! $this->current_user_can_manage_passes() ) {
+			return $row_actions;
+		}
+
+		$attendee_id = $this->resolve_attendee_id_from_row( $item );
+		if ( $attendee_id <= 0 ) {
+			return $row_actions;
+		}
+
+		$html = $this->render_pass_action_links( $attendee_id );
+		if ( '' === $html ) {
+			return $row_actions;
+		}
+
+		$row_actions['epasscard_pass'] = self::kses_pass_action_html( $html );
+
+		return $row_actions;
+	}
+
+	/**
+	 * Resolve attendee ID from an attendees-table row.
+	 *
+	 * @param array<string, mixed> $item Row data.
+	 * @return int
+	 */
+	private function resolve_attendee_id_from_row( $item ) {
+		if ( ! is_array( $item ) ) {
+			return 0;
+		}
+
+		if ( ! empty( $item['attendee_id'] ) ) {
+			return absint( $item['attendee_id'] );
+		}
+
+		if ( ! empty( $item['qr_ticket_id'] ) ) {
+			return absint( $item['qr_ticket_id'] );
+		}
+
+		return 0;
 	}
 
 	/**
@@ -533,6 +688,11 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			return;
 		}
 
+		$event_id = isset( $data['event_id'] ) ? absint( $data['event_id'] ) : 0;
+		if ( $event_id <= 0 || ! $this->is_tec_event( $event_id ) ) {
+			return;
+		}
+
 		$status = $this->normalize_attendee_status( $data );
 		$action = $this->get_status_rule( $status );
 
@@ -560,24 +720,25 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 */
 	private function sync_attendee_data( array $data, $mode = 'sync' ) {
 		$attendee_id = isset( $data['attendee_id'] ) ? absint( $data['attendee_id'] ) : 0;
-		$ticket_id   = isset( $data['product_id'] ) ? absint( $data['product_id'] ) : 0;
+		$event_id    = isset( $data['event_id'] ) ? absint( $data['event_id'] ) : 0;
+
+		if ( $attendee_id <= 0 || $event_id <= 0 || ! $this->is_tec_event( $event_id ) ) {
+			return new WP_Error( 'epc_invalid_source', __( 'Attendee not found.', 'epasscard' ) );
+		}
+
+		$mapping = $this->get_mapping( $event_id );
+		if ( empty( $mapping['template_uid'] ) ) {
+			return new WP_Error( 'epc_no_mapping', __( 'No pass template is mapped for this event.', 'epasscard' ) );
+		}
+
+		$ticket_id = isset( $data['product_id'] ) ? absint( $data['product_id'] ) : 0;
 		if ( $ticket_id <= 0 && isset( $data['ticket_id'] ) ) {
 			$ticket_id = absint( $data['ticket_id'] );
 		}
 
-		if ( $attendee_id <= 0 || $ticket_id <= 0 ) {
-			return new WP_Error( 'epc_invalid_source', __( 'Attendee not found.', 'epasscard' ) );
-		}
-
-		$mapping = $this->get_mapping( $ticket_id );
-		if ( empty( $mapping['template_uid'] ) ) {
-			return new WP_Error( 'epc_no_mapping', __( 'No pass template is mapped for this ticket.', 'epasscard' ) );
-		}
-
-		$event_id = isset( $data['event_id'] ) ? absint( $data['event_id'] ) : 0;
-		$user_id  = isset( $data['user_id'] ) ? absint( $data['user_id'] ) : 0;
-		$email    = isset( $data['holder_email'] ) ? (string) $data['holder_email'] : '';
-		$full     = isset( $data['holder_name'] ) ? (string) $data['holder_name'] : '';
+		$user_id = isset( $data['user_id'] ) ? absint( $data['user_id'] ) : 0;
+		$email   = isset( $data['holder_email'] ) ? (string) $data['holder_email'] : '';
+		$full    = isset( $data['holder_name'] ) ? (string) $data['holder_name'] : '';
 
 		if ( $user_id <= 0 && $email ) {
 			$user = get_user_by( 'email', $email );
@@ -593,8 +754,12 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			$full = epc_format_user_full_name( $first, $last, $user ? $user->display_name : $email );
 		}
 
-		$ticket_name = isset( $data['ticket'] ) ? (string) $data['ticket'] : get_the_title( $ticket_id );
-		$event_end   = $this->get_event_end_raw( $event_id );
+		$ticket_name = isset( $data['ticket'] ) ? (string) $data['ticket'] : '';
+		if ( '' === $ticket_name && $ticket_id > 0 ) {
+			$ticket_name = get_the_title( $ticket_id );
+		}
+
+		$event_end = $this->get_event_end_raw( $event_id );
 
 		$values = array(
 			'user_display_name' => $user ? $user->display_name : $full,
@@ -606,10 +771,16 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			'ticket_id'         => (string) $ticket_id,
 			'ticket_name'       => $ticket_name,
 			'event_id'          => (string) $event_id,
-			'event_title'       => $event_id ? get_the_title( $event_id ) : '',
+			'event_title'       => get_the_title( $event_id ),
 			'event_start'       => $this->format_event_datetime( $event_id, 'start' ),
 			'event_end'         => $this->format_event_datetime( $event_id, 'end' ),
 			'expire_date'       => epc_format_pass_expiry_datetime( $event_end ),
+			'venue_name'        => $this->get_venue_name( $event_id ),
+			'venue_address'     => $this->get_venue_address( $event_id ),
+			'organizer_name'    => $this->get_organizer_name( $event_id ),
+			'event_cost'        => $this->get_event_cost( $event_id ),
+			'event_url'         => get_permalink( $event_id ) ? (string) get_permalink( $event_id ) : '',
+			'event_website'     => $this->get_event_website( $event_id ),
 			'order_id'          => isset( $data['order_id'] ) ? (string) $data['order_id'] : '',
 			'security_code'     => isset( $data['security_code'] ) ? (string) $data['security_code'] : ( isset( $data['security'] ) ? (string) $data['security'] : '' ),
 			'attendee_status'   => $this->normalize_attendee_status( $data ),
@@ -619,7 +790,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		return EPC_Pass_Service::sync_pass(
 			$this->get_slug(),
 			$attendee_id,
-			$ticket_id,
+			$event_id,
 			$user_id,
 			$mapping,
 			$values,
@@ -628,7 +799,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	}
 
 	/**
-	 * Load attendee data via ticket provider.
+	 * Load attendee data via Event Tickets provider.
 	 *
 	 * @param int $attendee_id Attendee ID.
 	 * @return array<string, mixed>|null
@@ -647,12 +818,58 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 					if ( empty( $data['attendee_id'] ) ) {
 						$data['attendee_id'] = $attendee_id;
 					}
+					if ( empty( $data['event_id'] ) ) {
+						$data['event_id'] = $this->get_attendee_event_id( $attendee_id );
+					}
 					return $data;
 				}
 			}
 		}
 
+		if ( function_exists( 'tribe_tickets_get_attendees' ) ) {
+			$list = tribe_tickets_get_attendees( $attendee_id );
+			if ( is_array( $list ) ) {
+				foreach ( $list as $row ) {
+					if ( ! is_array( $row ) ) {
+						continue;
+					}
+					$row_id = isset( $row['attendee_id'] ) ? absint( $row['attendee_id'] ) : 0;
+					if ( $row_id === $attendee_id ) {
+						if ( empty( $row['event_id'] ) ) {
+							$row['event_id'] = $this->get_attendee_event_id( $attendee_id );
+						}
+						return $row;
+					}
+				}
+			}
+		}
+
 		return null;
+	}
+
+	/**
+	 * Event ID stored on an attendee post.
+	 *
+	 * @param int $attendee_id Attendee ID.
+	 * @return int
+	 */
+	private function get_attendee_event_id( $attendee_id ) {
+		$attendee_id = absint( $attendee_id );
+		$keys        = array(
+			'_tribe_rsvp_event',
+			'_tec_tickets_commerce_event',
+			'_tribe_wooticket_event',
+			'_tribe_tpp_event',
+		);
+
+		foreach ( $keys as $key ) {
+			$event_id = absint( get_post_meta( $attendee_id, $key, true ) );
+			if ( $event_id > 0 ) {
+				return $event_id;
+			}
+		}
+
+		return 0;
 	}
 
 	/**
@@ -665,8 +882,6 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		$raw = '';
 		if ( isset( $data['order_status'] ) ) {
 			$raw = (string) $data['order_status'];
-		} elseif ( isset( $data['optout'] ) ) {
-			$raw = '';
 		}
 
 		$raw = strtolower( trim( $raw ) );
@@ -681,28 +896,31 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	}
 
 	/**
-	 * Event ID for a ticket product.
+	 * Whether a post is a The Events Calendar event.
 	 *
-	 * @param int $ticket_id Ticket ID.
-	 * @return int
+	 * @param int $event_id Event ID.
+	 * @return bool
 	 */
-	private function get_ticket_event_id( $ticket_id ) {
-		$ticket_id = absint( $ticket_id );
-		$keys      = array(
-			'_tribe_rsvp_for_event',
-			'_tec_tickets_commerce_event',
-			'_tribe_wooticket_for_event',
-			'_tribe_tpp_for_event',
-		);
-
-		foreach ( $keys as $key ) {
-			$event_id = absint( get_post_meta( $ticket_id, $key, true ) );
-			if ( $event_id > 0 ) {
-				return $event_id;
-			}
+	private function is_tec_event( $event_id ) {
+		$event_id = absint( $event_id );
+		if ( $event_id <= 0 ) {
+			return false;
 		}
 
-		return 0;
+		return $this->get_event_post_type() === get_post_type( $event_id );
+	}
+
+	/**
+	 * TEC event post type.
+	 *
+	 * @return string
+	 */
+	private function get_event_post_type() {
+		if ( class_exists( 'Tribe__Events__Main' ) ) {
+			return Tribe__Events__Main::POSTTYPE;
+		}
+
+		return 'tribe_events';
 	}
 
 	/**
@@ -738,6 +956,18 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 			return '';
 		}
 
+		$format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+
+		if ( 'end' === $which && function_exists( 'tribe_get_end_date' ) ) {
+			$formatted = tribe_get_end_date( $event_id, true, $format );
+			return is_string( $formatted ) ? $formatted : '';
+		}
+
+		if ( function_exists( 'tribe_get_start_date' ) ) {
+			$formatted = tribe_get_start_date( $event_id, true, $format );
+			return is_string( $formatted ) ? $formatted : '';
+		}
+
 		$key = 'end' === $which ? '_EventEndDate' : '_EventStartDate';
 		$raw = get_post_meta( $event_id, $key, true );
 		if ( ! is_string( $raw ) || '' === $raw ) {
@@ -745,7 +975,7 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 		}
 
 		$ts = strtotime( $raw );
-		return $ts ? wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $ts ) : $raw;
+		return $ts ? wp_date( $format, $ts ) : $raw;
 	}
 
 	/**
@@ -755,11 +985,118 @@ class EPC_Module_Event_Tickets extends EPC_Module {
 	 * @return int
 	 */
 	private function get_event_start_timestamp( $event_id ) {
-		$raw = get_post_meta( absint( $event_id ), '_EventStartDate', true );
+		$event_id = absint( $event_id );
+		if ( $event_id <= 0 ) {
+			return 0;
+		}
+
+		if ( function_exists( 'tribe_get_start_date' ) ) {
+			$unix = tribe_get_start_date( $event_id, true, 'U' );
+			if ( is_numeric( $unix ) && (int) $unix > 0 ) {
+				return (int) $unix;
+			}
+		}
+
+		$raw = get_post_meta( $event_id, '_EventStartDate', true );
 		if ( ! is_string( $raw ) || '' === $raw ) {
 			return 0;
 		}
 		$ts = strtotime( $raw );
 		return $ts ? (int) $ts : 0;
+	}
+
+	/**
+	 * Venue name for an event.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return string
+	 */
+	private function get_venue_name( $event_id ) {
+		if ( function_exists( 'tribe_get_venue' ) ) {
+			$name = tribe_get_venue( $event_id );
+			return is_string( $name ) ? $name : '';
+		}
+
+		return '';
+	}
+
+	/**
+	 * Plain-text venue address.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return string
+	 */
+	private function get_venue_address( $event_id ) {
+		$parts = array();
+
+		if ( function_exists( 'tribe_get_address' ) ) {
+			$parts[] = (string) tribe_get_address( $event_id );
+		}
+		if ( function_exists( 'tribe_get_city' ) ) {
+			$parts[] = (string) tribe_get_city( $event_id );
+		}
+		if ( function_exists( 'tribe_get_region' ) ) {
+			$parts[] = (string) tribe_get_region( $event_id );
+		}
+		if ( function_exists( 'tribe_get_zip' ) ) {
+			$parts[] = (string) tribe_get_zip( $event_id );
+		}
+		if ( function_exists( 'tribe_get_country' ) ) {
+			$parts[] = (string) tribe_get_country( $event_id );
+		}
+
+		$parts = array_filter(
+			array_map( 'trim', $parts ),
+			static function ( $part ) {
+				return '' !== $part;
+			}
+		);
+
+		return implode( ', ', $parts );
+	}
+
+	/**
+	 * Organizer name for an event.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return string
+	 */
+	private function get_organizer_name( $event_id ) {
+		if ( function_exists( 'tribe_get_organizer' ) ) {
+			$name = tribe_get_organizer( $event_id );
+			return is_string( $name ) ? $name : '';
+		}
+
+		return '';
+	}
+
+	/**
+	 * Formatted event cost.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return string
+	 */
+	private function get_event_cost( $event_id ) {
+		if ( function_exists( 'tribe_get_cost' ) ) {
+			$cost = tribe_get_cost( $event_id, true );
+			return is_string( $cost ) ? $cost : '';
+		}
+
+		return '';
+	}
+
+	/**
+	 * TEC event website URL field.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return string
+	 */
+	private function get_event_website( $event_id ) {
+		if ( function_exists( 'tribe_get_event_website_url' ) ) {
+			$url = tribe_get_event_website_url( $event_id );
+			return is_string( $url ) ? $url : '';
+		}
+
+		return '';
 	}
 }

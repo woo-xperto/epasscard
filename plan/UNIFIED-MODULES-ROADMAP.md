@@ -15,7 +15,8 @@
 | --- | --- | --- | --- | --- | --- |
 | 1 | Membership | **Paid Memberships Pro** | ~100,000+ (free core) | `paid-memberships-pro` | **Shipped** — module + loader |
 | 2 | Membership | **Simple Membership** | **40,000+** | `simple-membership` | **Shipped** — module + loader (QA pending) |
-| 3 | Events | **Event Tickets** (The Events Calendar) | **90,000+** | `event-tickets` | **Shipped** — ticket mapping; RSVP / Tickets Commerce / Woo hooks |
+| 3 | Events | **Event Tickets** (TEC add-on) | **90,000+** | _(merged)_ | **Removed as standalone module (1.0.7)** — attendees issue via The Events Calendar |
+| 3b | Events | **The Events Calendar** | **700,000+** | `the-events-calendar` | **Shipped** — event mapping; Event Tickets attendees; venue fields; attendees list UI |
 | 4 | Events | **Events Manager** | **70,000+** | `events-manager` | **Shipped** — event mapping; booking status hooks |
 | 5 | Gift cards | **PW WooCommerce Gift Cards** | **20,000+** | `pw-gift-cards` | **Shipped** — product mapping; create/balance/deactivate hooks |
 | 6 | Gift cards | **YITH WooCommerce Gift Cards** | **10,000+** | `yith-gift-cards` | **Shipped** — product mapping; generation + status/balance hooks |

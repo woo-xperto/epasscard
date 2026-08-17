@@ -157,6 +157,33 @@ function epc_is_simple_membership_active() {
 }
 
 /**
+ * Whether The Events Calendar is installed and active.
+ *
+ * @return bool
+ */
+function epc_is_the_events_calendar_active() {
+	if ( defined( 'TRIBE_EVENTS_FILE' ) || defined( 'TRIBE_EVENTS_MAJOR_VERSION' ) ) {
+		return true;
+	}
+
+	if ( class_exists( 'Tribe__Events__Main' ) || function_exists( 'tribe_events' ) ) {
+		return true;
+	}
+
+	$plugin_files = array(
+		'the-events-calendar/the-events-calendar.php',
+	);
+
+	foreach ( $plugin_files as $plugin_file ) {
+		if ( epc_is_plugin_active( $plugin_file ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Whether Event Tickets is installed and active.
  *
  * @return bool
